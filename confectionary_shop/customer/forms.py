@@ -1,0 +1,30 @@
+from django import forms
+from django.contrib.auth.forms import UserCreationForm
+from django.core.validators import RegexValidator
+from .models import User
+
+
+class SignUpForm(UserCreationForm):
+    first_name = forms.CharField(max_length=30)
+    last_name = forms.CharField(max_length=30)
+    phone = forms.CharField(max_length=12, validators=[RegexValidator(r'^(\+98|0)\d{10}')],widget=forms.TextInput(
+        attrs={
+            'class': 'form-control'
+        }))
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['password1'].label = 'Password'
+        self.fields['password2'].label = 'Password Confirmation'
+        self.fields['first_name'].label = 'First Name'
+        self.fields['last_name'].label = 'Last Name'
+        self.fields['phone'].label = 'phone'
+        # self.fields['password1'].help_text = None
+        self.fields['password2'].help_text = None
+
+    class Meta:
+        model = User
+        fields = ('phone', 'first_name', 'last_name', 'password1', 'password2')
+        help_texts = {
+            'username': None,
+        }
