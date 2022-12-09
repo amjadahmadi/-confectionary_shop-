@@ -5,11 +5,11 @@ from .models import User
 
 
 class SignUpForm(UserCreationForm):
-    first_name = forms.CharField(max_length=30)
-    last_name = forms.CharField(max_length=30)
-    phone = forms.CharField(max_length=12, validators=[RegexValidator(r'^(\+98|0)\d{10}')],widget=forms.TextInput(
+    first_name = forms.CharField(max_length=30, widget=forms.TextInput(attrs={"placeholder": "your first name"}))
+    last_name = forms.CharField(max_length=30, widget=forms.TextInput(attrs={"placeholder": "your last name"}))
+    phone = forms.CharField(max_length=12, validators=[RegexValidator(r'^(\+98|0)\d{10}')], widget=forms.TextInput(
         attrs={
-            'class': 'form-control'
+            "placeholder": "your phone"
         }))
 
     def __init__(self, *args, **kwargs):
@@ -19,7 +19,7 @@ class SignUpForm(UserCreationForm):
         self.fields['first_name'].label = 'First Name'
         self.fields['last_name'].label = 'Last Name'
         self.fields['phone'].label = 'phone'
-        # self.fields['password1'].help_text = None
+        self.fields['password1'].help_text = None
         self.fields['password2'].help_text = None
 
     class Meta:
@@ -28,3 +28,11 @@ class SignUpForm(UserCreationForm):
         help_texts = {
             'username': None,
         }
+
+
+class CodeForm(forms.Form):
+    valid_code = forms.CharField(max_length=4,widget=forms.TextInput(attrs={'placeholder':'enter send code on your phone.'}))
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['valid_code'].label = 'validation code'
