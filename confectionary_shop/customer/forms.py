@@ -1,7 +1,10 @@
+import random
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.core.validators import RegexValidator
+
 from .models import User
+
 
 
 class SignUpForm(UserCreationForm):
@@ -30,8 +33,12 @@ class SignUpForm(UserCreationForm):
         }
 
 
+
+
 class CodeForm(forms.Form):
-    valid_code = forms.CharField(max_length=4,widget=forms.TextInput(attrs={'placeholder':'enter send code on your phone.'}))
+    valid_code = forms.CharField(max_length=4,
+                                 widget=forms.TextInput(
+                                     attrs={'placeholder': 'enter send code on your phone.', 'style': '"margin: 0"'}))
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

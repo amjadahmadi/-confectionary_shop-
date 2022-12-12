@@ -1,0 +1,25 @@
+		<div class="sticky-top ">
+			<div class="d-none d-lg-block ">
+			<nav class="navbar">
+				<a href="#" class="logo">Logo</a>
+				<script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
+				<div class="search-box">
+				  <input class="search-input" type="text" name="" placeholder="Pesquise">
+				  <a href="#" class="search-btn">
+					<i class="fas fa-search"></i>
+				  </a>
+				</div>
+				<div class="nav-links">
+				  <ul class="nav-menu">
+					<li class="active"><a href="">Home</a></li>
+					<li><a href="">Card items</a></li>
+                      <li><a href="">Profile</a></li>
+					<li><a href="">{% if request.user.is_authenticate %} Logout {% else %}Login / Register {% endif %}</a></li>
+
+				  </ul>
+				</div>
+				  <i class='bx bx-grid-alt menu-hamburger'></i>
+
+			  </nav>
+              </div>
+        </div>

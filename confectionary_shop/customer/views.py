@@ -3,8 +3,9 @@ from django.shortcuts import render, redirect
 from django.views import View
 from django.views.generic.edit import CreateView
 from .models import User
-from .forms import SignUpForm,CodeForm
+from .forms import SignUpForm, CodeForm
 from django.contrib import messages
+from core.utils import send_otp
 
 
 # Create your views here.
@@ -19,7 +20,7 @@ class UserCreateView(View):
     def post(self, request):
         f = SignUpForm(request.POST or None)
         if f.is_valid():
-            request.session['info'] = f
+            request.session['info'] = f.cleaned_data
             return redirect('user:code')
         else:
             print(f.errors)
@@ -30,8 +31,7 @@ class CodeGenerate(View):
 
     def get(self, request):
         f = CodeForm()
-        f1 = SignUpForm(request.session['info'])
-        f1.save()
+        send_otp(request.session['info']['phone'])
         return render(request, 'customer/CodeForm.html', {'form': f})
         # template_name_suffix = 'customer/signup.html'
 

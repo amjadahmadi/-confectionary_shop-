@@ -25,7 +25,7 @@ class Cake_Designing(BaseModel):
     sample_img = models.ImageField()
     print_img = models.ImageField()
     ready_time = models.DateTimeField(null=True)
-    description = models.TextField()
+    description = models.TextField(null=True)
     payment_status = models.CharField(max_length=2, choices=Payment_Status.choices, default=Payment_Status.pre_payment)
     extra_payment = models.FloatField(null=True)
     feeling_id = models.ForeignKey(Feeling, on_delete=models.CASCADE)

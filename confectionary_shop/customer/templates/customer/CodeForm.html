@@ -18,18 +18,37 @@
 
     <div class="col-12 d-flex align-items-center justify-content-center w-100 mt-5">
 
-        <form class="col-lg-4 col-8" >
-  <div class="form-group" style="width: 100%">
+        <form class="col-lg-4 col-8">
+  <div class="form-group" style="width: 100%;margin: 0">
    <label for="first_name"><i class="zmdi zmdi-assignment-check"></i></label>
 
           {{ form.valid_code }}
 
       </div>
-
+       <div class="d-flex justify-content-between">
+      <div id="timer" class="pt-3 pb-3">5</div>
+      <div id="timer2" class="pt-3 pb-3"><a href="/signup">change number</a></div>
+         </div>
    <button type="submit" class="btn btn-primary center">Submit</button>
 
 
 </form>
     </div>
+
+    <script>
+              var myfunc = setInterval(function() {
+        const val = Number(document.getElementById('timer').innerHTML)
+          document.getElementById('timer').innerHTML = val - 1
+        if(val<1){
+             clearInterval(myfunc);
+             const a = document.createElement('a')
+             a.innerHTML = 'code'
+             a.href = '/code'
+                  document.getElementById('timer').innerHTML = ''
+                  document.getElementById('timer').append(a)
+
+        }
+        }, 1000)
+    </script>
 </body>
 </html>
