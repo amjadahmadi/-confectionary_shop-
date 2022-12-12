@@ -7,6 +7,7 @@ from kavenegar import *
 def send_otp(phone):
     r = redis.Redis()
     code = random.randint(1000, 9999)
+    print(code)
     r.set(name=phone, value=code, ex=60)
     try:
         import json
@@ -27,3 +28,11 @@ def send_otp(phone):
         print(e)
 
 
+def check_otp(phone, code):
+    r = redis.Redis()
+    print(phone)
+    _ = r.get(phone)
+    print(_)
+    if _ and str(_.decode('utf8')) == str(code):
+        return True
+    return False

@@ -6,7 +6,6 @@ from django.core.validators import RegexValidator
 from .models import User
 
 
-
 class SignUpForm(UserCreationForm):
     first_name = forms.CharField(max_length=30, widget=forms.TextInput(attrs={"placeholder": "your first name"}))
     last_name = forms.CharField(max_length=30, widget=forms.TextInput(attrs={"placeholder": "your last name"}))
@@ -33,8 +32,6 @@ class SignUpForm(UserCreationForm):
         }
 
 
-
-
 class CodeForm(forms.Form):
     valid_code = forms.CharField(max_length=4,
                                  widget=forms.TextInput(
@@ -43,3 +40,16 @@ class CodeForm(forms.Form):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['valid_code'].label = 'validation code'
+
+
+class LoginForm(forms.Form):
+    phone = forms.CharField(max_length=12, label='phone', validators=[RegexValidator(r'^(\+98|0)\d{10}')],
+                            widget=forms.TextInput(
+                                attrs={'placeholder': 'enter your phone.', 'style': '"margin: 0"'}))
+    password = forms.CharField(label='password',
+                               widget=forms.PasswordInput(
+                                   attrs={'placeholder': 'enter your password.', 'style': '"margin: 0"'}))
+
+
+
+

@@ -13,8 +13,8 @@
 				  <ul class="nav-menu">
 					<li class="active"><a href="">Home</a></li>
 					<li><a href="">Card items</a></li>
-                      <li><a href="">Profile</a></li>
-					<li><a href="">{% if request.user.is_authenticate %} Logout {% else %}Login / Register {% endif %}</a></li>
+                      <li><a href="/profile/">Profile</a></li>
+					<li><a href="{% if request.user.is_authenticated%}/logout/{% else %}/login/{% endif %}">{% if request.user.is_authenticated%} Logout {% else %}Login / Register {% endif %}</a></li>
 
 				  </ul>
 				</div>

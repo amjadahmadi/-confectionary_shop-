@@ -28,11 +28,11 @@
 				</a>
 			  </li>
 			  <li class="list">
-				<a href="#">
+				<a href="{% if request.user.is_authenticated%}/logout/{% else %}/login/{% endif %}">
 				  <span class="icon">
 					<ion-icon name="log-in-outline"></ion-icon>
 				  </span>
-				  <span class="text">{% if request.user.is_authenticate %} Logout {% else %}Login/Register {% endif %}</span>
+				  <span class="text">{% if request.user.is_authenticated %} Logout {% else %}Login/Register {% endif %}</span>
 				</a>
 			  </li>
 {#			  <li class="list">#}
