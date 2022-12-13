@@ -1,0 +1,59 @@
+{% extends 'core/home.html' %}
+{% load static %}
+
+
+{% block content %}
+    <section class="vh-100" style="background-color: rgb(170,160,160)">
+      <div class="container h-100" style="background-color:rgba(244,224,221)">
+        <div class="row d-flex justify-content-center align-items-center h-100 "style="margin-bottom: 20px !important;padding-bottom: 20px">
+          <div class="col-lg-12 col-xl-11">
+            <div class="card text-black" style="border-radius: 25px;">
+              <div class="card-body p-md-5 h-50">
+                <div class="row justify-content-center">
+                  <div class="col-md-10 col-lg-6 col-xl-5 order-2 order-lg-1">
+                    <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">Sign in</p>
+
+                    <div class="mx-1 mx-md-4">
+  <form action="{% url 'user:login' %}?next={{ next }}" method="POST" class="register-form" id="register-form">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <label for="phone"><i class="zmdi zmdi-phone"></i></label>
+                                {{ form.phone }}
+                            </div>
+                            <div class="form-group">
+                                <label for="pass"><i class="zmdi zmdi-lock"></i></label>
+                                {{ form.password }}
+                            </div>
+
+                            <div class="form-group form-button">
+
+                                <input type="submit" name="signup" id="signup" class="form-submit"/>
+                                <input type="hidden" name="next"  value="{{ next }}"/>
+
+                            </div>
+
+                        </form>
+                    </div>
+
+                  </div>
+                  <div class="col-md-10 col-lg-6 col-xl-7 d-flex align-items-center order-1 order-lg-2">
+                    <div class="row">
+                    <img src="{% static 'draw1.png' %}"
+                      class="img-fluid" alt="Sample image">
+                           {% if form.errors %}
+                            <div class="alert alert-danger">
+                                {{ form.errors }}
+                            </div>
+                        {% endif %}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+{% endblock %}

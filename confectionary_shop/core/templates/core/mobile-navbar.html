@@ -1,0 +1,51 @@
+		<div class="d-lg-none">
+		<div class="fixed-bottom">
+		<div class="fixed-bottom row" style="background-color:rgb(218,212,207)">
+		<div class="navigation" >
+			<ul>
+			  <li id="home" class="list active">
+				<a href="/">
+				  <span class="icon">
+					<ion-icon name="home-outline"></ion-icon>
+				  </span>
+				  <span class="text">Home</span>
+				</a>
+			  </li>
+			  <li id="profile" class="list">
+				<a href="#">
+				  <span class="icon">
+					<ion-icon name="person-outline"></ion-icon>
+				  </span>
+				  <span class="text">Profile</span>
+				</a>
+			  </li>
+			  <li id="'basket" class="list">
+				<a href="#">
+				  <span class="icon">
+					<ion-icon name="basket-outline"></ion-icon>
+				  </span>
+				  <span class="text">Card items</span>
+				</a>
+			  </li>
+			  <li id="log" class="list">
+				<a href="{% if request.user.is_authenticated%}/logout/{% else %}/login/{% endif %}">
+				  <span class="icon">
+					<ion-icon name="log-in-outline"></ion-icon>
+				  </span>
+				  <span class="text">{% if request.user.is_authenticated %} Logout {% else %}Login/Register {% endif %}</span>
+				</a>
+			  </li>
+{#			  <li class="list">#}
+{#				<a href="#" id="zz">#}
+{#				  <span class="icon">#}
+{#					<ion-icon name="settings-outline"></ion-icon>#}
+{#				  </span>#}
+{#				  <span class="text">Settings</span>#}
+{#				</a>#}
+{#			  </li>#}
+			  <div class="indicator"></div>
+			</ul>
+		  </div>
+		</div>
+		</div>
+	</div>
