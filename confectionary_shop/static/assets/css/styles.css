@@ -16,6 +16,7 @@ body {
   min-height: 100vh;
   background: var(--clr);
   background-color: rgb(244,224,221);
+
 }
 .navigation {
   position: relative;
@@ -143,7 +144,7 @@ body {
 }
 
 :root {
-    --background: #e9eef2;
+    --background: rgb(244,224,221);
     --color: #212325;
     --color-2: #444;
     --color-3: #666;
@@ -262,7 +263,45 @@ p.site-decription {
   text-decoration: underline
 }
 
+div.scrollmenu {
+  overflow: auto;
+  white-space: nowrap;
 
+  /*height: 210px;*/
+
+}
+/* div.scrollmenu div{
+    height: 85px;
+} */
+
+div.scrollmenu div {
+  display: inline-block;
+
+  text-align: center;
+  padding: 14px;
+  text-decoration: none;
+}
+
+div.scrollmenu .cat:hover {
+  background-color: #ffffff;
+  border-radius: 70%;
+}
+
+    .card{
+        border-radius: 4px;
+        background: #fff;
+        box-shadow: 0 6px 10px rgba(0,0,0,.08), 0 0 6px rgba(0,0,0,.05);
+          transition: .3s transform cubic-bezier(.155,1.105,.295,1.12),.3s box-shadow,.3s -webkit-transform cubic-bezier(.155,1.105,.295,1.12);
+      /* padding: 14px 80px 18px 36px; */
+      cursor: pointer;
+
+    }
+
+
+        .card:hover{
+         transform: scale(1.05);
+      box-shadow: 0 10px 20px rgba(0,0,0,.12), 0 4px 8px rgba(0,0,0,.06);
+    }
 @media screen and (max-width: 1100px){
   .footer-nav{
     flex-direction: column

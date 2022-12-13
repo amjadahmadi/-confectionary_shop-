@@ -6,5 +6,4 @@ from django.views import View
 
 class Home(View):
     def get(self, request):
-        print(request.user.is_authenticated)
-        return render(request, 'core/home.html')
+        return render(request, 'core/home.html',{'type':'home'})

@@ -60,8 +60,8 @@ class Logout(View):
 class Login(View):
     def get(self, request):
         f = LoginForm()
-        request.session['next'] = request.GET.get('next', False)
-        return render(request, 'customer/signIn.html', {'form': f})
+        x = request.GET.get('next', None)
+        return render(request, 'customer/signIn.html', {'form': f,'type':'log','next':x})
 
     def post(self, request):
         f = LoginForm(request.POST or None)

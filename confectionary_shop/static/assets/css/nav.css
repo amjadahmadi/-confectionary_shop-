@@ -11,6 +11,7 @@ body
 {
   font-family: 'Poppins', sans-serif;
   background-color: rgb(235,190,164);
+
 }
 ul
 {
@@ -38,6 +39,7 @@ a
   justify-content:space-between;
   align-items:center; */
   background-color:rgb(218,212,207);
+
 }
 .navbar .logo
 {
