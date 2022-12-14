@@ -14,10 +14,13 @@
         <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
 
         <!--=============== CSS ===============-->
+    <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
     <link rel="stylesheet" href="{% static 'assets/css/nav.css' %}">
     <link rel="stylesheet" href="{% static 'assets/css/styles.css' %}">
+    {% block style %}
     <link rel="stylesheet" href="{% static 'auth/fonts/material-icon/css/material-design-iconic-font.min.css' %}">
     <link rel="stylesheet" href="{% static 'auth/css/style.css' %}">
+    {% endblock %}
 
 
 

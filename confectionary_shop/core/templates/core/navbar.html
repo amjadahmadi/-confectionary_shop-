@@ -11,7 +11,7 @@
 				</div>
 				<div class="nav-links">
 				  <ul class="nav-menu">
-					<li class="active"><a href="">Home</a></li>
+					<li class="active"><a href="/">Home</a></li>
 					<li><a href="">Card items</a></li>
                       <li><a href="/profile/">Profile</a></li>
 					<li><a href="{% if request.user.is_authenticated%}/logout/{% else %}/login/{% endif %}">{% if request.user.is_authenticated%} Logout {% else %}Login / Register {% endif %}</a></li>
