@@ -42,7 +42,8 @@ INSTALLED_APPS = [
     'Cake_designing.apps.CakeDesigningConfig',
     'product.apps.ProductConfig',
     'orders.apps.OrdersConfig',
-    'crispy_forms'
+    'crispy_forms',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
