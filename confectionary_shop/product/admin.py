@@ -21,14 +21,14 @@ class ProductsAdmin(admin.ModelAdmin):
 
 @admin.register(Stock)
 class StockAdmin(admin.ModelAdmin):
-    list_display = [field.name for field in Stock._meta.get_fields()]
+    list_display = ['product', 'kilo', 'count', 'price', 'after_discount']
     search_fields = ('product',)
     ordering = ('price',)
 
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = [field.name for field in Category._meta.get_fields()]
+    list_display = [field.name for field in Category._meta.get_fields() if field != 'category']
     search_fields = ('category_name',)
     ordering = ('category_name',)
 

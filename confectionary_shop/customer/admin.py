@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.forms import UserChangeForm
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
-from .models import User, Profile, Bank_Account, Addresses
+from .models import User, Profile, Bank_Account, Addresses, Comment
 
 
 # Register your models here.
@@ -43,11 +43,13 @@ class BankAdmin(admin.ModelAdmin):
     ordering = ('balance',)
 
 
-@admin.register(Addresses)
-class AddressesAdmin(admin.ModelAdmin):
-    list_display = ['full_address', 'user']
-    search_fields = ('full_address',)
-    ordering = ('full_address',)
+
+
+@admin.register(Comment)
+class CommentAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in Comment._meta.get_fields()]
+    search_fields = [field.name for field in Comment._meta.get_fields()]
+    ordering = ('id',)
 
 
 admin.site.register(User, UserAdmin)
