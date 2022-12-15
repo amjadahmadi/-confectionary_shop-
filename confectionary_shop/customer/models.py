@@ -58,3 +58,13 @@ class User(AbstractUser, PermissionsMixin):
 class Addresses(BaseModel):
     full_address = models.TextField(null=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+
+class Comment(BaseModel):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    first_name = models.CharField(max_length=30, null=True, blank=True)
+    last_name = models.CharField(max_length=30, null=True, blank=True)
+    email = models.EmailField(null=True, blank=True)
+    stock_id = models.ForeignKey('product.Stock', on_delete=models.CASCADE)
+    comment_body = models.TextField()
+    rate = models.FloatField()
