@@ -1,9 +1,8 @@
 async function load_category(){
-    console.log('h')
+
     const result = await fetch('http://127.0.0.1:8000/product/category_list/')
     const json_result = await result.json()
     json_result.forEach(element=>{
-    console.log(element)
     const cat = document.createElement('div')
     cat.className = 'cat'
     cat.style.width ='200px'
@@ -24,6 +23,9 @@ async function load_category(){
     p.innerHTML = element.category_name
     category_name.append(p)
     cat.append(img_div,category_name)
+    cat.addEventListener("click", function () {
+    load_products(element.id);
+});
     document.getElementById('category').append(cat)
     })
 
