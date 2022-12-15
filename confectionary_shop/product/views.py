@@ -5,12 +5,23 @@ from rest_framework import generics
 from .models import Category, Stock
 from .serializers import CategorySerializer, StockSerializer
 
+from rest_framework import generics
+from .models import Category, Stock, Products
+from .serializers import CategorySerializer
+from django.views.generic.detail import DetailView
 
 # Create your views here.
 
-class Detail_product(View):
-    def get(self, request):
-        return render(request, 'product/detail_product.html')
+class Detail_product(DetailView):
+    model = Stock
+    template_name_suffix = 'product/detail+product.html'
+
+
+class CategoryList(generics.ListCreateAPIView):
+    serializer_class = CategorySerializer
+
+    def get_queryset(self):
+        return Category.objects.filter(is_deleted=False)
 
 
 class CategoryList(generics.ListCreateAPIView):
