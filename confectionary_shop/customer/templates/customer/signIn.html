@@ -2,7 +2,7 @@
 {% load static %}
 
 
-{% block content %}
+{% block main %}
     <section class="vh-100" style="background-color: rgb(170,160,160)">
       <div class="container h-100" style="background-color:rgba(244,224,221)">
         <div class="row d-flex justify-content-center align-items-center h-100 "style="margin-bottom: 20px !important;padding-bottom: 20px">
@@ -28,6 +28,7 @@
                             <div class="form-group form-button">
 
                                 <input type="submit" name="signup" id="signup" class="form-submit"/>
+                                <h6 class="mt-2">don have account? <a href="/signup/">SinUp</a></h6>
                                 <input type="hidden" name="next"  value="{{ next }}"/>
 
                             </div>

@@ -128,12 +128,12 @@
 
 
             <div class="row  justify-content-center">
-                <img class="rounded-5 mt-5 mb-5" src="{% static 'draw1.png' %}" alt="Card image cap" style="max-width: 600px;max-height: 300px">
+                <img class="rounded-5 mt-5 mb-5" src="{{ object.product.img.url }}" alt="Card image cap" style="max-width: 600px;max-height: 300px">
             </div>
 
-                <div class="row text-end" > <h1>title</h1></div>
-                <div class="row text-end" ><h2>discription</h2></div>
-                <div class="row text-end"><h3>price</h3></div>
+                <div class="row text-end" > <h1>{{ object.product.product_name }}</h1></div>
+                <div class="row text-end" ><h2>{{ object.product.description }}</h2></div>
+                <div class="row text-end"><h3>{{ object.price}}</h3></div>
                 <div class="row">
                 <div class="d-flex flex-row-reverse mt-5">
            <div class="d-flex flex-column-reverse" >    <select id="menu2" style="width: 200px; margin-top:20px;height: 30px;margin-left: 10px;">

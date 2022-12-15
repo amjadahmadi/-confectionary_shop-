@@ -10,11 +10,17 @@ from .models import Category, Stock, Products
 from .serializers import CategorySerializer
 from django.views.generic.detail import DetailView
 
+
 # Create your views here.
 
 class Detail_product(DetailView):
     model = Stock
-    template_name_suffix = 'product/detail+product.html'
+    template_name = 'product/detail_product.html'
+    queryset = Stock.objects.select_related('product')
+    # def get_context_data(self, **kwargs):
+    #     context = super(Detail_product, self).get_context_data(**kwargs)
+    #     print(context['object']['product_name'])
+    #     return context
 
 
 class CategoryList(generics.ListCreateAPIView):
