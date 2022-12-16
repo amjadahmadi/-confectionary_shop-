@@ -2,6 +2,14 @@
 async function load_products(category_id){
     const result = await fetch('http://127.0.0.1:8000/product/product_list/'+category_id)
     const json_result = await result.json()
+
+
+        var e = document.getElementById('products')
+        var child = e.lastElementChild;
+        while (child) {
+            e.removeChild(child);
+            child = e.lastElementChild;
+        }
     json_result.forEach(element=>{
     const html = `          <div class="d-flex flex-row  mt-4 mb-4" onclick="detail_product(${element['id']})" style="min-width: 400px; max-width: 600px; height: 210px;">
 

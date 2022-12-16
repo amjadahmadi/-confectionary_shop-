@@ -15,7 +15,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 class UserCreateView(View):
 
     def get(self, request):
-        if request.user.is_authenticated:
+        if request.user.is_authenticated and not request.user.is_superuser:
             return redirect('core:home')
         f = SignUpForm()
         return render(request, 'customer/register.html', {'form': f, 'met': 'signup'})
@@ -65,7 +65,7 @@ class Logout(View):
 class Login(View):
     def get(self, request):
 
-        if request.user.is_authenticated:
+        if request.user.is_authenticated and not request.user.is_superuser:
 
             return redirect('core:home')
 

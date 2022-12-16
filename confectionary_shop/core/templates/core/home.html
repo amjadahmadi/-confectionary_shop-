@@ -6,50 +6,13 @@
 {% endblock %}
 {% block main %}
     <div id="category" class="scrollmenu">
-{#        <div class="cat" style="width: 200px;">#}
-{#            <div class="d-flex row align-content-center justify-content-center  " style="height: 120px;"><img class="rounded-circle" alt="avatar1" src="{% static 'draw1.png' %}" style="height: 100px;width: 120px;" /></div>#}
-{#            <div class="d-flex row align-content-center text-center justify-content-center" style="height: 40px;"><p>شیرینی خشک</p></div>#}
-{#        </div>#}
-{##}
-{#        <div class="cat" style="width: 200px;">#}
-{#            <div class="d-flex row align-content-center justify-content-center  " style="height: 120px;"><img class="rounded-circle" alt="avatar1" src="{% static 'draw1.png' %}" style="height: 100px;width: 120px;" /></div>#}
-{#            <div class="d-flex row align-content-center text-center justify-content-centet" style="height: 40px;"><p>کیک تولد</p></div>#}
-{#        </div>#}
-{#        <div class="cat" style="width: 200px;">#}
-{#            <div class="d-flex row align-content-center justify-content-center  " style="height: 120px;"><img class="rounded-circle" alt="avatar1" src="{% static 'draw1.png' %}" style="height: 100px;width: 120px;" /></div>#}
-{#            <div class="d-flex row align-content-center text-center justify-content-center" style="height: 40px;"><p>12ascascasc</p></div>#}
-{#        </div>#}
-{#        <div class="cat" style="width: 200px;">#}
-{#            <div class="d-flex row align-content-center justify-content-center  " style="height: 120px;"><img class="rounded-circle" alt="avatar1" src="{% static 'draw1.png' %}" style="height: 100px;width: 120px;" /></div>#}
-{#            <div class="d-flex row align-content-center text-center justify-content-center" style="height: 40px;"><p>12ascascasc</p></div>#}
-{#        </div>#}
-{#        <div class="cat" style="width: 200px;">#}
-{#            <div class="d-flex row align-content-center justify-content-center  " style="height: 120px;"><img class="rounded-circle" alt="avatar1" src="{% static 'draw1.png' %}" style="height: 100px;width: 120px;" /></div>#}
-{#            <div class="d-flex row align-content-center text-center justify-content-center" style="height: 40px;"><p>12ascascasc</p></div>#}
-{#        </div>#}
-{#        <div class="cat" style="width: 200px;">#}
-{#            <div class="d-flex row align-content-center justify-content-center  " style="height: 120px;"><img class="rounded-circle" alt="avatar1" src="{% static 'draw1.png' %}" style="height: 100px;width: 120px;" /></div>#}
-{#            <div class="d-flex row align-content-center text-center justify-content-center" style="height: 40px;"><p>12ascascasc</p></div>#}
-{#        </div>#}
-{#        <div class="cat" style="width: 200px;">#}
-{#            <div class="d-flex row align-content-center justify-content-center  " style="height: 120px;"><img class="rounded-circle" alt="avatar1" src="{% static 'draw1.png' %}" style="height: 100px;width: 120px;" /></div>#}
-{#            <div class="d-flex row align-content-center text-center justify-content-center" style="height: 40px;"><p>12ascascasc</p></div>#}
-{#        </div>#}
-{##}
-{#        <div class="cat" style="width: 200px;">#}
-{#            <div class="d-flex row align-content-center justify-content-center  " style="height: 120px;"><img class="rounded-circle" alt="avatar1" src="{% static 'draw1.png' %}" style="height: 100px;width: 120px;" /></div>#}
-{#            <div class="d-flex row align-content-center text-center justify-content-center" style="height: 40px;"><p>12ascascasc</p></div>#}
-{#        </div>#}
-{#        <div class="cat" style="width: 200px;">#}
-{#            <div class="d-flex row align-content-center justify-content-center  " style="height: 120px;"><img class="rounded-circle" alt="avatar1" src="{% static 'draw1.png' %}" style="height: 100px;width: 120px;" /></div>#}
-{#            <div class="d-flex row align-content-center text-center justify-content-center" style="height: 40px;"><p>12ascascasc</p></div>#}
-{#        </div>#}
+
 
       </div>
     <div class="container-fluid d-flex  justify-content-end">
 
         <div id="products" class="row justify-content-end">
-            ascac
+
         </div>
         </div>
 {% endblock %}
@@ -62,7 +25,71 @@
 
 
 {% block script %}
-<script src="{% static 'assets/js/load.js' %}"></script>
-<script>load_category();</script>
+<script>
+async function load_category(){
+
+    const result = await fetch('http://127.0.0.1:8000/product/category_list/')
+    const json_result = await result.json()
+    const cat = document.createElement('div')
+    cat.className = 'cat'
+    cat.style.width ='200px'
+    cat.id = 'all'
+    const img_div = document.createElement('div')
+    img_div.className = 'd-flex row align-content-center justify-content-center'
+    img_div.style.height = '120px'
+    const img = document.createElement('img')
+    img.className = 'rounded-circle'
+    img.style.width = '120px'
+    img.style.height = '100px'
+    img.alt = 'avatar'
+    img.src ='http://127.0.0.1:8000/media/draw1.png'
+    img_div.append(img)
+    const category_name = document.createElement('div')
+    category_name.className = 'd-flex row align-content-center text-center justify-content-center'
+    category_name.style.height = '40px'
+    const p = document.createElement('p')
+    p.innerHTML = 'همه'
+    category_name.append(p)
+    cat.append(img_div,category_name)
+    cat.addEventListener("click", function () {
+    load_products('all');})
+    document.getElementById('category').append(cat)
+    json_result.forEach(element=>{
+    const cat = document.createElement('div')
+    cat.className = 'cat'
+    cat.style.width ='200px'
+    const img_div = document.createElement('div')
+    img_div.className = 'd-flex row align-content-center justify-content-center'
+    img_div.style.height = '120px'
+    const img = document.createElement('img')
+    img.className = 'rounded-circle'
+    img.style.width = '120px'
+    img.style.height = '100px'
+    img.alt = 'avatar'+element.id
+    img.src = element.img
+    img_div.append(img)
+    const category_name = document.createElement('div')
+    category_name.className = 'd-flex row align-content-center text-center justify-content-center'
+    category_name.style.height = '40px'
+    const p = document.createElement('p')
+    p.innerHTML = element.category_name
+    category_name.append(p)
+    cat.append(img_div,category_name)
+    cat.addEventListener("click", function () {
+    load_products(element.id);
+});
+    document.getElementById('category').append(cat)
+    })
+
+        document.getElementById('all').click()
+}
+
+
+
+</script>
+<script>
+    load_category();
+
+</script>
  <script src="{% static 'assets/js/load_prod.js' %}"></script>
 {% endblock %}

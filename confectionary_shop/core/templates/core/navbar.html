@@ -3,7 +3,7 @@
 		    <nav class="navbar">
         <div class="d-flex flex-row w-100">
             <div class="col">        <a href="#" class="navbar-logo"
-                ><i class="material-icons">fastfood</i> foodRoad</a
+                ><i class="material-icons">online</i> shop</a
               ></div>
             <div class="d-flex flex-column justify-content-center align-content-center">
                                 <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
@@ -18,7 +18,7 @@
                 <li class="navbar-dropdown">
                   <a href="/">Home</a>
                 </li>
-                {% if  request.user.is_authenticated %}
+                {% if  request.user.is_authenticated and request.user.is_superuser is False %}
                 <li class="navbar-dropdown">
 
                   <a href="#">{{ request.user.last_name }} {{ request.user.first_name }}</a>
@@ -34,9 +34,9 @@
                 <li class="navbar-dropdown">
                   <a href="#">Card items</a>
                 </li>
-              {% if request.user.is_authenticated is False %}
+              {% if  request.user.is_authenticated is False or request.user.is_superuser is True  %}
                 <li class="navbar-dropdown">
-                  <a href="/login">Log in / Register</a>
+                  <a href="/login/">Log in / Register</a>
                 </li>
             {% endif %}
               </ul></div>
