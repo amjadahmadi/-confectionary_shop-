@@ -15,6 +15,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 class UserCreateView(View):
 
     def get(self, request):
+        if request.user.is_authenticated and not request.user.is_superuser:
+            return redirect('core:home')
         f = SignUpForm()
         return render(request, 'customer/register.html', {'form': f, 'met': 'signup'})
         # template_name_suffix = 'customer/signup.html'
@@ -25,16 +27,18 @@ class UserCreateView(View):
             request.session['info'] = f.cleaned_data
             return redirect('user:code')
         else:
-            print(f.errors)
             return render(request, 'customer/register.html', {'form': f})
 
 
 class CodeGenerate(View):
 
     def get(self, request):
-        f = CodeForm()
-        send_otp(request.session['info']['phone'])
-        return render(request, 'customer/CodeForm.html', {'form': f})
+        if request.session.get('info',False):
+            f = CodeForm()
+            send_otp(request.session['info']['phone'])
+            return render(request, 'customer/CodeForm.html', {'form': f})
+        else:
+            return  redirect('core:home')
         # template_name_suffix = 'customer/signup.html'
 
     def post(self, request):
@@ -43,6 +47,7 @@ class CodeGenerate(View):
             if check_otp(request.session['info']['phone'], f.cleaned_data['valid_code']):
                 user = SignUpForm(request.session['info'])
                 user = user.save()
+                del request.session['info']
                 login(request, user)
                 return redirect('core:home')
             return redirect('user:code')
@@ -59,21 +64,29 @@ class Logout(View):
 
 class Login(View):
     def get(self, request):
+
+        if request.user.is_authenticated and not request.user.is_superuser:
+
+            return redirect('core:home')
+
         f = LoginForm()
         x = request.GET.get('next', None)
-        return render(request, 'customer/signIn.html', {'form': f,'type':'log','next':x})
+        return render(request, 'customer/signIn.html', {'form': f, 'type': 'log', 'next': x})
 
     def post(self, request):
         f = LoginForm(request.POST or None)
 
         if f.is_valid():
             user = authenticate(request, phone=f.cleaned_data['phone'], password=f.cleaned_data['password'])
-            next = request.session['next'] if request.session['next'] else 'core:home'
-            del request.session['next']
+
+            next1 = request.GET['next']
+
+
             if user:
                 login(request, user)
-
-                return redirect(next)
+                if next1 != str(None):
+                    return redirect(next1)
+                return redirect('core:home')
             else:
                 messages.error(request, 'no user')
                 return redirect('user:login')

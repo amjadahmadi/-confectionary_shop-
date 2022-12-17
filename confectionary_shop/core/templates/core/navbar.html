@@ -1,25 +1,48 @@
 		<div class="sticky-top">
 			<div class="d-none d-lg-block">
-			<nav class="navbar">
-				<a href="#" class="logo">Logo</a>
-				<script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
-				<div class="search-box">
-				  <input class="search-input" type="text" name="" placeholder="Pesquise">
-				  <a href="#" class="search-btn">
-					<i class="fas fa-search"></i>
-				  </a>
-				</div>
-				<div class="nav-links">
-				  <ul class="nav-menu">
-					<li class="active"><a href="/">Home</a></li>
-					<li><a href="">Card items</a></li>
-                      <li><a href="/profile/">Profile</a></li>
-					<li><a href="{% if request.user.is_authenticated%}/logout/{% else %}/login/{% endif %}">{% if request.user.is_authenticated%} Logout {% else %}Login / Register {% endif %}</a></li>
+		    <nav class="navbar">
+        <div class="d-flex flex-row w-100">
+            <div class="col">        <a href="#" class="navbar-logo"
+                ><i class="material-icons">online</i> shop</a
+              ></div>
+            <div class="d-flex flex-column justify-content-center align-content-center">
+                                <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
+                <div class="search-box">
 
-				  </ul>
-				</div>
-				  <i class='bx bx-grid-alt menu-hamburger'></i>
+                <input class="search-input" type="text" name="" placeholder="Pesquise">
+                <a href="#" class="search-btn">
+                  <i class="fas fa-search"></i>
+                </a>
+              </div></div>
+            <div class="d-flex flex-column justify-content-end" style="margin-right: 50px;">        <ul class="navbar-links">
+                <li class="navbar-dropdown">
+                  <a href="/">Home</a>
+                </li>
+                {% if  request.user.is_authenticated and request.user.is_superuser is False %}
+                <li class="navbar-dropdown">
 
-			  </nav>
-              </div>
+                  <a href="#">{{ request.user.last_name }} {{ request.user.first_name }}</a>
+                  <div class="dropdown">
+                    <a href="/profile/">Profile</a>
+                    <a href="/logout/">Log Out</a>
+                  </div>
+                </li>
+                {% endif %}
+                <li class="navbar-dropdown">
+                  <a href="#">Cake Designing</a>
+                </li>
+                <li class="navbar-dropdown">
+                  <a href="#">Card items</a>
+                </li>
+              {% if  request.user.is_authenticated is False or request.user.is_superuser is True  %}
+                <li class="navbar-dropdown">
+                  <a href="/login/">Log in / Register</a>
+                </li>
+            {% endif %}
+              </ul></div>
         </div>
+
+
+      </nav>
+              </div>
+        </div >
