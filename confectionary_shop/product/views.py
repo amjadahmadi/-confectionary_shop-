@@ -30,6 +30,22 @@ class CategoryList(generics.ListCreateAPIView):
         return Category.objects.filter(is_deleted=False)
 
 
+class ProductListAPI(generics.ListCreateAPIView):
+    serializer_class = StockSerializer
+
+    def get_queryset(self):
+        return Stock.objects.filter(is_deleted=False)
+
+    def list(self, request, *args, **kwargs):
+        if kwargs['category_id'] == 'all':
+            queryset = self.filter_queryset(self.get_queryset())
+        else:
+            queryset = self.filter_queryset(self.get_queryset().filter(category=kwargs['category_id']))
+
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+
+
 class ProductList(generics.ListCreateAPIView):
     serializer_class = StockSerializer
 

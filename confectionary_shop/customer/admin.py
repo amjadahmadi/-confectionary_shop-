@@ -42,6 +42,11 @@ class BankAdmin(admin.ModelAdmin):
     search_fields = ('card_bank',)
     ordering = ('balance',)
 
+    def has_view_permission(self, request, obj=None):
+        print('h')
+        if request.user.id == request.GET.get('pk',None):
+            return True
+        return False
 
 
 

@@ -9,5 +9,5 @@ urlpatterns = [
                   path('code/', CodeGenerate.as_view(), name='code'),
                   path('logout/', Logout.as_view(), name='logout'),
                   path('login/', Login.as_view(), name='login'),
-                  path('profile/', Profile.as_view(), name='profile'),
+                  path('profile/<pk>', Profile.as_view(), name='profile'),
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

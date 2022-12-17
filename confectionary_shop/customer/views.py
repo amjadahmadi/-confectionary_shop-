@@ -2,15 +2,16 @@ from django.contrib.auth import login, logout, authenticate
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.views import View
-from django.views.generic.edit import CreateView, FormView
-from .models import User
+from django.views.generic.detail import DetailView
 from .forms import SignUpForm, CodeForm, LoginForm
 from django.contrib import messages
 from core.utils import send_otp, check_otp
-from django.contrib.auth.mixins import LoginRequiredMixin
-
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin, UserPassesTestMixin
+from .permisions import IsAuthenticatedAndOwner
 
 # Create your views here.
+from .models import User
+
 
 class UserCreateView(View):
 
@@ -33,12 +34,12 @@ class UserCreateView(View):
 class CodeGenerate(View):
 
     def get(self, request):
-        if request.session.get('info',False):
+        if request.session.get('info', False):
             f = CodeForm()
             send_otp(request.session['info']['phone'])
             return render(request, 'customer/CodeForm.html', {'form': f})
         else:
-            return  redirect('core:home')
+            return redirect('core:home')
         # template_name_suffix = 'customer/signup.html'
 
     def post(self, request):
@@ -66,7 +67,6 @@ class Login(View):
     def get(self, request):
 
         if request.user.is_authenticated and not request.user.is_superuser:
-
             return redirect('core:home')
 
         f = LoginForm()
@@ -80,7 +80,6 @@ class Login(View):
             user = authenticate(request, phone=f.cleaned_data['phone'], password=f.cleaned_data['password'])
 
             next1 = request.GET['next']
-
 
             if user:
                 login(request, user)
@@ -96,8 +95,12 @@ class Login(View):
             return render(request, 'customer/signIn.html', {'form': f})
 
 
-class Profile(LoginRequiredMixin, View):
+class Profile(LoginRequiredMixin, UserPassesTestMixin, DetailView):
     login_url = '/login/'
+    model = User
+    template_name = 'customer/profile.html'
 
-    def get(self, request):
-        return HttpResponse(request.user.first_name)
+    def test_func(self):
+        if str(self.request.user.id) == str(self.kwargs['pk']):
+            return True
+        return False
