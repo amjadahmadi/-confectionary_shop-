@@ -70,7 +70,7 @@ class Stock(BaseModel):
 
         return self.price - amount
 
-    def get_product(self):
+    def get_discount(self):
         queryset = Discount.objects.filter(product=self).values().last()
         if queryset:
             return queryset
