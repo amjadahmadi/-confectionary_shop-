@@ -13,7 +13,7 @@ class UserAdmin(BaseUserAdmin):
         ('Permissions', {'fields': ('is_active', 'is_staff', 'is_superuser',
                                     'groups', 'user_permissions')}),
         ('Important dates', {'fields': ('last_login', 'date_joined')}),
-        ('user_info', {'fields': ('phone', )}),
+        ('user_info', {'fields': ('phone',)}),
         ('user bank info', {'fields': ('bank_account',)}),
         ('user profile', {'fields': ('profile',)}),
     )
@@ -26,7 +26,6 @@ class UserAdmin(BaseUserAdmin):
     list_display = ['phone', 'first_name', 'last_name', 'is_staff']
     search_fields = ('first_name', 'last_name', 'phone')
     ordering = ('last_name',)
-
 
 
 @admin.register(Profile)
@@ -42,19 +41,12 @@ class BankAdmin(admin.ModelAdmin):
     search_fields = ('card_bank',)
     ordering = ('balance',)
 
-    def has_view_permission(self, request, obj=None):
-        print('h')
-        if request.user.id == request.GET.get('pk',None):
-            return True
-        return False
-
-
 
 @admin.register(Comment)
 class CommentAdmin(admin.ModelAdmin):
     list_display = [field.name for field in Comment._meta.get_fields()]
-    search_fields = [field.name for field in Comment._meta.get_fields()]
-    ordering = ('id',)
+    search_fields = ['content_object']
+    ordering = ('-id',)
 
 
 admin.site.register(User, UserAdmin)

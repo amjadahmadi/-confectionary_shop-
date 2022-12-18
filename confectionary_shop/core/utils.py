@@ -2,6 +2,22 @@ import random
 
 import redis
 from kavenegar import *
+import pytz
+from django.utils import timezone
+import jdatetime
+
+
+def convert_time_to_jalali(date_time):
+    date_time = str(date_time).split(' ')
+    part_1 = date_time[0].split('/')
+    d_time = jdatetime.date.fromgregorian(year=int(part_1[2]), month=int(part_1[1]), day=int(part_1[0]))
+    return d_time
+
+
+def convert_to_localtime(utctime):
+    fmt = '%d/%m/%Y %H:%M'
+    local_dt = timezone.localtime(utctime, pytz.timezone('Asia/Tehran'))
+    return convert_time_to_jalali(local_dt.strftime(fmt))
 
 
 def send_otp(phone):
