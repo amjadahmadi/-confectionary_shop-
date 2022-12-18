@@ -3,7 +3,12 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser, PermissionsMixin
 from django.core.validators import RegexValidator
 from core.models import BaseModel
-from .permisions import IsAuthenticatedAndOwner
+from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.models import ContentType
+from django.contrib.auth import get_user_model
+from django.utils.translation import gettext_lazy as _
+
+from customer.managers import CommentManager
 
 
 class CustomManager(BaseUserManager):
@@ -62,10 +67,31 @@ class Addresses(BaseModel):
 
 
 class Comment(BaseModel):
+    class RATE(models.IntegerChoices):
+        """
+            This is a class for rating choices.
+        """
+        VERY_BAD = 1, _('Very bad')
+        BAD = 2, _('Bad')
+        GOOD = 3, _('Good')
+        VERY_GOOD = 4, _('Very good')
+        EXCELLENT = 5, _('Excellent')
+
+    class STATUS(models.IntegerChoices):
+        """
+            This is a class for status choices.
+        """
+        PENDING = 1, _('Pending')
+        APPROVED = 2, _('Approved')
+        REJECTED = 3, _('Rejected')
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     first_name = models.CharField(max_length=30, null=True, blank=True)
     last_name = models.CharField(max_length=30, null=True, blank=True)
     email = models.EmailField(null=True, blank=True)
-    stock_id = models.ForeignKey('product.Stock', on_delete=models.CASCADE)
+    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE, related_name='comments')
+    status = models.IntegerField(choices=STATUS.choices, default=STATUS.PENDING)
+    object_id = models.PositiveIntegerField()
+    content_object = GenericForeignKey('content_type', 'object_id')
     comment_body = models.TextField()
-    rate = models.FloatField()
+    rate = models.IntegerField(choices=RATE.choices, default=RATE.GOOD)
+    objects = CommentManager()

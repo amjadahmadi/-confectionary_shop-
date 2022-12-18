@@ -51,18 +51,18 @@ class ProductSerializer(serializers.ModelSerializer):
 
 
 class StockSerializer(serializers.ModelSerializer):
-    discount = serializers.SerializerMethodField()
+    after_discount = serializers.SerializerMethodField()
     product = ProductSerializer()
 
     class Meta:
         model = Stock
         fields = '__all__'
 
-    def get_discount(self, obj: Stock):
+    def get_after_discount(self, obj: Stock):
         dis = obj.get_discount()
         if dis:
-            obj.after_discount = obj._after_discount(dis['amount'], dis['percent'])
-        return dis
+            return obj._after_discount(dis['amount'], dis['percent'])
+        return None
 
     # def get_dis(self, obj: Stock):
     #     _discount = obj.get_discount

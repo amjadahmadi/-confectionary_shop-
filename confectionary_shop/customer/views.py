@@ -3,14 +3,14 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.views import View
 from django.views.generic.detail import DetailView
-from .forms import SignUpForm, CodeForm, LoginForm
+from .forms import SignUpForm, CodeForm, LoginForm, CommentForm
 from django.contrib import messages
 from core.utils import send_otp, check_otp
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin, UserPassesTestMixin
-from .permisions import IsAuthenticatedAndOwner
+from django.views.generic.edit import CreateView
 
 # Create your views here.
-from .models import User
+from .models import User, Comment
 
 
 class UserCreateView(View):
@@ -104,3 +104,14 @@ class Profile(LoginRequiredMixin, UserPassesTestMixin, DetailView):
         if str(self.request.user.id) == str(self.kwargs['pk']):
             return True
         return False
+
+
+class CreateComment(View):
+    def post(self, request):
+        c = CommentForm(request.POST)
+        if c.is_valid():
+            c.save()
+            messages.info(request, 'your comment after approve will be show')
+        else:
+            messages.error(request, c.errors)
+        return redirect('product:detail', pk=request.POST['object_id'])

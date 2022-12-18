@@ -11,116 +11,21 @@
         <div class="col-lg-7 order-last order-lg-first shadow-lg  bg-white rounded">
 
               <div class="scrollmenu" >
+                  {% for i in comments %}
                 <div class="cat" >
                     <div class="card " style="width: 18rem;margin-top: 50px;margin-bottom: 50px;">
                         <div class="card-body">
-                          <h5 class="card-title">Card title</h5>
-                          <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
-                          <p class="card-text  text-wrap"> make up the bulk of the card's content.
+                          <h5 class="card-title">{{ i.first_name }}</h5>
+                          <h6 class="card-subtitle mb-2 text-muted">{{ i.create_at }}</h6>
+                          <p class="card-text  text-wrap"> {{ i.comment_body }}
+                          <p class="card-text  text-wrap">Rate : {{ i.rate }}
 
                           </p>
                         </div>
                       </div>
                 </div>
-                            <div class="cat" >
-                    <div class="card " style="width: 18rem;margin-top: 50px;margin-bottom: 50px;">
-                        <div class="card-body">
-                          <h5 class="card-title">Card title</h5>
-                          <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
-                          <p class="card-text  text-wrap">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                        </div>
-                      </div>
-                </div>
-                <div class="cat" >
-                    <div class="card " style="width: 18rem;margin-top: 50px;margin-bottom: 50px;">
-                        <div class="card-body">
-                          <h5 class="card-title">Card title</h5>
-                          <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
-                          <p class="card-text  text-wrap">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                        </div>
-                      </div>
-                </div>
 
-                <div class="cat" >
-                    <div class="card " style="width: 18rem;margin-top: 50px;margin-bottom: 50px;">
-                        <div class="card-body">
-                          <h5 class="card-title">Card title</h5>
-                          <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
-                          <p class="card-text  text-wrap">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                        </div>
-                      </div>
-                </div>
-
-                <div class="cat" >
-                    <div class="card " style="width: 18rem;margin-top: 50px;margin-bottom: 50px;">
-                        <div class="card-body">
-                          <h5 class="card-title">Card title</h5>
-                          <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
-                          <p class="card-text  text-wrap">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                        </div>
-                      </div>
-                </div>
-
-                <div class="cat" >
-                    <div class="card " style="width: 18rem;margin-top: 50px;margin-bottom: 50px;">
-                        <div class="card-body">
-                          <h5 class="card-title">Card title</h5>
-                          <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
-                          <p class="card-text  text-wrap">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                        </div>
-                      </div>
-                </div>
-
-                <div class="cat" >
-                    <div class="card " style="width: 18rem;margin-top: 50px;margin-bottom: 50px;">
-                        <div class="card-body">
-                          <h5 class="card-title">Card title</h5>
-                          <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
-                          <p class="card-text  text-wrap">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                        </div>
-                      </div>
-                </div>
-
-                <div class="cat" >
-                    <div class="card " style="width: 18rem;margin-top: 50px;margin-bottom: 50px;">
-                        <div class="card-body">
-                          <h5 class="card-title">Card title</h5>
-                          <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
-                          <p class="card-text  text-wrap">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                        </div>
-                      </div>
-                </div>
-
-                <div class="cat" >
-                    <div class="card " style="width: 18rem;margin-top: 50px;margin-bottom: 50px;">
-                        <div class="card-body">
-                          <h5 class="card-title">Card title</h5>
-                          <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
-                          <p class="card-text  text-wrap">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                        </div>
-                      </div>
-                </div>
-
-                <div class="cat" >
-                    <div class="card " style="width: 18rem;margin-top: 50px;margin-bottom: 50px;">
-                        <div class="card-body">
-                          <h5 class="card-title">Card title</h5>
-                          <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
-                          <p class="card-text  text-wrap">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                        </div>
-                      </div>
-                </div>
-
-                <div class="cat" >
-                    <div class="card " style="width: 18rem;margin-top: 50px;margin-bottom: 50px;">
-                        <div class="card-body">
-                          <h5 class="card-title">Card title</h5>
-                          <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
-                          <p class="card-text  text-wrap">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                        </div>
-                      </div>
-                </div>
-
+{% endfor %}
 
               </div>
         </div>
@@ -164,18 +69,23 @@
     </div>
     <div class="d-flex flex-row ">
         <div class="container mt-3 shadow-lg  bg-white rounded">
-            <h2>Textarea</h2>
-            <p>Use the .form-control class to style textareas as well:</p>
-            <form action="/action_page.php">
-                <div class="mb-3">
-                    <label for="exampleFormControlInput1" class="form-label">Email address</label>
-                    <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="name@example.com">
-                  </div>
-                  <div class="mb-3">
-                    <label for="exampleFormControlTextarea1" class="form-label">Example textarea</label>
-                    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
-                  </div>
+            <h2>Left Comment Here:</h2>
+            <form method="post" action="/comment/">
+                {% csrf_token %}
+{{ form.as_p }}
               <button type="submit" class="btn btn-primary mb-4">Submit</button>
+        {% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+                     {% if form.errors %}
+                            <div class="alert alert-danger">
+                                {{ form.errors }}
+                            </div>
+                        {% endif %}
+</ul>
+{% endif %}
             </form>
           </div>
     </div>

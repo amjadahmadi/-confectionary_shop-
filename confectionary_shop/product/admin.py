@@ -23,7 +23,7 @@ class ProductsAdmin(admin.ModelAdmin):
 class StockAdmin(admin.ModelAdmin):
     autocomplete_fields = ('product',)
     filter_horizontal = ('category',)
-    list_display = ['product', 'kilo', 'count', 'price', 'after_discount']
+    list_display = ['product', 'kilo', 'count', 'price']
     search_fields = ('product',)
     ordering = ('price',)
 

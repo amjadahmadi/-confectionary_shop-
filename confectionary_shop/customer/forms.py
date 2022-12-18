@@ -3,7 +3,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.core.validators import RegexValidator
 
-from .models import User
+from .models import User, Comment
 
 
 class SignUpForm(UserCreationForm):
@@ -51,5 +51,18 @@ class LoginForm(forms.Form):
                                    attrs={'placeholder': 'enter your password.', 'style': '"margin: 0"'}))
 
 
-
-
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = '__all__'
+        widgets = {
+            'first_name': forms.TextInput(attrs={'class': 'form-control'}),
+            'last_name': forms.TextInput(attrs={'class': 'form-control'}),
+            'comment_body': forms.Textarea(attrs={'class': 'form-control'}),
+            'email': forms.TextInput(attrs={'class': 'form-control'}),
+            'user': forms.HiddenInput(),
+            'object_id': forms.HiddenInput(),
+            'content_type': forms.HiddenInput(),
+            'status': forms.HiddenInput(),
+            'is_deleted': forms.HiddenInput()
+        }

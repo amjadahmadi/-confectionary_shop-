@@ -46,8 +46,8 @@ class Discount(BaseModel):
     amount = models.FloatField()
     percent = models.BooleanField()
     active = models.BooleanField()
-    create_at = models.DateTimeField(auto_now_add=True)
-    update_at = models.DateTimeField(auto_now=True)
+    # create_at = models.DateTimeField(auto_now_add=True)
+    # update_at = models.DateTimeField(auto_now=True)
 
     # class Meta:
     #     ordering = 'id'
@@ -57,7 +57,6 @@ class Stock(BaseModel):
     kilo = models.FloatField(null=True, blank=True)
     count = models.IntegerField(null=True, blank=True)
     price = models.FloatField()
-    after_discount = models.FloatField(null=True, blank=True)
     category = models.ManyToManyField(Category)
     stock_manager = StockManagers()
 
