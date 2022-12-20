@@ -2,6 +2,7 @@ from django.urls import path
 from .views import UserCreateView, CodeGenerate, Logout, Login, Profile, CreateComment
 from django.conf import settings
 from django.conf.urls.static import static
+import django.utils.translation as e
 
 app_name = 'user'
 urlpatterns = [

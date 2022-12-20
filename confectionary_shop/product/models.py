@@ -8,7 +8,7 @@ from .managers import StockManagers
 from Cake_designing.models import Cake_Designing
 from customer.models import User
 from core.models import BaseModel
-from django.db.models import Q
+from translated_fields import TranslatedField
 
 # Create your models here.
 
@@ -22,16 +22,16 @@ class Discount_Code(BaseModel):
 
 
 class Products(BaseModel):
-    product_name = models.CharField(max_length=100)
+    product_name = TranslatedField(models.CharField(max_length=100))
     img = models.ImageField()
-    description = models.TextField()
+    description = TranslatedField(models.TextField())
 
     def __str__(self):
         return f"{self.product_name}({self.description})"
 
 
 class Category(BaseModel):
-    category_name = models.CharField(max_length=100)
+    category_name = TranslatedField(models.CharField(max_length=100))
     img = models.ImageField(default='draw1.png', null=True, blank=True)
     parent_category = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
 

@@ -2,6 +2,7 @@ async function load_category(){
 
     const result = await fetch('http://127.0.0.1:8000/product/category_list/')
     const json_result = await result.json()
+
     const cat = document.createElement('div')
     cat.className = 'cat'
     cat.style.width ='200px'

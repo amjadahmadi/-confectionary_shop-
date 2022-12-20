@@ -1,7 +1,7 @@
 {% extends 'core/home.html' %}
 {% load static %}
-
-
+{% load i18n %}
+{% get_current_language as LANGUAGE_CODE %}
 {% block main %}
     <section class="vh-100" style="background-color: rgb(170,160,160)">
       <div class="container h-100" style="background-color:rgba(244,224,221)">
@@ -11,7 +11,7 @@
               <div class="card-body p-md-5 h-50">
                 <div class="row justify-content-center">
                   <div class="col-md-10 col-lg-6 col-xl-5 order-2 order-lg-1">
-                    <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">Sign in</p>
+                    <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">{% translate 'Sign in' %} </p>
 
                     <div class="mx-1 mx-md-4">
   <form action="{% url 'user:login' %}?next={{ next }}" method="POST" class="register-form" id="register-form">
@@ -27,8 +27,8 @@
 
                             <div class="form-group form-button">
 
-                                <input type="submit" name="signup" id="signup" class="form-submit"/>
-                                <h6 class="mt-2">don have account? <a href="/signup/">SinUp</a></h6>
+                                <input type="submit" name="signup" id="signup" class="form-submit" value="{% translate 'submit' %}" />
+                                <h6 class="mt-2"> {% translate 'don have account?' %} <a href="/{{ LANGUAGE_CODE }}/signup/">{% translate 'SignUp' %}</a></h6>
                                 <input type="hidden" name="next"  value="{{ next }}"/>
 
                             </div>

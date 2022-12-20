@@ -1,4 +1,6 @@
-		<div class="sticky-top">
+{% load i18n %}
+{% get_current_language as LANGUAGE_CODE %}
+<div class="sticky-top">
 			<div class="d-none d-lg-block">
 		    <nav class="navbar">
         <div class="d-flex flex-row w-100">
@@ -14,29 +16,37 @@
                   <i class="fas fa-search"></i>
                 </a>
               </div></div>
-            <div class="d-flex flex-column justify-content-end" style="margin-right: 50px;">        <ul class="navbar-links">
+            <div class="d-flex flex-column justify-content-end">
+                <ul id="links" class="navbar-links {% if LANGUAGE_CODE == 'fa' %} d-flex flex-row-reverse {% endif %} ">
                 <li class="navbar-dropdown">
-                  <a href="/">Home</a>
+                  <a href="/{{ LANGUAGE_CODE }}/">{% translate 'Home' %} </a>
+                </li>
+                <li class="navbar-dropdown">
+                  <a href="#">{% translate 'language' %}</a>
+                  <div class="dropdown">
+                    <a href="{% url 'change_lang' %}?lang=en&next=/en/{{ request.path|slice:'4:' }}">{% translate 'English' %}</a>
+                    <a href="{% url 'change_lang' %}?lang=fa&next=/fa/{{ request.path|slice:'4:' }}">{% translate 'Persian' %}</a>
+                  </div>
                 </li>
                 {% if  request.user.is_authenticated and request.user.is_superuser is False %}
                 <li class="navbar-dropdown">
 
                   <a href="#">{{ request.user.last_name }} {{ request.user.first_name }}</a>
                   <div class="dropdown">
-                    <a href="/profile/{{request.user.id}}">Profile</a>
-                    <a href="/logout/">Log Out</a>
+                    <a href="/{{ LANGUAGE_CODE }}/profile/{{request.user.id}}">{% translate 'Profile' %} </a>
+                    <a href="/{{ LANGUAGE_CODE }}/logout/">{% translate 'Log Out'%}</a>
                   </div>
                 </li>
                 {% endif %}
                 <li class="navbar-dropdown">
-                  <a href="#">Cake Designing</a>
+                  <a href="#">{% translate 'Cake Designing' %}</a>
                 </li>
                 <li class="navbar-dropdown">
-                  <a href="#">Card items</a>
+                  <a href="#">{% translate 'Card items' %} </a>
                 </li>
               {% if  request.user.is_authenticated is False or request.user.is_superuser is True  %}
                 <li class="navbar-dropdown">
-                  <a href="/login/">Log in / Register</a>
+                  <a href="/{{ LANGUAGE_CODE }}/login/">{% translate 'Log in / Register' %}</a>
                 </li>
             {% endif %}
               </ul></div>

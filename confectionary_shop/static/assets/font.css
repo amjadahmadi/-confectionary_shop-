@@ -1,0 +1,12 @@
+@font-face {
+    font-family: "CustomFont";
+    src : local("CustomFont"),
+    url("../fonts/Vazir-Light.eot") format("eot"),
+    url("../fonts/Vazir-Light.woff") format("woff")
+    /*url("fonts/Vazir-Light.otf") format("opentype"),*/
+    /*url("fontsVazir-Light.svg") format("svg");*/
+}
+body{
+  font-family: 'CustomFont', Arial, sans-serif !important;
+font-weight:normal !important;
+}

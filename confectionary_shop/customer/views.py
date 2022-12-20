@@ -7,7 +7,7 @@ from .forms import SignUpForm, CodeForm, LoginForm, CommentForm
 from django.contrib import messages
 from core.utils import send_otp, check_otp
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin, UserPassesTestMixin
-from django.views.generic.edit import CreateView
+from django.utils.translation import gettext_lazy as _
 
 # Create your views here.
 from .models import User, Comment
@@ -111,7 +111,7 @@ class CreateComment(View):
         c = CommentForm(request.POST)
         if c.is_valid():
             c.save()
-            messages.info(request, 'your comment after approve will be show')
+            messages.info(request, _('your comment after approve will be show'))
         else:
-            messages.error(request, c.errors)
+            messages.error(request, _(c.errors))
         return redirect('product:detail', pk=request.POST['object_id'])

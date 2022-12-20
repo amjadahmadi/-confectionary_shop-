@@ -1,0 +1,54 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-12-20 18:12+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+#: product/templates/product/detail_product.html:15
+msgid "There is no comment,Be the first to comment"
+msgstr "نظری وجد ندارد,اولین نفر نظر دهید"
+
+#: product/templates/product/detail_product.html:46
+msgid "each count:"
+msgstr "هر عدد"
+
+#: product/templates/product/detail_product.html:46
+msgid "each kilo:"
+msgstr "هر کیلو"
+
+#: product/templates/product/detail_product.html:53
+msgid "IR"
+msgstr "تومان"
+
+#: product/templates/product/detail_product.html:62
+msgid "Number"
+msgstr "عدد"
+
+#: product/templates/product/detail_product.html:63
+msgid "weight(kilos)"
+msgstr "وزن(کیلو)"
+
+#: product/templates/product/detail_product.html:69
+msgid "count"
+msgstr "تعداد"
+
+#: product/templates/product/detail_product.html:91
+msgid "Left Comment Here:"
+msgstr "نظر دهید:"
+
+#: product/templates/product/detail_product.html:94
+msgid "Submit"
+msgstr "ثبت"

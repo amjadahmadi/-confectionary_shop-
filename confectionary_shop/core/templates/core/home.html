@@ -1,17 +1,20 @@
 {% extends 'core/base.html' %}
 {% load static %}
-
+{% load i18n %}
 {% block navbar %}
-{% include 'core/navbar.html' %}
+    {% include 'core/navbar.html' %}
+
 {% endblock %}
+
 {% block main %}
+
     <div id="category" class="scrollmenu">
 
 
       </div>
     <div class="container-fluid d-flex  justify-content-end">
 
-        <div id="products" class="row justify-content-end">
+        <div id="products" class="row justify-content-end flex-row-reverse">
 
         </div>
         </div>
@@ -26,10 +29,13 @@
 
 {% block script %}
 <script>
+    {% get_current_language as LANGUAGE_CODE %}
+    const lang = '{{ LANGUAGE_CODE }}'
 async function load_category(){
 
     const result = await fetch('http://127.0.0.1:8000/product/category_list/')
     const json_result = await result.json()
+
     const cat = document.createElement('div')
     cat.className = 'cat'
     cat.style.width ='200px'
@@ -48,7 +54,11 @@ async function load_category(){
     category_name.className = 'd-flex row align-content-center text-center justify-content-center'
     category_name.style.height = '40px'
     const p = document.createElement('p')
-    p.innerHTML = 'همه'
+    if(lang === 'fa'){
+    p.innerHTML = 'همه'}
+    else {
+        p.innerHTML = 'all'
+    }
     category_name.append(p)
     cat.append(img_div,category_name)
     cat.addEventListener("click", function () {
@@ -72,7 +82,12 @@ async function load_category(){
     category_name.className = 'd-flex row align-content-center text-center justify-content-center'
     category_name.style.height = '40px'
     const p = document.createElement('p')
-    p.innerHTML = element.category_name
+        if(lang === 'fa'){
+    p.innerHTML = element.category_name_fa}
+    else {
+        p.innerHTML = element.category_name_en
+    }
+
     category_name.append(p)
     cat.append(img_div,category_name)
     cat.addEventListener("click", function () {
@@ -91,5 +106,108 @@ async function load_category(){
     load_category();
 
 </script>
- <script src="{% static 'assets/js/load_prod.js' %}"></script>
+ <script>
+async function load_products(category_id){
+    const result = await fetch('http://127.0.0.1:8000/product/product_list/'+category_id)
+    const json_result = await result.json()
+
+   console.log(json_result)
+        var e = document.getElementById('products')
+        var child = e.lastElementChild;
+        while (child) {
+            e.removeChild(child);
+            child = e.lastElementChild;
+        }
+    json_result.forEach(element=>{
+        let name =''
+        let des = ''
+        let unit = ''
+        let count = ''
+        let select_weight = ''
+        let select_num = ''
+        let class_name = ''
+        let del = ''
+        let money = ''
+      if (lang === 'en' ){
+           name = element['product']['product_name_en']
+           des = element['product']['description_en']
+          if(element['count']){
+          unit = 'each number'
+          }else {
+              unit = 'each kilo'
+          }
+          class_name = 'd-flex flex-row m-2'
+          count = 'count'
+          select_weight = 'weight(kilos)'
+          select_num = 'Number'
+          money = 'IR'
+      }
+      else {
+           name = element['product']['product_name_fa']
+           des = element['product']['description_fa']
+                    if(element['count']){
+          unit = 'هر عدد'
+          }else {
+              unit = 'هر کیلو'
+          }
+          class_name = 'd-flex flex-row-reverse m-2'
+          count = 'تعداد'
+          select_weight = 'وزن(کیلو)'
+          select_num = 'عدد'
+          money = 'تومان'
+
+      }
+        if (element['after_discount']){
+            del = `<del style="margin-right: 15px;margin-left: 15px"> ${element['price']} </del> <h6 style="color: red;margin-right: 15px;margin-left: 15px">${element['after_discount']}</h6><h6>${money}</h6>`
+        }else {
+            del =  `<h6 style="margin-right: 15px;margin-left: 15px">${element['price']}</h6> <h6>${money}</h6>`
+        }
+
+    const html = `          <div class="d-flex flex-row  mt-4 mb-4" onclick="detail_product(${element['id']})" style="min-width: 400px; max-width: 600px; height: 210px;">
+
+            <div  class="card ">
+
+                <div class="d-flex flex-row h-100">
+        <div class="d-flex flex-column col-7">
+
+            <div class="${class_name}" style="height: 20%;"><p class="">${name}</p></div>
+        <div class="${class_name}" style="height: 40%;">
+        ${des}
+        </div>
+        <div class="${class_name}" style="height: 20%;"><h6> ${unit} </h6>  ${del}
+        </div>
+        <div class="d-flex  flex-row-reverse justify-content-around " style="height: 20%;">
+         <div class="d-flex flex-colum">
+            <select id="menu" style="height: 25px;width: 100px;">
+                <option>${select_num}</option>
+                <option>${select_weight}</option>
+            </select>
+
+         </div>
+
+         <div class="d-flex flex-column">
+                <input type="number" step="0.5" id="inputPassword2" placeholder="${count}" size="7" style="height: 25px;width: 100px;">
+            </div>
+            <div class="d-flex flex-column">
+                <i class="fa fa-plus" aria-hidden="true" style="font-size:24px;"></i>
+
+             </div>
+        </div>
+        </div>
+        <div class="d-flex flex-column col-5 ">
+            <img class="card-img-top w-100 h-100" src="${element['product']['img']}" alt="Card image cap">
+
+        </div>
+                </div>
+            </div>
+
+        </div>`
+       document.getElementById('products').innerHTML += html
+    })
+
+}
+
+function detail_product(product_id){
+    window.location.href = `http://127.0.0.1:8000/${lang}/product/detail/${product_id}`
+}</script>
 {% endblock %}

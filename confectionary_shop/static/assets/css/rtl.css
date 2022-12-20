@@ -1,0 +1,12 @@
+.scrollmenu{
+    /*display: flex;*/
+    direction: rtl;
+}
+#products{
+
+    display: flex;
+flex-direction: row !important;
+}
+#comment_form{
+    direction: rtl !important;
+}
