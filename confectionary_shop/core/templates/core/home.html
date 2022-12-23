@@ -1,6 +1,6 @@
 {% extends 'core/base.html' %}
 {% load static %}
-{% load i18n %}
+{% load i18n %}django_admin_log
 {% block navbar %}
     {% include 'core/navbar.html' %}
 
@@ -8,7 +8,7 @@
 
 {% block main %}
 
-    <div id="category" class="scrollmenu">
+    <div id="category" class="scrollmenu ">
 
 
       </div>
@@ -111,7 +111,6 @@ async function load_products(category_id){
     const result = await fetch('http://127.0.0.1:8000/product/product_list/'+category_id)
     const json_result = await result.json()
 
-   console.log(json_result)
         var e = document.getElementById('products')
         var child = e.lastElementChild;
         while (child) {
@@ -128,6 +127,8 @@ async function load_products(category_id){
         let class_name = ''
         let del = ''
         let money = ''
+        let disabled_w = ''
+        let disabled_c = ''
       if (lang === 'en' ){
            name = element['product']['product_name_en']
            des = element['product']['description_en']
@@ -145,56 +146,78 @@ async function load_products(category_id){
       else {
            name = element['product']['product_name_fa']
            des = element['product']['description_fa']
-                    if(element['count']){
+          if(element['count']){
           unit = 'هر عدد'
           }else {
               unit = 'هر کیلو'
           }
           class_name = 'd-flex flex-row-reverse m-2'
-          count = 'تعداد'
+          count = 'مقدار'
           select_weight = 'وزن(کیلو)'
           select_num = 'عدد'
           money = 'تومان'
 
       }
+                if(element['count'] && !element['kilo']){
+              disabled_w ='disabled'
+          }
+          else if (!element['count'] && element['kilo']){
+              disabled_c = 'disabled'
+          }
         if (element['after_discount']){
             del = `<del style="margin-right: 15px;margin-left: 15px"> ${element['price']} </del> <h6 style="color: red;margin-right: 15px;margin-left: 15px">${element['after_discount']}</h6><h6>${money}</h6>`
         }else {
             del =  `<h6 style="margin-right: 15px;margin-left: 15px">${element['price']}</h6> <h6>${money}</h6>`
         }
+   sessionStorage.setItem(element['id'],JSON.stringify(element))
+   let item = JSON.parse(sessionStorage.getItem('shop_card'))
 
-    const html = `          <div class="d-flex flex-row  mt-4 mb-4" onclick="detail_product(${element['id']})" style="min-width: 400px; max-width: 600px; height: 210px;">
+        let item_value = ''
+        let item_type_count = ''
+        let item_type_weight = ''
+   if (item){
+       item = item[element['id']]
+       if(item){
+
+       item_value = item['shopping_info']['count']
+       if(item['shopping_info']['type']==='Number' || item['shopping_info']['type']==='عدد'){
+            item_type_count = 'selected'
+       }else {
+            item_type_weight = 'selected'
+       }}
+   }
+    const html = `          <div class="d-flex flex-row  mt-4 mb-4" style="min-width: 400px; max-width: 600px; height: 210px;">
 
             <div  class="card ">
 
                 <div class="d-flex flex-row h-100">
         <div class="d-flex flex-column col-7">
 
-            <div class="${class_name}" style="height: 20%;"><p class="">${name}</p></div>
-        <div class="${class_name}" style="height: 40%;">
+            <div class="${class_name}"  onclick="detail_product(${element['id']})"  style="height: 20%;"><p class="">${name}</p></div>
+        <div class="${class_name}"  onclick="detail_product(${element['id']})"  style="height: 40%;">
         ${des}
         </div>
-        <div class="${class_name}" style="height: 20%;"><h6> ${unit} </h6>  ${del}
+        <div class="${class_name}"  onclick="detail_product(${element['id']})"  style="height: 20%;"><h6> ${unit} </h6>  ${del}
         </div>
         <div class="d-flex  flex-row-reverse justify-content-around " style="height: 20%;">
          <div class="d-flex flex-colum">
-            <select id="menu" style="height: 25px;width: 100px;">
-                <option>${select_num}</option>
-                <option>${select_weight}</option>
+            <select id="menu_${element['id']}" value="${select_weight}" style="height: 25px;width: 100px;">
+                <option ${item_type_count} ${disabled_c}>${select_num}</option>
+                <option ${item_type_weight} ${disabled_w} >${select_weight}</option>
             </select>
 
          </div>
 
          <div class="d-flex flex-column">
-                <input type="number" step="0.5" id="inputPassword2" placeholder="${count}" size="7" style="height: 25px;width: 100px;">
+                <input id="${element['id']}" type="number" value="${item_value}" step="0.5" id="inputPassword2" placeholder="${count}" size="7" style="height: 25px;width: 100px;">
             </div>
-            <div class="d-flex flex-column">
-                <i class="fa fa-plus" aria-hidden="true" style="font-size:24px;"></i>
+            <div  class="d-flex flex-column">
+                <i   class="fa fa-plus" aria-hidden="true" onclick="test(${element['id']})"   style="font-size:24px;"></i>
 
              </div>
         </div>
         </div>
-        <div class="d-flex flex-column col-5 ">
+        <div class="d-flex flex-column col-5  "  onclick="detail_product(${element['id']})" >
             <img class="card-img-top w-100 h-100" src="${element['product']['img']}" alt="Card image cap">
 
         </div>
@@ -202,12 +225,150 @@ async function load_products(category_id){
             </div>
 
         </div>`
-       document.getElementById('products').innerHTML += html
-    })
 
+       document.getElementById('products').innerHTML += html
+
+    })
+ document.getElementById('shopp_count').innerHTML = Object.keys(JSON.parse(sessionStorage.getItem('shop_card'))).length
 }
 
 function detail_product(product_id){
     window.location.href = `http://127.0.0.1:8000/${lang}/product/detail/${product_id}`
-}</script>
+}
+ function test(id) {
+     let item_count = document.getElementById(id).value
+     console.log(item_count)
+     if(item_count){
+     let product = JSON.parse(sessionStorage.getItem(id))
+     let shopping_info = {'count':document.getElementById(id).value,'type':document.getElementById("menu_"+id).value}
+     let shop_card = sessionStorage.getItem('shop_card')
+     product['shopping_info'] = shopping_info
+     let flag = false
+     let ls = {}
+     ls[product['id']] = product
+     if (shop_card){
+         shop_card = JSON.parse(shop_card)
+         const len_shop = Object.keys(shop_card).length
+         shop_card[product['id']] = product
+         sessionStorage.setItem('shop_card',JSON.stringify(shop_card))
+         if(len_shop !== Object.keys(shop_card).length){
+             flag = true
+         }
+     }
+     else {
+          sessionStorage.setItem('shop_card',JSON.stringify(ls))
+         flag = true
+     }
+     if (flag){
+                  document.getElementById('shopp_count').innerHTML = Number(document.getElementById('shopp_count').innerHTML)+1
+
+     }}
+     console.log(JSON.parse((sessionStorage.getItem('shop_card'))))
+{#sessionStorage.clear()#}
+ }
+ </script>
+ <script>
+
+ function shop_card() {
+    var e = document.getElementById("shop-body");
+    var child = e.lastElementChild;
+    while (child) {
+        e.removeChild(child);
+        child = e.lastElementChild;
+          }
+
+     const items = JSON.parse(sessionStorage.getItem('shop_card'))
+     const key_items = Object.keys(items)
+     const lang = '{{ LANGUAGE_CODE }}'
+
+     key_items.forEach(create_shop_card)
+     function create_shop_card(item){
+       const element = JSON.parse(sessionStorage.getItem(item))
+
+        let name =''
+        let des = ''
+        let unit = ''
+        let count = ''
+        let select_weight = ''
+        let select_num = ''
+        let class_name = ''
+        let del = ''
+        let money = ''
+              if (lang === 'en' ){
+           name = element['product']['product_name_en']
+           des = element['product']['description_en']
+          if(!element['kilo']){
+          unit = 'each count'
+          }else {
+              unit = 'each kilo'
+          }
+          class_name = 'd-flex flex-row m-2'
+          count = 'count'
+          select_weight = 'weight(kilos)'
+          select_num = 'Number'
+          money = 'IR'
+      }
+      else {
+           name = element['product']['product_name_fa']
+           des = element['product']['description_fa']
+          if(!element['kilo']){
+          unit = 'هر عدد'
+          }else {
+              unit = 'هر کیلو'
+          }
+          class_name = 'd-flex flex-row-reverse m-2'
+          count = 'مقدار'
+          select_weight = 'وزن(کیلو)'
+          select_num = 'عدد'
+          money = 'تومان'
+
+      }
+
+      let price = element['price']
+      let qty = items[item]['shopping_info']['count']
+      let total_price = Number(qty)*Number(price)
+      let shop_unit = ''
+      const type_qty = items[item]['shopping_info']['type']
+         if (type_qty === 'Number' || type_qty === 'عدد'){
+                      if(lang === 'en'){
+                 shop_unit = 'number'
+             }else {
+                 shop_unit = 'عدد'
+             }}
+         else {
+               if(lang === 'en'){
+                 shop_unit = 'kilo'
+             }else {
+                 shop_unit = 'کیلو'
+             }
+         }
+      if(element['kilo']&&element['count']){
+         let weight_each_number = Number(element['kilo']) / Number(element['count'])
+         let price_each_number = weight_each_number * price
+         if (type_qty === 'Number' || type_qty === 'عدد'){
+             total_price = price_each_number * qty
+         }
+
+     }
+
+
+      const html = `<tr>
+              <td class="w-25">
+                <img src="${element['product']['img']}" class="img-fluid img-thumbnail" alt="Sheep">
+              </td>
+              <td>${name}</td>
+              <td>${unit} ${price} ${money}</td>
+              <td class="qty"><p>${qty} ${shop_unit}</p>
+              <td>${total_price} ${money}</td>
+              <td>
+                <a href="#" class="btn btn-danger btn-sm">
+                  <i class="fa fa-times"></i>
+                </a>
+              </td>
+            </tr>`
+      e.innerHTML += html
+  }
+}
+
+ </script>
 {% endblock %}

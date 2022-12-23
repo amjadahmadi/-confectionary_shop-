@@ -15,8 +15,6 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-
-import confectionary_shop.settings
 from core.views import ChangeLanguage
 from django.conf.urls.i18n import i18n_patterns
 
@@ -28,4 +26,7 @@ urlpatterns = [
 urlpatterns += i18n_patterns(path('admin/', admin.site.urls),
                              path('', include('customer.urls')),
                              path('', include('core.urls')),
-                             path('product/', include('product.urls')), )
+                             path('product/', include('product.urls')),
+                             path('', include('Cake_designing.urls')),
+
+                             )

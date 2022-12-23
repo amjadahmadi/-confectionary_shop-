@@ -91,7 +91,6 @@ class Login(View):
                 return redirect('user:login')
 
         else:
-            del request.session['next']
             return render(request, 'customer/signIn.html', {'form': f})
 
 

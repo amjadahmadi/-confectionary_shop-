@@ -1,4 +1,5 @@
 {% load i18n %}
+{% load static %}
 {% get_current_language as LANGUAGE_CODE %}
 <div class="sticky-top">
 			<div class="d-none d-lg-block">
@@ -31,28 +32,65 @@
                 {% if  request.user.is_authenticated and request.user.is_superuser is False %}
                 <li class="navbar-dropdown">
 
-                  <a href="#">{{ request.user.last_name }} {{ request.user.first_name }}</a>
+                  <a href="#">{{ request.user.first_name }} {{ request.user.last_name }} </a>
                   <div class="dropdown">
-                    <a href="/{{ LANGUAGE_CODE }}/profile/{{request.user.id}}">{% translate 'Profile' %} </a>
-                    <a href="/{{ LANGUAGE_CODE }}/logout/">{% translate 'Log Out'%}</a>
+                    <a href="{% url 'user:profile' pk=request.user.id %}">{% translate 'Profile' %} </a>
+                    <a href="{% url 'user:logout' %}">{% translate 'Log Out'%}</a>
                   </div>
                 </li>
                 {% endif %}
                 <li class="navbar-dropdown">
-                  <a href="#">{% translate 'Cake Designing' %}</a>
+                  <a href="{% url 'cake_designing:cake_designing' %}">{% translate 'Cake Designing' %}</a>
                 </li>
-                <li class="navbar-dropdown">
-                  <a href="#">{% translate 'Card items' %} </a>
+                <li id="cart" class="navbar-dropdown">
+                  <a href="#"  onclick="shop_card()" data-toggle="modal" data-target="#cartModal" data-bs-toggle="collapse">{% translate 'Card items' %}<span id="shopp_count" class="badge">0</span></a>
                 </li>
               {% if  request.user.is_authenticated is False or request.user.is_superuser is True  %}
                 <li class="navbar-dropdown">
-                  <a href="/{{ LANGUAGE_CODE }}/login/">{% translate 'Log in / Register' %}</a>
+                  <a href="{% url 'user:login' %}">{% translate 'Log in / Register' %}</a>
                 </li>
             {% endif %}
               </ul></div>
         </div>
 
-
       </nav>
               </div>
         </div >
+
+<div class="modal fade" id="cartModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header border-bottom-0">
+        <h5 class="modal-title" id="exampleModalLabel">
+          Your Shopping Cart
+        </h5>
+      </div>
+      <div class="modal-body">
+        <table class="table table-image">
+          <thead>
+            <tr>
+              <th scope="col"></th>
+              <th scope="col">Product</th>
+              <th scope="col">Price</th>
+              <th scope="col">Qty</th>
+              <th scope="col">Total</th>
+              <th scope="col">Actions</th>
+            </tr>
+          </thead>
+          <tbody id="shop-body">
+
+
+
+          </tbody>
+        </table>
+        <div class="d-flex justify-content-end">
+          <h5  > Total: <span  id="total" class="price text-success">0</span></h5>
+        </div>
+      </div>
+      <div id="load" class="modal-footer border-top-0 d-flex justify-content-between">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" onclick="get_card('check')" class="btn btn-success">Checkout</button>
+      </div>
+    </div>
+  </div>
+</div>
