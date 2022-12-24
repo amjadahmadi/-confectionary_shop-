@@ -16,7 +16,7 @@ class DiscountCodeAdmin(admin.ModelAdmin):
 class ProductsAdmin(admin.ModelAdmin):
     list_display = [field.name for field in Products._meta.get_fields()]
     search_fields = [field.name for field in Products._meta.get_fields()]
-    # ordering = ('product_name',)
+    ordering = ('product_name_fa','product_name_en')
 
 
 @admin.register(Stock)
@@ -24,7 +24,7 @@ class StockAdmin(admin.ModelAdmin):
     autocomplete_fields = ('product',)
     filter_horizontal = ('category',)
     list_display = ['product', 'kilo', 'count', 'price']
-    # search_fields = ('product',)
+    search_fields = ('product__product_name_fa','product__product_name_en')
     ordering = ('price',)
 
 
