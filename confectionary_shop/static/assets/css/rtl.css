@@ -10,3 +10,6 @@ flex-direction: row !important;
 #comment_form{
     direction: rtl !important;
 }
+#cartModal{
+   direction: rtl;
+}

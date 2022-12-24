@@ -1,0 +1,80 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-12-24 08:18+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: Cake_designing/forms.py:23
+msgid "after review will be showed"
+msgstr "بعد از بررسی نمایش داده خواهد شد"
+
+#: Cake_designing/forms.py:25
+msgid "choice your feeling want"
+msgstr ""
+
+#: Cake_designing/forms.py:29
+msgid "The amount of weight you want"
+msgstr "مقدار وزن مورد نیاز را وارد کنید"
+
+#: Cake_designing/forms.py:35
+msgid "sample image"
+msgstr "عکس نمونه"
+
+#: Cake_designing/forms.py:36
+msgid "printing image"
+msgstr "عکس برای چاپ"
+
+#: Cake_designing/forms.py:37
+msgid "ready time"
+msgstr "زمان حاظر شدن"
+
+#: Cake_designing/forms.py:38
+msgid "description"
+msgstr "توضیحات"
+
+#: Cake_designing/forms.py:39
+msgid "payment status"
+msgstr "وضعیت پرداخت"
+
+#: Cake_designing/forms.py:40
+msgid "extra payment"
+msgstr "پرداخت اضافی"
+
+#: Cake_designing/forms.py:41
+msgid "felling"
+msgstr "محتویات"
+
+#: Cake_designing/forms.py:42
+msgid "taste"
+msgstr "طعم"
+
+#: Cake_designing/forms.py:43
+msgid "price / each kilo (180000 IR)"
+msgstr "قیمت / هر کیلو (180000 تومان)"
+
+#: Cake_designing/forms.py:44
+msgid "amount"
+msgstr "مقدار"
+
+#: Cake_designing/templates/Cake_designing/cake_design.html:16
+msgid "ٰDue to the design, the price may increase after review"
+msgstr ""
+"با توجه به طراحی وقیمت های متفاوت,ممکن است پس از بررسی قیمت افزایش یابد"
+
+#: Cake_designing/templates/Cake_designing/cake_design.html:21
+msgid "Submit"
+msgstr "ثبت"

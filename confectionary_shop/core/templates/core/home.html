@@ -107,7 +107,9 @@ async function load_category(){
 
 </script>
  <script>
+     {#sessionStorage.clear()#}
 async function load_products(category_id){
+
     const result = await fetch('http://127.0.0.1:8000/product/product_list/'+category_id)
     const json_result = await result.json()
 
@@ -229,18 +231,18 @@ async function load_products(category_id){
        document.getElementById('products').innerHTML += html
 
     })
- document.getElementById('shopp_count').innerHTML = Object.keys(JSON.parse(sessionStorage.getItem('shop_card'))).length
+
 }
 
 function detail_product(product_id){
     window.location.href = `http://127.0.0.1:8000/${lang}/product/detail/${product_id}`
 }
  function test(id) {
-     let item_count = document.getElementById(id).value
+     let item_count = Number(document.getElementById(id).value)
      console.log(item_count)
-     if(item_count){
+     if(item_count && item_count !== 0){
      let product = JSON.parse(sessionStorage.getItem(id))
-     let shopping_info = {'count':document.getElementById(id).value,'type':document.getElementById("menu_"+id).value}
+     let shopping_info = {'count':item_count,'type':document.getElementById("menu_"+id).value}
      let shop_card = sessionStorage.getItem('shop_card')
      product['shopping_info'] = shopping_info
      let flag = false
@@ -269,106 +271,8 @@ function detail_product(product_id){
  </script>
  <script>
 
- function shop_card() {
-    var e = document.getElementById("shop-body");
-    var child = e.lastElementChild;
-    while (child) {
-        e.removeChild(child);
-        child = e.lastElementChild;
-          }
-
-     const items = JSON.parse(sessionStorage.getItem('shop_card'))
-     const key_items = Object.keys(items)
-     const lang = '{{ LANGUAGE_CODE }}'
-
-     key_items.forEach(create_shop_card)
-     function create_shop_card(item){
-       const element = JSON.parse(sessionStorage.getItem(item))
-
-        let name =''
-        let des = ''
-        let unit = ''
-        let count = ''
-        let select_weight = ''
-        let select_num = ''
-        let class_name = ''
-        let del = ''
-        let money = ''
-              if (lang === 'en' ){
-           name = element['product']['product_name_en']
-           des = element['product']['description_en']
-          if(!element['kilo']){
-          unit = 'each count'
-          }else {
-              unit = 'each kilo'
-          }
-          class_name = 'd-flex flex-row m-2'
-          count = 'count'
-          select_weight = 'weight(kilos)'
-          select_num = 'Number'
-          money = 'IR'
-      }
-      else {
-           name = element['product']['product_name_fa']
-           des = element['product']['description_fa']
-          if(!element['kilo']){
-          unit = 'هر عدد'
-          }else {
-              unit = 'هر کیلو'
-          }
-          class_name = 'd-flex flex-row-reverse m-2'
-          count = 'مقدار'
-          select_weight = 'وزن(کیلو)'
-          select_num = 'عدد'
-          money = 'تومان'
-
-      }
-
-      let price = element['price']
-      let qty = items[item]['shopping_info']['count']
-      let total_price = Number(qty)*Number(price)
-      let shop_unit = ''
-      const type_qty = items[item]['shopping_info']['type']
-         if (type_qty === 'Number' || type_qty === 'عدد'){
-                      if(lang === 'en'){
-                 shop_unit = 'number'
-             }else {
-                 shop_unit = 'عدد'
-             }}
-         else {
-               if(lang === 'en'){
-                 shop_unit = 'kilo'
-             }else {
-                 shop_unit = 'کیلو'
-             }
-         }
-      if(element['kilo']&&element['count']){
-         let weight_each_number = Number(element['kilo']) / Number(element['count'])
-         let price_each_number = weight_each_number * price
-         if (type_qty === 'Number' || type_qty === 'عدد'){
-             total_price = price_each_number * qty
-         }
-
-     }
 
 
-      const html = `<tr>
-              <td class="w-25">
-                <img src="${element['product']['img']}" class="img-fluid img-thumbnail" alt="Sheep">
-              </td>
-              <td>${name}</td>
-              <td>${unit} ${price} ${money}</td>
-              <td class="qty"><p>${qty} ${shop_unit}</p>
-              <td>${total_price} ${money}</td>
-              <td>
-                <a href="#" class="btn btn-danger btn-sm">
-                  <i class="fa fa-times"></i>
-                </a>
-              </td>
-            </tr>`
-      e.innerHTML += html
-  }
-}
 
  </script>
 {% endblock %}

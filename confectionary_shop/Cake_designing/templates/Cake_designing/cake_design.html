@@ -12,13 +12,13 @@
 {% block main %}
 <div class="d-flex justify-content-center" >
 
-<form action="" method="POST" class="w-50" id="" {% if LANGUAGE_CODE == 'fa' %} style="direction: rtl" {% endif %}>
+<form id="cake_design"  class="w-50" id="" {% if LANGUAGE_CODE == 'fa' %} style="direction: rtl" {% endif %}>
     <p class="mt-5" style="color: red">{% translate 'ٰDue to the design, the price may increase after review' %}</p>
     {% csrf_token %}
     {{ form }}
         <div class="form-group form-button">
 
-        <button type="submit" class="btn btn-outline-primary mt-4">{% translate 'Submit' %} </button>
+        <button type="button" onclick="add_to_basket()" class="btn btn-outline-primary mt-4">{% translate 'Submit' %} </button>
 
     </div>
 </form>
@@ -87,6 +87,46 @@
          if (amount){
         document.getElementById('id_price').value = Number(amount) * price}
          else document.getElementById('id_price').value = ''
+    }
+    function add_to_basket() {
+        const form = document.getElementById('cake_design')
+        const payload = new FormData(form)
+        const qty = document.getElementById('id_amount').value
+        const total_price = document.getElementById('id_price').value
+        const description = document.getElementById('id_description').value
+        const feeling = document.getElementById('id_feeling_id')
+        var f_text = feeling.options[feeling.selectedIndex].text;
+        const taste = document.getElementById('id_taste_id')
+        var t_text = taste.options[taste.selectedIndex].text;
+
+        const price = 180000 + Number(get_taste_price()) + Number(get_feeling_price())
+        let cake_info = {
+            'price': price,
+            'feeling': f_text,
+            'taste': t_text,
+            'description': description,
+            'total_price': total_price,
+            'qty': qty,
+            'id':'cake-'+Math.floor((Math.random() * 100) + 1)
+        }
+        let card_shop = JSON.parse(sessionStorage.getItem('shop_card'))
+        let ls = {}
+        if (card_shop) {
+            let cake_shop = card_shop['cake_shop']
+            if (cake_shop) {
+                cake_shop.push(cake_info)
+            } else {
+                card_shop['cake_shop'] = [cake_info]
+            }
+            sessionStorage.setItem('shop_card',JSON.stringify(card_shop))
+        } else {
+            ls['cake_shop'] = [cake_info]
+            sessionStorage.setItem('shop_card',JSON.stringify(ls))
+        }
+
+        console.log(JSON.parse(sessionStorage.getItem('shop_card'))['cake_shop'])
+             document.getElementById('shopp_count').innerHTML = Object.keys(JSON.parse(sessionStorage.getItem('shop_card'))).length - 1 + JSON.parse(sessionStorage.getItem('shop_card'))['cake_shop'].length
+
     }
     </script>
 {% endblock %}
