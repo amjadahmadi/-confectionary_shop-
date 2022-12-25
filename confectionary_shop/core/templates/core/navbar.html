@@ -97,136 +97,93 @@
 
 <script>
      document.getElementById('shopp_count').innerHTML = Object.keys(JSON.parse(sessionStorage.getItem('shop_card'))).length - 1 + JSON.parse(sessionStorage.getItem('shop_card'))['cake_shop'].length
-     function shop_card() {
-    var e = document.getElementById("shop-body");
-    var child = e.lastElementChild;
-    while (child) {
-        e.removeChild(child);
-        child = e.lastElementChild;
-          }
-
-     const items = JSON.parse(sessionStorage.getItem('shop_card'))
-     const key_items = Object.keys(items)
-     const lang = '{{ LANGUAGE_CODE }}'
-     let final_price = 0
-     let money = ''
-     key_items.forEach(create_shop_card)
-     function create_shop_card(item){
-        let name =''
-        let des = ''
-        let unit = ''
-        let count = ''
-        let select_weight = ''
-        let select_num = ''
-        let class_name = ''
-        let shop_unit = ''
-        if (item === 'cake_shop'){
-        for (const i of items[item]){
-
-        console.log(i)
-        if (lang === 'en' ){
-           name = `cake order  /  ${i.feeling}  /  ${i.taste}`
-          class_name = 'd-flex flex-row m-2'
-          unit = 'each kilo'
-          money = 'IR'
-          shop_unit = 'kilo'
-
-      }
-        else {
-           name = `سفارش کیک  /  ${i.feeling}  /  ${i.taste}`
-          class_name = 'd-flex flex-row m-2'
-          unit = 'هر کیلو'
-          money = 'تومان'
-          shop_unit = 'کیلو'
-
-      }
-
-        final_price += Number(i.total_price)
-          const html = `<tr id="item-${i['id']}">
-              <td class="w-25">
-                <img src="http://127.0.0.1:8000/media/draw1.png" class="img-fluid img-thumbnail" alt="Sheep">
-              </td>
-              <td style="text-align: center;padding-top: 40px">${name}</td>
-              <td style="text-align: center;padding-top: 40px">${unit} ${i.price} ${money}</td>
-              <td class="qty" style="text-align: center;padding-top: 40px"><p>${i.qty} ${shop_unit}</p>
-              <td id="total-item-${i['id']}" style="text-align: center;padding-top: 40px">${i.total_price} ${money}</td>
-              <td style="text-align: center;padding-top: 40px">
-                <a onclick="delete_item('${i['id']}')" class="btn btn-danger btn-sm">
-                  <i class="fa fa-times" ></i>
-                </a>
-              </td>
-            </tr>`
-           e.innerHTML += html
-        }
-
-        }
-        else {
-       const element = JSON.parse(sessionStorage.getItem(item))
-
-
-              if (lang === 'en' ){
-           name = element['product']['product_name_en']
-           des = element['product']['description_en']
-          if(!element['kilo']){
-          unit = 'each count'
-          }else {
-              unit = 'each kilo'
-          }
-          class_name = 'd-flex flex-row m-2'
-          count = 'count'
-          select_weight = 'weight(kilos)'
-          select_num = 'Number'
-          money = 'IR'
-      }
-      else {
-           name = element['product']['product_name_fa']
-           des = element['product']['description_fa']
-          if(!element['kilo']){
-          unit = 'هر عدد'
-          }else {
-              unit = 'هر کیلو'
-          }
-          class_name = 'd-flex flex-row-reverse m-2'
-          count = 'مقدار'
-          select_weight = 'وزن(کیلو)'
-          select_num = 'عدد'
-          money = 'تومان'
-
-      }
-
-      let price = element['price']
-      if(element['after_discount']) {
-          price = element['after_discount']
-      }
-      let qty = items[item]['shopping_info']['count']
-      let total_price = Number(qty)*Number(price)
-      let shop_unit = ''
-      const type_qty = items[item]['shopping_info']['type']
-         if (type_qty === 'Number' || type_qty === 'عدد'){
-                      if(lang === 'en'){
-                 shop_unit = 'number'
-             }else {
-                 shop_unit = 'عدد'
-             }}
-         else {
-               if(lang === 'en'){
-                 shop_unit = 'kilo'
-             }else {
-                 shop_unit = 'کیلو'
-             }
-         }
-      if(element['kilo']&&element['count']){
-         let weight_each_number = Number(element['kilo']) / Number(element['count'])
-         let price_each_number = weight_each_number * price
-         if (type_qty === 'Number' || type_qty === 'عدد'){
-             total_price = price_each_number * qty
+     async function shop_card() {
+         var e = document.getElementById("shop-body");
+         var child = e.lastElementChild;
+         while (child) {
+             e.removeChild(child);
+             child = e.lastElementChild;
          }
 
-     }
+         const items = JSON.parse(sessionStorage.getItem('shop_card'))
+         const key_items = Object.keys(items)
+         const lang = '{{ LANGUAGE_CODE }}'
+         let final_price = 0
+         let money = ''
+         let x = 0
+         let name = ''
+         let des = ''
+         let unit = ''
+         let count = ''
+         let select_weight = ''
+         let select_num = ''
+         let class_name = ''
+         let shop_unit = ''
+         let k = null
+         key_items.forEach(create_shop_card)
 
-      final_price += total_price
+         async function create_shop_card(item) {
 
-      const html = `<tr id="item-${element['id']}">
+             if (item !== 'cake_shop') {
+                 const element = JSON.parse(sessionStorage.getItem(item))
+
+                 if (lang === 'en') {
+                     name = element['product']['product_name_en']
+                     if (!element['kilo']) {
+                         unit = 'each count'
+                     } else {
+                         unit = 'each kilo'
+                     }
+                     money = 'IR'
+                 } else {
+                     name = element['product']['product_name_fa']
+                     des = element['product']['description_fa']
+                     if (!element['kilo']) {
+                         unit = 'هر عدد'
+                     } else {
+                         unit = 'هر کیلو'
+                     }
+                     class_name = 'd-flex flex-row-reverse m-2'
+                     count = 'مقدار'
+                     select_weight = 'وزن(کیلو)'
+                     select_num = 'عدد'
+                     money = 'تومان'
+
+                 }
+
+                 let price = element['price']
+                 if (element['after_discount']) {
+                     price = element['after_discount']
+                 }
+                 let qty = items[item]['shopping_info']['count']
+                 let total_price = Number(qty) * Number(price)
+                 let shop_unit = ''
+                 const type_qty = items[item]['shopping_info']['type']
+                 if (type_qty === 'Number' || type_qty === 'عدد') {
+                     if (lang === 'en') {
+                         shop_unit = 'number'
+                     } else {
+                         shop_unit = 'عدد'
+                     }
+                 } else {
+                     if (lang === 'en') {
+                         shop_unit = 'kilo'
+                     } else {
+                         shop_unit = 'کیلو'
+                     }
+                 }
+                 if (element['kilo'] && element['count']) {
+                     let weight_each_number = Number(element['kilo']) / Number(element['count'])
+                     let price_each_number = weight_each_number * price
+                     if (type_qty === 'Number' || type_qty === 'عدد') {
+                         total_price = price_each_number * qty
+                     }
+
+                 }
+
+                 final_price += total_price
+
+                 const html = `<tr id="item-${element['id']}">
               <td class="w-25">
                 <img src="${element['product']['img']}" class="img-fluid img-thumbnail" alt="Sheep">
               </td>
@@ -240,10 +197,61 @@
                 </a>
               </td>
             </tr>`
-      e.innerHTML += html
-  }}
-  document.getElementById('total').innerText = `${final_price}  ${money}`
-}
+                 e.innerHTML += html
+             } else {
+                 k = item;
+
+             }
+
+         }
+
+         async function cake_shop(item) {
+
+             for (const i of items[item]) {
+                 console.log(item)
+                 const response = await fetch(`http://127.0.0.1:8000/en/get_feeling_taste/${i.feeling}/${i.taste}`)
+                 const res_json = await response.json()
+
+                 if (lang === 'en') {
+                     name = `cake order  /  ${res_json['feeling']['feeling_name_en']}  /  ${res_json['taste']['taste_name_en']}`
+                     class_name = 'd-flex flex-row m-2'
+                     unit = 'each kilo'
+                     money = 'IR'
+                     shop_unit = 'kilo'
+
+                 } else {
+                     name = `سفارش کیک  /  ${res_json['feeling']['feeling_name_fa']}  /  ${res_json['taste']['taste_name_fa']}`
+                     class_name = 'd-flex flex-row m-2'
+                     unit = 'هر کیلو'
+                     money = 'تومان'
+                     shop_unit = 'کیلو'
+
+                 }
+
+                 x += Number(i.total_price)
+
+                 const html = `<tr id="item-${i['id']}">
+              <td class="w-25">
+                <img src="http://127.0.0.1:8000/media/draw1.png" class="img-fluid img-thumbnail" alt="Sheep">
+              </td>
+              <td style="text-align: center;padding-top: 40px">${name}</td>
+              <td style="text-align: center;padding-top: 40px">${unit} ${i.price} ${money}</td>
+              <td class="qty" style="text-align: center;padding-top: 40px"><p>${i.qty} ${shop_unit}</p>
+              <td id="total-item-${i['id']}" style="text-align: center;padding-top: 40px">${i.total_price} ${money}</td>
+              <td style="text-align: center;padding-top: 40px">
+                <a onclick="delete_item('${i['id']}')" class="btn btn-danger btn-sm">
+                  <i class="fa fa-times" ></i>
+                </a>
+              </td>
+            </tr>`
+                 e.innerHTML += html
+             }
+             return x
+         }
+
+         let cake_price = await cake_shop(k)
+         document.getElementById('total').innerText = `${final_price + cake_price}  ${money}`
+     }
 function delete_item(id) {
 
     let shop_card = JSON.parse(sessionStorage.getItem('shop_card'));
@@ -256,7 +264,6 @@ function delete_item(id) {
             }
         }
     }else delete shop_card[id]
-    console.log(shop_card)
     sessionStorage.setItem('shop_card',JSON.stringify(shop_card))
     var total_item =Number( document.getElementById("total-item-"+id).innerText.split(' ')[0])
     document.getElementById('item-'+id).remove()
