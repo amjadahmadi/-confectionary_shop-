@@ -1,71 +1,18 @@
-{% load i18n %}
+{% extends 'core/base.html' %}
 {% load static %}
-{% get_current_language as LANGUAGE_CODE %}
-<div class="sticky-top">
-			<div class="d-none d-lg-block">
-		    <nav class="navbar">
-        <div class="d-flex flex-row w-100">
-            <div class="col">        <a href="#" class="navbar-logo"
-                ><i class="material-icons">online</i> shop</a
-              ></div>
-            <div class="d-flex flex-column justify-content-center align-content-center">
-                                <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
-                <div class="search-box">
+{% load i18n %}
+{% block navbar %}
+    {% include 'core/navbar.html' %}
 
-                <input class="search-input" type="text" name="" placeholder="Pesquise">
-                <a href="#" class="search-btn">
-                  <i class="fas fa-search"></i>
-                </a>
-              </div></div>
-            <div class="d-flex flex-column justify-content-end">
-                <ul id="links" class="navbar-links {% if LANGUAGE_CODE == 'fa' %} d-flex flex-row-reverse {% endif %} ">
-                <li class="navbar-dropdown">
-                  <a href="/{{ LANGUAGE_CODE }}/">{% translate 'Home' %} </a>
-                </li>
-                <li class="navbar-dropdown">
-                  <a href="#">{% translate 'language' %}</a>
-                  <div class="dropdown">
-                    <a href="{% url 'change_lang' %}?lang=en&next=/en/{{ request.path|slice:'4:' }}">{% translate 'English' %}</a>
-                    <a href="{% url 'change_lang' %}?lang=fa&next=/fa/{{ request.path|slice:'4:' }}">{% translate 'Persian' %}</a>
-                  </div>
-                </li>
-                {% if  request.user.is_authenticated and request.user.is_superuser is False %}
-                <li class="navbar-dropdown">
-
-                  <a href="#">{{ request.user.first_name }} {{ request.user.last_name }} </a>
-                  <div class="dropdown">
-                    <a href="{% url 'user:profile' pk=request.user.id %}">{% translate 'Profile' %} </a>
-                    <a href="{% url 'user:logout' %}">{% translate 'Log Out'%}</a>
-                  </div>
-                </li>
-                {% endif %}
-                <li class="navbar-dropdown">
-                  <a href="{% url 'cake_designing:cake_designing' %}">{% translate 'Cake Designing' %}</a>
-                </li>
-                <li id="cart" class="navbar-dropdown">
-                  <a href="#"  onclick="shop_card()" data-toggle="modal" data-target="#cartModal" data-bs-toggle="collapse">{% translate 'Card items' %}<span id="shopp_count" class="badge">0</span></a>
-                </li>
-              {% if  request.user.is_authenticated is False or request.user.is_superuser is True  %}
-                <li class="navbar-dropdown">
-                  <a href="{% url 'user:login' %}">{% translate 'Log in / Register' %}</a>
-                </li>
-            {% endif %}
-              </ul></div>
-        </div>
-
-      </nav>
-              </div>
-        </div >
-
-<div class="modal fade" id="cartModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
-    <div class="modal-content">
-      <div class="modal-header border-bottom-0">
-        <h5 class="modal-title" id="exampleModalLabel">
-          {% translate ' Your Shopping Cart' %}
-        </h5>
-      </div>
-      <div class="modal-body">
+{% endblock %}
+    {% get_current_language as LANGUAGE_CODE %}
+{% block style %}
+{% endblock %}
+{% load crispy_forms_tags %}
+{% block main %}
+    <div class="container">
+<div class="d-flex flex-row justify-content-center " >
+      <div class="modal-body" style="width: 700px;{% if LANGUAGE_CODE == 'fa' %} direction: rtl {% endif %}">
         <table class="table table-image">
           <thead>
             <tr class="">
@@ -77,33 +24,76 @@
               <th scope="col" style="text-align: center">{% translate 'Actions' %}</th>
             </tr>
           </thead>
-          <tbody id="shop-body">
+          <tbody id="order-body">
 
 
 
           </tbody>
         </table>
         <div class="d-flex justify-content-start">
-          <h5><h5> {% translate 'Total:' %} </h5>   <h5  id="total" class="price text-success pr-2">0</h5></h5>
+          <h5><h5> {% translate 'Total:' %} </h5>   <h5  id="order-total" class="price text-success pr-2">0</h5></h5>
         </div>
       </div>
-      <div id="load" class="modal-footer border-top-0 d-flex justify-content-between">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">{% translate 'Close' %} </button>
-        <a type="submit" href="{% url 'orders:orders' %}" class="btn btn-success">{% translate 'Checkout' %} </a>
-      </div>
+</div></div>
+ <div class="tab">
+<div class="container" {% if LANGUAGE_CODE == 'fa' %}   style="direction: rtl" {% endif %}>
+
+  <ul class="nav nav-tabs"  {% if LANGUAGE_CODE == 'fa' %}   style="direction: rtl" {% endif %}>
+    <li class="active"><a data-toggle="tab" href="#home">{% translate 'Send to me' %}</a></li>
+    <li><a data-toggle="tab" href="#menu1">{% translate 'Send to someone else' %}</a></li>
+
+  </ul>
+
+  <div class="tab-content" {% if LANGUAGE_CODE == 'fa' %}   style="direction: rtl" {% endif %}>
+    <div id="home" class="tab-pane fade in active">
+<form>
+  <div class="form-group">
+    <label for="address">{% translate 'Address' %}</label>
+        <select class="form-control"  id="address">
+
+    </select>
+
+  </div>
+
+</form>    </div>
+    <div id="menu1" class="tab-pane fade">
+    <form>
+  <div class="form-group">
+    <label for="first_name">{% translate 'First name' %}</label>
+    <input type="text" class="form-control" id="first_name" placeholder="{% translate 'Enter the recipients name' %}">
+  </div>
+  <div class="form-group">
+    <label for="last_name">{% translate 'Last name' %}</label>
+    <input type="text" class="form-control" id="last_name" placeholder="{% translate 'Enter the recipients last name' %}">
+  </div>
+  <div class="form-group">
+    <label for='phone'>{% translate 'phone' %}</label>
+    <input type="text" class="form-control" id="last_name" placeholder="{% translate 'Enter the recipients phone' %}">
+  </div>
+  <div class="form-group">
+    <label for="recipients_address">{% translate 'recipients address' %}</label>
+    <textarea class="form-control" id="recipients_address" rows="3"></textarea>
+  </div>
+</form>
     </div>
   </div>
+
+  <button type="submit" class="btn btn-primary">Submit</button>
 </div>
 
+ </div>
+
+
+{% endblock %}
+{% block footer %}
+{% include 'core/footer.html' %}
+{% endblock %}
+{% block script %}
 <script>
-    let cake_count = 0
-    const cake = JSON.parse(sessionStorage.getItem('shop_card'))['cake_shop']
-    if (cake){
-        cake_count = cake.length -1
-    }
-     document.getElementById('shopp_count').innerHTML = Object.keys(JSON.parse(sessionStorage.getItem('shop_card'))).length + cake_count
-     async function shop_card() {
-         var e = document.getElementById("shop-body");
+const lang = '{{ LANGUAGE_CODE }}'
+shop_card_order();
+     async function shop_card_order() {
+         var e = document.getElementById("order-body");
          var child = e.lastElementChild;
          while (child) {
              e.removeChild(child);
@@ -124,7 +114,9 @@
          let select_num = ''
          let class_name = ''
          let shop_unit = ''
+         let pre = ''
          let k = null
+         let count_ = 0
          key_items.forEach(create_shop_card)
 
          async function create_shop_card(item) {
@@ -186,23 +178,23 @@
 
                  }
 
-                 final_price += total_price
-
-                 const html = `<tr id="item-${element['id']}">
+                  final_price += total_price
+                 const html = `<tr id="order-item-${element['id']}" style="background-color: white">
               <td class="w-25">
                 <img src="${element['product']['img']}" class="img-fluid img-thumbnail" alt="Sheep">
               </td>
               <td style="text-align: center;padding-top: 75px">${name}</td>
               <td style="text-align: center;padding-top: 75px">${unit} ${price} ${money}</td>
               <td class="qty" style="text-align: center;padding-top: 75px"><p>${qty} ${shop_unit}</p>
-              <td id="total-item-${element['id']}" style="text-align: center;padding-top: 75px">${total_price} ${money}</td>
+              <td id="order-total-item-${element['id']}" style="text-align: center;padding-top: 75px">${total_price} ${money}</td>
               <td style="text-align: center;padding-top: 75px">
-                <a onclick="delete_item('${element['id']}')" class="btn btn-danger btn-sm">
+                <a onclick="delete_item_order('${element['id']}')" class="btn btn-danger btn-sm">
                   <i class="fa fa-times" ></i>
                 </a>
               </td>
             </tr>`
                  e.innerHTML += html
+                count_ += 1
              } else {
                  k = item;
 
@@ -210,8 +202,8 @@
 
          }
 
-         async function cake_shop(item) {
-            if(items[item]){
+         async function cake_shop_order(item) {
+             if(items[item]){
              for (const i of items[item]) {
                  console.log(item)
                  const response = await fetch(`http://127.0.0.1:8000/en/get_feeling_taste/${i.feeling}/${i.taste}`)
@@ -223,6 +215,7 @@
                      unit = 'each kilo'
                      money = 'IR'
                      shop_unit = 'kilo'
+                     pre = 'pre payment'
 
                  } else {
                      name = `سفارش کیک  /  ${res_json['feeling']['feeling_name_fa']}  /  ${res_json['taste']['taste_name_fa']}`
@@ -230,21 +223,22 @@
                      unit = 'هر کیلو'
                      money = 'تومان'
                      shop_unit = 'کیلو'
+                     pre = 'پیش پرداخت'
 
                  }
 
                  x += Number(i.total_price)
 
-                 const html = `<tr id="item-${i['id']}">
-              <td class="w-25">
+                 const html = `<tr id="order-item-${i['id']}" style="background-color: white">
+              <td class="w-25" >
                 <img src="http://127.0.0.1:8000/media/draw1.png" class="img-fluid img-thumbnail" alt="Sheep">
               </td>
               <td style="text-align: center;padding-top: 40px">${name}</td>
               <td style="text-align: center;padding-top: 40px">${unit} ${i.price} ${money}</td>
               <td class="qty" style="text-align: center;padding-top: 40px"><p>${i.qty} ${shop_unit}</p>
-              <td id="total-item-${i['id']}" style="text-align: center;padding-top: 40px">${i.total_price} ${money}</td>
+              <td id="order-total-item-${i['id']}" style="text-align: center;padding-top: 40px">${i.total_price} ${money} (${pre})</td>
               <td style="text-align: center;padding-top: 40px">
-                <a onclick="delete_item('${i['id']}')" class="btn btn-danger btn-sm">
+                <a onclick="delete_item_order('${i['id']}')" class="btn btn-danger btn-sm">
                   <i class="fa fa-times" ></i>
                 </a>
               </td>
@@ -254,11 +248,10 @@
              return x
          }
 
-         let cake_price = await cake_shop(k)
-         console.log(cake_price,final_price)
-         document.getElementById('total').innerText = `${final_price + cake_price}  ${money}`
+         let cake_price = await cake_shop_order(k)
+         document.getElementById('order-total').innerText = `${final_price + cake_price}  ${money}`
      }
-function delete_item(id) {
+function delete_item_order(id) {
 
     let shop_card = JSON.parse(sessionStorage.getItem('shop_card'));
 
@@ -271,8 +264,7 @@ function delete_item(id) {
         }
     }else delete shop_card[id]
     sessionStorage.setItem('shop_card',JSON.stringify(shop_card))
-    var total_item =Number( document.getElementById("total-item-"+id).innerText.split(' ')[0])
-    document.getElementById('item-'+id).remove()
+    var total_item =Number( document.getElementById("order-total-item-"+id).innerText.split(' ')[0])
     document.getElementById('order-item-'+id).remove()
 
     let money = ''
@@ -284,10 +276,15 @@ function delete_item(id) {
           money = 'تومان'
 
       }
+      console.log(document.getElementById('shopp_count'))
     document.getElementById('shopp_count').innerText = Number( document.getElementById('shopp_count').innerText)-1
-     document.getElementById('total').innerText = Number(document.getElementById('total').innerText.split(' ')[0]) - total_item + ' ' + money
      document.getElementById('order-total').innerText = Number(document.getElementById('order-total').innerText.split(' ')[0]) - total_item + ' ' + money
      document.getElementById(id).value = ''
 
 }
+
+async function get_address(user_id){
+       const result = fetch()
+}
 </script>
+{% endblock %}
