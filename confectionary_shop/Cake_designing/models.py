@@ -30,6 +30,7 @@ class Cake_Designing(BaseModel):
 
     amount = models.FloatField()
     price = models.FloatField()
+    total_price = models.FloatField()
     sample_img = models.ImageField(null=True, blank=True)
     print_img = models.ImageField(null=True, blank=True)
     ready_time = models.DateTimeField(null=True, blank=True)
