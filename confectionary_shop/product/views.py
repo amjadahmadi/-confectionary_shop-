@@ -56,3 +56,5 @@ class ProductListAPI(generics.ListCreateAPIView):
 
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
+
+
