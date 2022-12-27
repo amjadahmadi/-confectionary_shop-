@@ -1,0 +1,87 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-12-25 15:45+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: orders/templates/orders/order_page.html:20
+msgid "Product"
+msgstr "محصول"
+
+#: orders/templates/orders/order_page.html:21
+msgid "Price"
+msgstr "قیمت"
+
+#: orders/templates/orders/order_page.html:22
+msgid "Qty"
+msgstr "تعداد"
+
+#: orders/templates/orders/order_page.html:23
+msgid "Total"
+msgstr "مجموع"
+
+#: orders/templates/orders/order_page.html:24
+msgid "Actions"
+msgstr "عملیات"
+
+#: orders/templates/orders/order_page.html:34
+msgid "Total:"
+msgstr "قیمت کل:"
+
+#: orders/templates/orders/order_page.html:42
+msgid "Send to me"
+msgstr "ارسال به من"
+
+#: orders/templates/orders/order_page.html:43
+msgid "Send to someone else"
+msgstr "ارسال به فرد دیگر"
+
+#: orders/templates/orders/order_page.html:51
+msgid "Address"
+msgstr "آدرس"
+
+#: orders/templates/orders/order_page.html:62
+msgid "First name"
+msgstr "نام"
+
+#: orders/templates/orders/order_page.html:63
+msgid "Enter the recipients name"
+msgstr "نام فرد گیرنده را وارد کنید"
+
+#: orders/templates/orders/order_page.html:66
+msgid "Last name"
+msgstr "نام خانوادگی"
+
+#: orders/templates/orders/order_page.html:67
+msgid "Enter the recipients last name"
+msgstr "نام خانوادگی گیرنده را وارد کنید"
+
+#: orders/templates/orders/order_page.html:70
+msgid "phone"
+msgstr "تلفن"
+
+#: orders/templates/orders/order_page.html:71
+msgid "Enter the recipients phone"
+msgstr "تلفن گیرنده را وارد کنید"
+
+#: orders/templates/orders/order_page.html:74
+msgid "recipients address"
+msgstr "آدرس گیرنده را وارد کنید"
+
+#: orders/templates/orders/order_page.html:81
+msgid "pay"
+msgstr "پرداخت"
