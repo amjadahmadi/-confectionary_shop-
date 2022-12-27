@@ -15,7 +15,7 @@ class CakeDesigningForm(forms.ModelForm):
             'print_img': forms.FileInput(
                 attrs={'class': 'form-control'}),
             'ready_time': forms.TimeInput(attrs={'class': 'form-control', 'readonly': True,
-                                                 'value': (datetime.now() + timedelta(days=3)).strftime('%d/%m/%Y')}),
+                                                 'value': (datetime.now() + timedelta(days=3)).strftime('%Y-%m-%d')}),
             'description': forms.Textarea(attrs={'class': 'form-control'}),
             'payment_status': forms.TextInput(
                 attrs={'class': 'form-control', 'readonly': True}),
@@ -28,7 +28,8 @@ class CakeDesigningForm(forms.ModelForm):
             'amount': forms.NumberInput(
                 attrs={'class': 'form-control', 'placeholder': _('The amount of weight you want')}),
             'order_id': forms.HiddenInput(),
-            'is_deleted': forms.HiddenInput()
+            'is_deleted': forms.HiddenInput(),
+            'total_price': forms.HiddenInput()
 
         }
         labels = {
