@@ -10,6 +10,7 @@
 {% endblock %}
 {% load crispy_forms_tags %}
 {% block main %}
+    {% csrf_token %}
     <div class="container">
 <div class="d-flex flex-row justify-content-center " >
       <div class="modal-body" style="width: 700px;{% if LANGUAGE_CODE == 'fa' %} direction: rtl {% endif %}">
@@ -46,21 +47,21 @@
 
   <div class="tab-content" {% if LANGUAGE_CODE == 'fa' %}   style="direction: rtl" {% endif %}>
     <div id="home" class="tab-pane fade in active">
-<form>
+<form id="me-form" class="mt-5">
   <div class="form-group">
-    <label for="address">{% translate 'Address' %}</label>
-        <select class="form-control"  id="address">
+    <label id="l-address" for="address">{% translate 'Address' %}</label>
+        <select name="address" class="form-control" required  id="address">
 
     </select>
 
   </div>
-
+  <button type="button"  onclick="send_order()" class="btn btn-primary">{% translate 'pay' %}</button>
 </form>    </div>
     <div id="menu1" class="tab-pane fade">
-    <form>
+    <form >
   <div class="form-group">
     <label for="first_name">{% translate 'First name' %}</label>
-    <input type="text" class="form-control" id="first_name" placeholder="{% translate 'Enter the recipients name' %}">
+    <input type="text" required class="form-control" id="first_name" placeholder="{% translate 'Enter the recipients name' %}">
   </div>
   <div class="form-group">
     <label for="last_name">{% translate 'Last name' %}</label>
@@ -74,11 +75,12 @@
     <label for="recipients_address">{% translate 'recipients address' %}</label>
     <textarea class="form-control" id="recipients_address" rows="3"></textarea>
   </div>
+          <button type="submit" class="btn btn-primary">{% translate 'pay' %}</button>
 </form>
     </div>
   </div>
 
-  <button type="submit" class="btn btn-primary">Submit</button>
+
 </div>
 
  </div>
@@ -92,6 +94,7 @@
 <script>
 const lang = '{{ LANGUAGE_CODE }}'
 shop_card_order();
+get_address()
      async function shop_card_order() {
          var e = document.getElementById("order-body");
          var child = e.lastElementChild;
@@ -100,7 +103,7 @@ shop_card_order();
              child = e.lastElementChild;
          }
 
-         const items = JSON.parse(sessionStorage.getItem('shop_card'))
+         let items = JSON.parse(sessionStorage.getItem('shop_card'))
          const key_items = Object.keys(items)
          const lang = '{{ LANGUAGE_CODE }}'
          let final_price = 0
@@ -177,7 +180,8 @@ shop_card_order();
                      }
 
                  }
-
+                  items[item]['shopping_info']['total_price'] = total_price
+                 sessionStorage.setItem('shop_card',JSON.stringify(items))
                   final_price += total_price
                  const html = `<tr id="order-item-${element['id']}" style="background-color: white">
               <td class="w-25">
@@ -254,7 +258,7 @@ shop_card_order();
 function delete_item_order(id) {
 
     let shop_card = JSON.parse(sessionStorage.getItem('shop_card'));
-
+        console.log(id.search('cake-') !== -1)
         if(id.search('cake-') !== -1)     {
         for(let i of shop_card['cake_shop']){
             if(i.id === id){
@@ -283,8 +287,101 @@ function delete_item_order(id) {
 
 }
 
-async function get_address(user_id){
-       const result = fetch()
+async function get_address(){
+       const result = await fetch(`http://127.0.0.1:8000/en/address/{{ request.user.id }}`)
+       const json_res = await result.json()
+               var e = document.getElementById("address");
+         var child = e.lastElementChild;
+         while (child) {
+             e.removeChild(child);
+             child = e.lastElementChild;
+         }
+       if(Object.keys(json_res).length > 0){
+       for (const i of json_res){
+           const html = `<option>${i['full_address']}</option>`
+           e.innerHTML += html
+       }}
+       else {
+           let address_lang = ''
+           if (lang === 'en'){
+               address_lang = 'Address (You have not registered any address, first register an address in your profile)'
+           }else {
+              address_lang = 'ادرس (شما هیچ ادرسی ثبت نکردید,ابتدا ادرسی در پروفایل خود ثبت کنید)'
+
+           }
+           document.getElementById('l-address').innerText = address_lang
+
+       }
+
+}
+
+async function send_order(){
+     const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+    const form = document.getElementById('me-form')
+    let payload = new FormData(form)
+    payload.append('basket',JSON.stringify(JSON.parse(sessionStorage.getItem('shop_card'))))
+        console.log(JSON.parse(payload.get('basket'))['cake_shop'])
+    const order = {
+            'user_id': '{{ request.user.id }}',
+            'total_price': total_price_items(JSON.parse(payload.get('basket'))),
+            'final_price': total_price_items(JSON.parse(payload.get('basket'))),
+            'address': payload.get('address'),
+            'payment_status': JSON.parse(payload.get('basket'))['cake_shop'].length > 0 ? 'PR' : 'PY'
+        }
+    let order_items = Object.keys(JSON.parse(payload.get('basket'))).map(create_order_item)
+    let cake = JSON.parse(payload.get('basket'))['cake_shop'].length > 0 ? JSON.parse(payload.get('basket'))['cake_shop'].map(create_design_cake) : []
+    order_items.pop('undefined')
+    const body = new FormData()
+    body.append('order',JSON.stringify(order))
+    body.append('order_items',JSON.stringify(order_items))
+    body.append('cake_design',JSON.stringify(cake))
+    const res = await fetch('http://127.0.0.1:8000/en/ordersapi/',{method:'POST',body:body,headers:{'X-CSRFToken': csrftoken}})
+}
+function total_price_items(val){
+    let count = 0
+    for (const i of Object.keys(val)){
+
+        if (i==='cake_shop'){
+            for (const x of val[i])
+            count += Number(x['total_price'])
+        }
+        else {
+
+                    count += Number(val[i]['shopping_info']['total_price'])
+        }
+
+    }
+    return count
+}
+
+function create_order_item(val){
+    const shop = JSON.parse(sessionStorage.getItem('shop_card'))
+    console.log(val)
+    if (val !=='cake_shop'){
+        return  {
+            'stock_id': val,
+            'amount': shop[val]['shopping_info']['count'],
+            'kilo': (shop[val]['shopping_info']['type'] === 'number' || shop[val]['shopping_info']['type']=== 'عدد') ? false : true,
+            'price': shop[val]['price'],
+            'after_discount':shop[val]['after_discount'],
+            'total_price': shop[val]['shopping_info']['total_price'],
+            'pre_order': false
+        }
+    }
+}
+function create_design_cake(val){
+
+        return  {
+            'amount': val['qty'],
+            'price': val['price'],
+            'total_price': val['total_price'],
+            'ready_time':val['ready_time'],
+            'description': val['description'],
+            'feeling_id': val['feeling'],
+            'taste_id': val['taste'],
+        }
+
 }
 </script>
 {% endblock %}

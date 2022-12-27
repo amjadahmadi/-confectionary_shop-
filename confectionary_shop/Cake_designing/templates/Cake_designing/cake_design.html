@@ -97,6 +97,7 @@
         const feeling = document.getElementById('id_feeling_id')
         var f_text = feeling.options[feeling.selectedIndex].text;
         const taste = document.getElementById('id_taste_id')
+        const ready_time = document.getElementById('id_ready_time').value
         var t_text = taste.options[taste.selectedIndex].text;
 
         const price = 180000 + Number(get_taste_price()) + Number(get_feeling_price())
@@ -107,6 +108,7 @@
             'description': description,
             'total_price': total_price,
             'qty': qty,
+            'ready_time': ready_time,
             'id':'cake-'+Math.floor((Math.random() * 100) + 1)
         }
         let card_shop = JSON.parse(sessionStorage.getItem('shop_card'))
