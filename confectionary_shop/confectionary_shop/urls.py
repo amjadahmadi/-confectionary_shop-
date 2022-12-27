@@ -28,5 +28,6 @@ urlpatterns += i18n_patterns(path('admin/', admin.site.urls),
                              path('', include('core.urls')),
                              path('product/', include('product.urls')),
                              path('', include('Cake_designing.urls')),
+                             path('', include('orders.urls')),
 
                              )
