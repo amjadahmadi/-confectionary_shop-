@@ -1,3 +1,4 @@
+{% load i18n %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -14,20 +15,30 @@
         <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <!--=============== CSS ===============-->
-    <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
+
     <link rel="stylesheet" href="{% static 'assets/css/nav.css' %}">
     <link rel="stylesheet" href="{% static 'assets/css/styles.css' %}">
+
+{% get_current_language as LANGUAGE_CODE %}
+    {% if LANGUAGE_CODE == 'fa' %}
+ <link rel="stylesheet" href="{% static 'assets/css/rtl.css' %}">
+{% endif %}
     {% block style %}
+            <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
     <link rel="stylesheet" href="{% static 'auth/fonts/material-icon/css/material-design-iconic-font.min.css' %}">
     <link rel="stylesheet" href="{% static 'auth/css/style.css' %}">
     {% endblock %}
 
-
-
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 
 
 </head>
-<body onload="xc('{{ type }}')" style="background-color: rgb(244,224,221) !important;">
+<body style="background-color: rgb(244,224,221) !important;padding: 0 !important;margin: 0!important;">
 <div class="container-fluid" style="--bs-gutter-x:0">
     {% block navbar %}
     {% endblock %}

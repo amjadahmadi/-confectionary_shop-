@@ -1,0 +1,18 @@
+.scrollmenu{
+
+    direction: rtl;
+}
+#products{
+
+    display: flex;
+flex-direction: row !important;
+}
+#comment_form{
+    direction: rtl !important;
+}
+#cartModal{
+   direction: rtl;
+}
+#products_con{
+    direction: rtl;
+}

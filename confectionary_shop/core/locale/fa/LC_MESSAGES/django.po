@@ -1,0 +1,91 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-12-24 08:18+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: core/templates/core/navbar.html:23
+msgid "Home"
+msgstr "خانه"
+
+#: core/templates/core/navbar.html:26
+msgid "language"
+msgstr "زبان"
+
+#: core/templates/core/navbar.html:28
+msgid "English"
+msgstr "انگلیسی"
+
+#: core/templates/core/navbar.html:29
+msgid "Persian"
+msgstr "فارسی"
+
+#: core/templates/core/navbar.html:37
+msgid "Profile"
+msgstr "پروفایل"
+
+#: core/templates/core/navbar.html:38
+msgid "Log Out"
+msgstr "خروج"
+
+#: core/templates/core/navbar.html:43
+msgid "Cake Designing"
+msgstr "طراحی کیک"
+
+#: core/templates/core/navbar.html:46
+msgid "Card items"
+msgstr "سبد خرید"
+
+#: core/templates/core/navbar.html:50
+msgid "Log in / Register"
+msgstr "ورود / ثبت نام"
+
+#: core/templates/core/navbar.html:65
+msgid " Your Shopping Cart"
+msgstr "سبد حرید شما"
+
+#: core/templates/core/navbar.html:73
+msgid "Product"
+msgstr "محصول"
+
+#: core/templates/core/navbar.html:74
+msgid "Price"
+msgstr "قیمت"
+
+#: core/templates/core/navbar.html:75
+msgid "Qty"
+msgstr "تعداد"
+
+#: core/templates/core/navbar.html:76
+msgid "Total"
+msgstr "مجموع"
+
+#: core/templates/core/navbar.html:77
+msgid "Actions"
+msgstr "عملیات"
+
+#: core/templates/core/navbar.html:87
+msgid "Total:"
+msgstr "قیمت کل:"
+
+#: core/templates/core/navbar.html:91
+msgid "Close"
+msgstr ""
+
+#: core/templates/core/navbar.html:92
+msgid "Checkout"
+msgstr "نهایی کردن"

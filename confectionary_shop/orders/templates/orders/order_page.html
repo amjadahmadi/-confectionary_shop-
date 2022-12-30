@@ -1,0 +1,406 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% load i18n %}
+{% block navbar %}
+    {% include 'core/navbar.html' %}
+
+{% endblock %}
+    {% get_current_language as LANGUAGE_CODE %}
+{% block style %}
+{% endblock %}
+{% load crispy_forms_tags %}
+{% block main %}
+    {% csrf_token %}
+    <div class="container">
+<div class="d-flex flex-row justify-content-center " >
+      <div class="modal-body" style="width: 700px;{% if LANGUAGE_CODE == 'fa' %} direction: rtl {% endif %}">
+        <table class="table table-image">
+          <thead>
+            <tr class="">
+              <th scope="col"></th>
+              <th scope="col" style="text-align: center">{% translate 'Product' %}</th>
+              <th scope="col" style="text-align: center">{% translate 'Price' %}</th>
+              <th scope="col" style="text-align: center">{% translate 'Qty' %} </th>
+              <th scope="col" style="text-align: center">{% translate 'Total' %} </th>
+              <th scope="col" style="text-align: center">{% translate 'Actions' %}</th>
+            </tr>
+          </thead>
+          <tbody id="order-body">
+
+
+
+          </tbody>
+        </table>
+        <div class="d-flex justify-content-start">
+          <h5><h5> {% translate 'Total:' %} </h5>   <h5  id="order-total" class="price text-success pr-2">0</h5></h5>
+        </div>
+      </div>
+</div></div>
+ <div class="tab">
+<div class="container" {% if LANGUAGE_CODE == 'fa' %}   style="direction: rtl" {% endif %}>
+
+  <ul class="nav nav-tabs"  {% if LANGUAGE_CODE == 'fa' %}   style="direction: rtl" {% endif %}>
+    <li class="active"><a data-toggle="tab" href="#home">{% translate 'Send to me' %}</a></li>
+    <li><a data-toggle="tab" href="#menu1">{% translate 'Send to someone else' %}</a></li>
+
+  </ul>
+
+  <div class="tab-content" {% if LANGUAGE_CODE == 'fa' %}   style="direction: rtl" {% endif %}>
+    <div id="home" class="tab-pane fade in active">
+<form id="me-form" class="mt-5">
+  <div class="form-group">
+    <label id="l-address" for="address">{% translate 'Address' %}</label>
+        <select name="address" class="form-control" required  id="address">
+
+    </select>
+
+  </div>
+  <button type="button"  onclick="send_order()" class="btn btn-primary">{% translate 'pay' %}</button>
+</form>    </div>
+    <div id="menu1" class="tab-pane fade">
+    <form >
+  <div class="form-group">
+    <label for="first_name">{% translate 'First name' %}</label>
+    <input type="text" required class="form-control" id="first_name" placeholder="{% translate 'Enter the recipients name' %}">
+  </div>
+  <div class="form-group">
+    <label for="last_name">{% translate 'Last name' %}</label>
+    <input type="text" class="form-control" id="last_name" placeholder="{% translate 'Enter the recipients last name' %}">
+  </div>
+  <div class="form-group">
+    <label for='phone'>{% translate 'phone' %}</label>
+    <input type="text" class="form-control" id="last_name" placeholder="{% translate 'Enter the recipients phone' %}">
+  </div>
+  <div class="form-group">
+    <label for="recipients_address">{% translate 'recipients address' %}</label>
+    <textarea class="form-control" id="recipients_address" rows="3"></textarea>
+  </div>
+          <button type="submit" class="btn btn-primary">{% translate 'pay' %}</button>
+</form>
+    </div>
+  </div>
+
+
+</div>
+
+ </div>
+
+
+{% endblock %}
+{% block footer %}
+{% include 'core/footer.html' %}
+{% endblock %}
+{% block script %}
+<script>
+const lang = '{{ LANGUAGE_CODE }}'
+shop_card_order();
+get_address()
+     async function shop_card_order() {
+         var e = document.getElementById("order-body");
+         var child = e.lastElementChild;
+         while (child) {
+             e.removeChild(child);
+             child = e.lastElementChild;
+         }
+
+         let items = JSON.parse(sessionStorage.getItem('shop_card'))
+         const key_items = Object.keys(items)
+         const lang = '{{ LANGUAGE_CODE }}'
+         let final_price = 0
+         let money = ''
+         let x = 0
+         let name = ''
+         let des = ''
+         let unit = ''
+         let count = ''
+         let select_weight = ''
+         let select_num = ''
+         let class_name = ''
+         let shop_unit = ''
+         let pre = ''
+         let k = null
+         let count_ = 0
+         key_items.forEach(create_shop_card)
+
+         async function create_shop_card(item) {
+
+             if (item !== 'cake_shop') {
+                 const element = JSON.parse(sessionStorage.getItem(item))
+
+                 if (lang === 'en') {
+                     name = element['product']['product_name_en']
+                     if (!element['kilo']) {
+                         unit = 'each count'
+                     } else {
+                         unit = 'each kilo'
+                     }
+                     money = 'IR'
+                 } else {
+                     name = element['product']['product_name_fa']
+                     des = element['product']['description_fa']
+                     if (!element['kilo']) {
+                         unit = 'هر عدد'
+                     } else {
+                         unit = 'هر کیلو'
+                     }
+                     class_name = 'd-flex flex-row-reverse m-2'
+                     count = 'مقدار'
+                     select_weight = 'وزن(کیلو)'
+                     select_num = 'عدد'
+                     money = 'تومان'
+
+                 }
+
+                 let price = element['price']
+                 if (element['after_discount']) {
+                     price = element['after_discount']
+                 }
+                 let qty = items[item]['shopping_info']['count']
+                 let total_price = Number(qty) * Number(price)
+                 let shop_unit = ''
+                 const type_qty = items[item]['shopping_info']['type']
+                 if (type_qty === 'Number' || type_qty === 'عدد') {
+                     if (lang === 'en') {
+                         shop_unit = 'number'
+                     } else {
+                         shop_unit = 'عدد'
+                     }
+                 } else {
+                     if (lang === 'en') {
+                         shop_unit = 'kilo'
+                     } else {
+                         shop_unit = 'کیلو'
+                     }
+                 }
+                 if (element['kilo'] && element['count']) {
+                     let weight_each_number = Number(element['kilo']) / Number(element['count'])
+                     let price_each_number = weight_each_number * price
+                     if (type_qty === 'Number' || type_qty === 'عدد') {
+                         total_price = price_each_number * qty
+                     }
+
+                 }
+                  items[item]['shopping_info']['total_price'] = total_price
+                 sessionStorage.setItem('shop_card',JSON.stringify(items))
+                  final_price += total_price
+                 const html = `<tr id="order-item-${element['id']}" style="background-color: white">
+              <td class="w-25">
+                <img src="${element['product']['img']}" class="img-fluid img-thumbnail" alt="Sheep">
+              </td>
+              <td style="text-align: center;padding-top: 75px">${name}</td>
+              <td style="text-align: center;padding-top: 75px">${unit} ${price} ${money}</td>
+              <td class="qty" style="text-align: center;padding-top: 75px"><p>${qty} ${shop_unit}</p>
+              <td id="order-total-item-${element['id']}" style="text-align: center;padding-top: 75px">${total_price} ${money}</td>
+              <td style="text-align: center;padding-top: 75px">
+                <a onclick="delete_item_order('${element['id']}')" class="btn btn-danger btn-sm">
+                  <i class="fa fa-times" ></i>
+                </a>
+              </td>
+            </tr>`
+                 e.innerHTML += html
+                count_ += 1
+             } else {
+                 k = item;
+
+             }
+
+         }
+
+         async function cake_shop_order(item) {
+             if(items[item]){
+             for (const i of items[item]) {
+                 console.log(item)
+                 const response = await fetch(`http://127.0.0.1:8000/en/get_feeling_taste/${i.feeling}/${i.taste}`)
+                 const res_json = await response.json()
+
+                 if (lang === 'en') {
+                     name = `cake order  /  ${res_json['feeling']['feeling_name_en']}  /  ${res_json['taste']['taste_name_en']}`
+                     class_name = 'd-flex flex-row m-2'
+                     unit = 'each kilo'
+                     money = 'IR'
+                     shop_unit = 'kilo'
+                     pre = 'pre payment'
+
+                 } else {
+                     name = `سفارش کیک  /  ${res_json['feeling']['feeling_name_fa']}  /  ${res_json['taste']['taste_name_fa']}`
+                     class_name = 'd-flex flex-row m-2'
+                     unit = 'هر کیلو'
+                     money = 'تومان'
+                     shop_unit = 'کیلو'
+                     pre = 'پیش پرداخت'
+
+                 }
+
+                 x += Number(i.total_price)
+
+                 const html = `<tr id="order-item-${i['id']}" style="background-color: white">
+              <td class="w-25" >
+                <img src="http://127.0.0.1:8000/media/draw1.png" class="img-fluid img-thumbnail" alt="Sheep">
+              </td>
+              <td style="text-align: center;padding-top: 40px">${name}</td>
+              <td style="text-align: center;padding-top: 40px">${unit} ${i.price} ${money}</td>
+              <td class="qty" style="text-align: center;padding-top: 40px"><p>${i.qty} ${shop_unit}</p>
+              <td id="order-total-item-${i['id']}" style="text-align: center;padding-top: 40px">${i.total_price} ${money} (${pre})</td>
+              <td style="text-align: center;padding-top: 40px">
+                <a onclick="delete_item_order('${i['id']}')" class="btn btn-danger btn-sm">
+                  <i class="fa fa-times" ></i>
+                </a>
+              </td>
+            </tr>`
+                 e.innerHTML += html
+             }}
+             return x
+         }
+
+         let cake_price = await cake_shop_order(k)
+         document.getElementById('order-total').innerText = `${final_price + cake_price}  ${money}`
+     }
+function delete_item_order(id) {
+
+    let shop_card = JSON.parse(sessionStorage.getItem('shop_card'));
+        console.log(id.search('cake-') !== -1)
+        if(id.search('cake-') !== -1)     {
+        for(let i of shop_card['cake_shop']){
+            if(i.id === id){
+                shop_card['cake_shop'].pop(i)
+                break;
+            }
+        }
+    }else delete shop_card[id]
+    sessionStorage.setItem('shop_card',JSON.stringify(shop_card))
+    var total_item =Number( document.getElementById("order-total-item-"+id).innerText.split(' ')[0])
+    document.getElementById('order-item-'+id).remove()
+
+    let money = ''
+
+              if (lang === 'en' ){
+          money = 'IR'
+      }
+      else {
+          money = 'تومان'
+
+      }
+      console.log(document.getElementById('shopp_count'))
+    document.getElementById('shopp_count').innerText = Number( document.getElementById('shopp_count').innerText)-1
+     document.getElementById('order-total').innerText = Number(document.getElementById('order-total').innerText.split(' ')[0]) - total_item + ' ' + money
+     document.getElementById(id).value = ''
+
+}
+
+async function get_address(){
+       const result = await fetch(`http://127.0.0.1:8000/en/address/{{ request.user.id }}`)
+       const json_res = await result.json()
+               var e = document.getElementById("address");
+         var child = e.lastElementChild;
+         while (child) {
+             e.removeChild(child);
+             child = e.lastElementChild;
+         }
+       if(Object.keys(json_res).length > 0){
+       for (const i of json_res){
+           const html = `<option>${i['full_address']}</option>`
+           e.innerHTML += html
+       }}
+       else {
+           let address_lang = ''
+           if (lang === 'en'){
+               address_lang = 'Address (You have not registered any address, first register an address in your profile)'
+           }else {
+              address_lang = 'ادرس (شما هیچ ادرسی ثبت نکردید,ابتدا ادرسی در پروفایل خود ثبت کنید)'
+
+           }
+           document.getElementById('l-address').innerText = address_lang
+
+       }
+
+}
+
+async function send_order(){
+     const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+    const form = document.getElementById('me-form')
+    let payload = new FormData(form)
+    payload.append('basket',JSON.stringify(JSON.parse(sessionStorage.getItem('shop_card'))))
+        console.log(JSON.parse(payload.get('basket'))['cake_shop'])
+    const order = {
+            'user_id': '{{ request.user.id }}',
+            'total_price': total_price_items(JSON.parse(payload.get('basket'))),
+            'final_price': total_price_items(JSON.parse(payload.get('basket'))),
+            'address': payload.get('address'),
+            'payment_status': JSON.parse(payload.get('basket'))['cake_shop'].length > 0 ? 'PR' : 'PY'
+        }
+    let order_items = Object.keys(JSON.parse(payload.get('basket'))).map(create_order_item)
+    let cake = JSON.parse(payload.get('basket'))['cake_shop'].length > 0 ? JSON.parse(payload.get('basket'))['cake_shop'].map(create_design_cake) : []
+    order_items.pop('undefined')
+    const body = new FormData()
+    body.append('order',JSON.stringify(order))
+    body.append('order_items',JSON.stringify(order_items))
+    body.append('cake_design',JSON.stringify(cake))
+    for (const i of Object.keys(localStorage)){
+        console.log(i)
+         body.append(i,dataURLtoFile(localStorage.getItem(i),i+'.jpeg'))
+    }
+    const res = await fetch('http://127.0.0.1:8000/en/ordersapi/',{method:'POST',body:body,headers:{'X-CSRFToken': csrftoken}})
+}
+function total_price_items(val){
+    let count = 0
+    for (const i of Object.keys(val)){
+
+        if (i==='cake_shop'){
+            for (const x of val[i])
+            count += Number(x['total_price'])
+        }
+        else {
+
+                    count += Number(val[i]['shopping_info']['total_price'])
+        }
+
+    }
+    return count
+}
+
+function create_order_item(val){
+    const shop = JSON.parse(sessionStorage.getItem('shop_card'))
+    console.log(val)
+    if (val !=='cake_shop'){
+        return  {
+            'stock_id': val,
+            'amount': shop[val]['shopping_info']['count'],
+            'kilo': (shop[val]['shopping_info']['type'] === 'number' || shop[val]['shopping_info']['type']=== 'عدد') ? false : true,
+            'price': shop[val]['price'],
+            'after_discount':shop[val]['after_discount'],
+            'total_price': shop[val]['shopping_info']['total_price'],
+            'pre_order': false
+        }
+    }
+}
+function create_design_cake(val){
+
+        return  {
+            'amount': val['qty'],
+            'price': val['price'],
+            'total_price': val['total_price'],
+            'ready_time':val['ready_time'],
+            'description': val['description'],
+            'feeling_id': val['feeling'],
+            'taste_id': val['taste'],
+            'id':val['id']
+        }
+
+}
+ function dataURLtoFile(dataurl, filename) {
+
+        var arr = dataurl.split(','),
+            mime = arr[0].match(/:(.*?);/)[1],
+            bstr = atob(arr[1]),
+            n = bstr.length,
+            u8arr = new Uint8Array(n);
+
+        while(n--){
+            u8arr[n] = bstr.charCodeAt(n);
+        }
+
+        return new File([u8arr], filename, {type:mime});
+    }
+</script>
+{% endblock %}

@@ -35,6 +35,13 @@ class ProfileAdmin(admin.ModelAdmin):
     ordering = ('birth_day',)
 
 
+@admin.register(Addresses)
+class AddressAdmin(admin.ModelAdmin):
+    list_display = ['full_address', 'user']
+    search_fields = ('full_address', 'user__first_name', 'user__last_name', 'user__phone')
+    ordering = ('user__last_name',)
+
+
 @admin.register(Bank_Account)
 class BankAdmin(admin.ModelAdmin):
     list_display = ['balance', 'card_bank']

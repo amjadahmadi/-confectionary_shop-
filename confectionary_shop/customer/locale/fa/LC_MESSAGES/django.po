@@ -1,0 +1,174 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-12-25 15:42+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: customer/forms.py:12
+msgid "your first name"
+msgstr "نام خود را وارد کنید"
+
+#: customer/forms.py:13
+msgid "your last name"
+msgstr "نام خانوادگی خود را وارد کنید"
+
+#: customer/forms.py:16
+msgid "your phone here"
+msgstr "تلفن خود را وارد کنید"
+
+#: customer/forms.py:20 customer/forms.py:34
+msgid "Password"
+msgstr "رمز ورود"
+
+#: customer/forms.py:22
+msgid "your password"
+msgstr "رمز خود را وارد کنید"
+
+#: customer/forms.py:26
+msgid "Password confirmation"
+msgstr ""
+
+#: customer/forms.py:27
+msgid "Repeat your password"
+msgstr "تکرار رمز خود را وارد کنید"
+
+#: customer/forms.py:29
+msgid "Enter the same password as before, for verification."
+msgstr ""
+
+#: customer/forms.py:35
+msgid "Password Confirmation"
+msgstr ""
+
+#: customer/forms.py:36
+msgid "First Name"
+msgstr ""
+
+#: customer/forms.py:37
+msgid "Last Name"
+msgstr ""
+
+#: customer/forms.py:38
+msgid "phone 2"
+msgstr ""
+
+#: customer/forms.py:53
+msgid "enter send code on your phone."
+msgstr "کد پیامک شده به تلفن خود را وارد کنید"
+
+#: customer/forms.py:58
+msgid "validation code"
+msgstr "کد تایید"
+
+#: customer/forms.py:62
+msgid "phone"
+msgstr "تلفن همراه"
+
+#: customer/forms.py:64
+msgid "enter your phone."
+msgstr "تلفن خود را وارد کنید"
+
+#: customer/forms.py:67
+msgid "enter your password."
+msgstr "رمز خود را وارد کنید"
+
+#: customer/forms.py:86
+#, fuzzy
+msgid "first name"
+msgstr "نام خود را وارد کنید"
+
+#: customer/forms.py:87
+#, fuzzy
+msgid "last name"
+msgstr "نام خانوادگی خود را وارد کنید"
+
+#: customer/forms.py:88
+msgid "your comment"
+msgstr "نظر شما"
+
+#: customer/forms.py:89
+msgid "email"
+msgstr "ایمیل"
+
+#: customer/forms.py:90
+msgid "Rate"
+msgstr "امتیاز"
+
+#: customer/models.py:74
+msgid "Very bad"
+msgstr "خیلی بد"
+
+#: customer/models.py:75
+msgid "Bad"
+msgstr "بد"
+
+#: customer/models.py:76
+msgid "Good"
+msgstr "خوب"
+
+#: customer/models.py:77
+msgid "Very good"
+msgstr "خیلی خوب"
+
+#: customer/models.py:78
+msgid "Excellent"
+msgstr "عالی"
+
+#: customer/models.py:84
+msgid "Pending"
+msgstr "انتظار"
+
+#: customer/models.py:85
+msgid "Approved"
+msgstr "تایید شده"
+
+#: customer/models.py:86
+msgid "Rejected"
+msgstr "رد شده"
+
+#: customer/templates/customer/register.html:15
+msgid "Sign up"
+msgstr "ثبت نام"
+
+#: customer/templates/customer/register.html:47
+#: customer/templates/customer/signIn.html:30
+msgid "submit"
+msgstr "ثبت"
+
+#: customer/templates/customer/register.html:47
+msgid "already user?"
+msgstr "ثبت نام کرده اید؟"
+
+#: customer/templates/customer/register.html:47
+msgid "Login"
+msgstr "وارد شوید"
+
+#: customer/templates/customer/signIn.html:14
+msgid "Sign in"
+msgstr "ورود"
+
+#: customer/templates/customer/signIn.html:31
+msgid "don have account?"
+msgstr "اکانت ندارید؟"
+
+#: customer/templates/customer/signIn.html:31
+msgid "SignUp"
+msgstr "ثبت نام کنید"
+
+#: customer/views.py:115
+msgid "your comment after approve will be show"
+msgstr "نظر شما پس از تایید نمایش داده خواهد شد"

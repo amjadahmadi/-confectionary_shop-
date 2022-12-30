@@ -15,8 +15,8 @@ class DiscountCodeAdmin(admin.ModelAdmin):
 @admin.register(Products)
 class ProductsAdmin(admin.ModelAdmin):
     list_display = [field.name for field in Products._meta.get_fields()]
-    search_fields = ('product_name',)
-    ordering = ('product_name',)
+    search_fields = [field.name for field in Products._meta.get_fields()]
+    ordering = ('product_name_fa','product_name_en')
 
 
 @admin.register(Stock)
@@ -24,15 +24,15 @@ class StockAdmin(admin.ModelAdmin):
     autocomplete_fields = ('product',)
     filter_horizontal = ('category',)
     list_display = ['product', 'kilo', 'count', 'price']
-    search_fields = ('product',)
+    search_fields = ('product__product_name_fa','product__product_name_en')
     ordering = ('price',)
 
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
     list_display = [field.name for field in Category._meta.get_fields() if field != 'category']
-    search_fields = ('category_name',)
-    ordering = ('category_name',)
+    # search_fields = ('category_name',)
+    # ordering = ('category_name',)
 
 
 @admin.register(Discount)

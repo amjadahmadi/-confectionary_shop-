@@ -725,12 +725,12 @@ label.valid:after {
 @media screen and (max-width: 1200px) {
   .container {
     width: calc(100% - 30px);
-    max-width: 100%;
+
   }
 }
 @media screen and (min-width: 1024px) {
   .container {
-    max-width: 100%;
+
   }
 }
 @media screen and (max-width: 768px) {

@@ -1,4 +1,7 @@
-		<div class="sticky-top">
+{% load i18n %}
+{% load static %}
+{% get_current_language as LANGUAGE_CODE %}
+<div class="sticky-top">
 			<div class="d-none d-lg-block">
 		    <nav class="navbar">
         <div class="d-flex flex-row w-100">
@@ -14,35 +17,277 @@
                   <i class="fas fa-search"></i>
                 </a>
               </div></div>
-            <div class="d-flex flex-column justify-content-end" style="margin-right: 50px;">        <ul class="navbar-links">
+            <div class="d-flex flex-column justify-content-end">
+                <ul id="links" class="navbar-links {% if LANGUAGE_CODE == 'fa' %} d-flex flex-row-reverse {% endif %} ">
                 <li class="navbar-dropdown">
-                  <a href="/">Home</a>
+                  <a href="/{{ LANGUAGE_CODE }}/">{% translate 'Home' %} </a>
+                </li>
+                <li class="navbar-dropdown">
+                  <a href="#">{% translate 'language' %}</a>
+                  <div class="dropdown">
+                    <a href="{% url 'change_lang' %}?lang=en&next=/en/{{ request.path|slice:'4:' }}">{% translate 'English' %}</a>
+                    <a href="{% url 'change_lang' %}?lang=fa&next=/fa/{{ request.path|slice:'4:' }}">{% translate 'Persian' %}</a>
+                  </div>
                 </li>
                 {% if  request.user.is_authenticated and request.user.is_superuser is False %}
                 <li class="navbar-dropdown">
 
-                  <a href="#">{{ request.user.last_name }} {{ request.user.first_name }}</a>
+                  <a href="#">{{ request.user.first_name }} {{ request.user.last_name }} </a>
                   <div class="dropdown">
-                    <a href="/profile/{{request.user.id}}">Profile</a>
-                    <a href="/logout/">Log Out</a>
+                    <a href="{% url 'user:profile' pk=request.user.id %}">{% translate 'Profile' %} </a>
+                    <a href="{% url 'user:logout' %}">{% translate 'Log Out'%}</a>
                   </div>
                 </li>
                 {% endif %}
                 <li class="navbar-dropdown">
-                  <a href="#">Cake Designing</a>
+                  <a href="{% url 'cake_designing:cake_designing' %}">{% translate 'Cake Designing' %}</a>
                 </li>
-                <li class="navbar-dropdown">
-                  <a href="#">Card items</a>
+                <li id="cart" class="navbar-dropdown">
+                  <a href="#"  onclick="shop_card()" data-toggle="modal" data-target="#cartModal" data-bs-toggle="collapse">{% translate 'Card items' %}<span id="shopp_count" class="badge">0</span></a>
                 </li>
               {% if  request.user.is_authenticated is False or request.user.is_superuser is True  %}
                 <li class="navbar-dropdown">
-                  <a href="/login/">Log in / Register</a>
+                  <a href="{% url 'user:login' %}">{% translate 'Log in / Register' %}</a>
                 </li>
             {% endif %}
               </ul></div>
         </div>
 
-
       </nav>
               </div>
         </div >
+
+<div class="modal fade" id="cartModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header border-bottom-0">
+        <h5 class="modal-title" id="exampleModalLabel">
+          {% translate ' Your Shopping Cart' %}
+        </h5>
+      </div>
+      <div class="modal-body">
+        <table class="table table-image">
+          <thead>
+            <tr class="">
+              <th scope="col"></th>
+              <th scope="col" style="text-align: center">{% translate 'Product' %}</th>
+              <th scope="col" style="text-align: center">{% translate 'Price' %}</th>
+              <th scope="col" style="text-align: center">{% translate 'Qty' %} </th>
+              <th scope="col" style="text-align: center">{% translate 'Total' %} </th>
+              <th scope="col" style="text-align: center">{% translate 'Actions' %}</th>
+            </tr>
+          </thead>
+          <tbody id="shop-body">
+
+
+
+          </tbody>
+        </table>
+        <div class="d-flex justify-content-start">
+          <h5><h5> {% translate 'Total:' %} </h5>   <h5  id="total" class="price text-success pr-2">0</h5></h5>
+        </div>
+      </div>
+      <div id="load" class="modal-footer border-top-0 d-flex justify-content-between">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">{% translate 'Close' %} </button>
+        <a type="submit" href="{% url 'orders:orders' %}" class="btn btn-success">{% translate 'Checkout' %} </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+    let cake_count = 0
+    const cake = JSON.parse(sessionStorage.getItem('shop_card'))['cake_shop']
+    if (cake){
+        cake_count = cake.length -1
+    }
+     document.getElementById('shopp_count').innerHTML = Object.keys(JSON.parse(sessionStorage.getItem('shop_card'))).length + cake_count
+     async function shop_card() {
+         var e = document.getElementById("shop-body");
+         var child = e.lastElementChild;
+         while (child) {
+             e.removeChild(child);
+             child = e.lastElementChild;
+         }
+
+         const items = JSON.parse(sessionStorage.getItem('shop_card'))
+         const key_items = Object.keys(items)
+         const lang = '{{ LANGUAGE_CODE }}'
+         let final_price = 0
+         let money = ''
+         let x = 0
+         let name = ''
+         let des = ''
+         let unit = ''
+         let count = ''
+         let select_weight = ''
+         let select_num = ''
+         let class_name = ''
+         let shop_unit = ''
+         let k = null
+         key_items.forEach(create_shop_card)
+
+         async function create_shop_card(item) {
+
+             if (item !== 'cake_shop') {
+                 const element = JSON.parse(sessionStorage.getItem(item))
+
+                 if (lang === 'en') {
+                     name = element['product']['product_name_en']
+                     if (!element['kilo']) {
+                         unit = 'each count'
+                     } else {
+                         unit = 'each kilo'
+                     }
+                     money = 'IR'
+                 } else {
+                     name = element['product']['product_name_fa']
+                     des = element['product']['description_fa']
+                     if (!element['kilo']) {
+                         unit = 'هر عدد'
+                     } else {
+                         unit = 'هر کیلو'
+                     }
+                     class_name = 'd-flex flex-row-reverse m-2'
+                     count = 'مقدار'
+                     select_weight = 'وزن(کیلو)'
+                     select_num = 'عدد'
+                     money = 'تومان'
+
+                 }
+
+                 let price = element['price']
+                 if (element['after_discount']) {
+                     price = element['after_discount']
+                 }
+                 let qty = items[item]['shopping_info']['count']
+                 let total_price = Number(qty) * Number(price)
+                 let shop_unit = ''
+                 const type_qty = items[item]['shopping_info']['type']
+                 if (type_qty === 'Number' || type_qty === 'عدد') {
+                     if (lang === 'en') {
+                         shop_unit = 'number'
+                     } else {
+                         shop_unit = 'عدد'
+                     }
+                 } else {
+                     if (lang === 'en') {
+                         shop_unit = 'kilo'
+                     } else {
+                         shop_unit = 'کیلو'
+                     }
+                 }
+                 if (element['kilo'] && element['count']) {
+                     let weight_each_number = Number(element['kilo']) / Number(element['count'])
+                     let price_each_number = weight_each_number * price
+                     if (type_qty === 'Number' || type_qty === 'عدد') {
+                         total_price = price_each_number * qty
+                     }
+
+                 }
+
+                 final_price += total_price
+
+                 const html = `<tr id="item-${element['id']}">
+              <td class="w-25">
+                <img src="${element['product']['img']}" class="img-fluid img-thumbnail" alt="Sheep">
+              </td>
+              <td style="text-align: center;padding-top: 75px">${name}</td>
+              <td style="text-align: center;padding-top: 75px">${unit} ${price} ${money}</td>
+              <td class="qty" style="text-align: center;padding-top: 75px"><p>${qty} ${shop_unit}</p>
+              <td id="total-item-${element['id']}" style="text-align: center;padding-top: 75px">${total_price} ${money}</td>
+              <td style="text-align: center;padding-top: 75px">
+                <a onclick="delete_item('${element['id']}')" class="btn btn-danger btn-sm">
+                  <i class="fa fa-times" ></i>
+                </a>
+              </td>
+            </tr>`
+                 e.innerHTML += html
+             } else {
+                 k = item;
+
+             }
+
+         }
+
+         async function cake_shop(item) {
+            if(items[item]){
+             for (const i of items[item]) {
+                 console.log(item)
+                 const response = await fetch(`http://127.0.0.1:8000/en/get_feeling_taste/${i.feeling}/${i.taste}`)
+                 const res_json = await response.json()
+
+                 if (lang === 'en') {
+                     name = `cake order  /  ${res_json['feeling']['feeling_name_en']}  /  ${res_json['taste']['taste_name_en']}`
+                     class_name = 'd-flex flex-row m-2'
+                     unit = 'each kilo'
+                     money = 'IR'
+                     shop_unit = 'kilo'
+
+                 } else {
+                     name = `سفارش کیک  /  ${res_json['feeling']['feeling_name_fa']}  /  ${res_json['taste']['taste_name_fa']}`
+                     class_name = 'd-flex flex-row m-2'
+                     unit = 'هر کیلو'
+                     money = 'تومان'
+                     shop_unit = 'کیلو'
+
+                 }
+
+                 x += Number(i.total_price)
+
+                 const html = `<tr id="item-${i['id']}">
+              <td class="w-25">
+                <img src="http://127.0.0.1:8000/media/draw1.png" class="img-fluid img-thumbnail" alt="Sheep">
+              </td>
+              <td style="text-align: center;padding-top: 40px">${name}</td>
+              <td style="text-align: center;padding-top: 40px">${unit} ${i.price} ${money}</td>
+              <td class="qty" style="text-align: center;padding-top: 40px"><p>${i.qty} ${shop_unit}</p>
+              <td id="total-item-${i['id']}" style="text-align: center;padding-top: 40px">${i.total_price} ${money}</td>
+              <td style="text-align: center;padding-top: 40px">
+                <a onclick="delete_item('${i['id']}')" class="btn btn-danger btn-sm">
+                  <i class="fa fa-times" ></i>
+                </a>
+              </td>
+            </tr>`
+                 e.innerHTML += html
+             }}
+             return x
+         }
+
+         let cake_price = await cake_shop(k)
+         console.log(cake_price,final_price)
+         document.getElementById('total').innerText = `${final_price + cake_price}  ${money}`
+     }
+function delete_item(id) {
+
+    let shop_card = JSON.parse(sessionStorage.getItem('shop_card'));
+
+        if(id.search('cake-') !== -1)     {
+        for(let i of shop_card['cake_shop']){
+            if(i.id === id){
+                shop_card['cake_shop'].pop(i)
+                break;
+            }
+        }
+    }else delete shop_card[id]
+    sessionStorage.setItem('shop_card',JSON.stringify(shop_card))
+    var total_item =Number( document.getElementById("total-item-"+id).innerText.split(' ')[0])
+    document.getElementById('item-'+id).remove()
+    document.getElementById('order-item-'+id).remove()
+
+    let money = ''
+
+              if (lang === 'en' ){
+          money = 'IR'
+      }
+      else {
+          money = 'تومان'
+
+      }
+    document.getElementById('shopp_count').innerText = Number( document.getElementById('shopp_count').innerText)-1
+     document.getElementById('total').innerText = Number(document.getElementById('total').innerText.split(' ')[0]) - total_item + ' ' + money
+     document.getElementById('order-total').innerText = Number(document.getElementById('order-total').innerText.split(' ')[0]) - total_item + ' ' + money
+     document.getElementById(id).value = ''
+
+}
+</script>

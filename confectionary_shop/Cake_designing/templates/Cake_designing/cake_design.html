@@ -1,0 +1,141 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% load i18n %}
+{% block navbar %}
+    {% include 'core/navbar.html' %}
+
+{% endblock %}
+    {% get_current_language as LANGUAGE_CODE %}
+{% block style %}
+{% endblock %}
+{% load crispy_forms_tags %}
+{% block main %}
+<div class="d-flex justify-content-center" >
+
+<form id="cake_design"  class="w-50" id="" {% if LANGUAGE_CODE == 'fa' %} style="direction: rtl" {% endif %}>
+    <p class="mt-5" style="color: red">{% translate 'ٰDue to the design, the price may increase after review' %}</p>
+    {% csrf_token %}
+    {{ form }}
+        <div class="form-group form-button">
+
+        <button type="button" onclick="add_to_basket()" class="btn btn-outline-primary mt-4">{% translate 'Submit' %} </button>
+
+    </div>
+</form>
+</div>
+{% endblock %}
+{% block footer %}
+{% include 'core/footer.html' %}
+{% endblock %}
+{% block script %}
+    <script>
+
+    const lang = '{{ LANGUAGE_CODE }}'
+    function get_feeling_price() {
+        const e =  document.getElementById('id_feeling_id')
+        var value = e.value;
+        var text = e.options[e.selectedIndex].text;
+        var regExp = /\(([^)]+)\)/;
+        var matches = regExp.exec(text);
+        if (matches){
+        return matches[1].split(' ')[0]}
+        else return false
+    }
+        function get_taste_price() {
+        const e =  document.getElementById('id_taste_id')
+        var value = e.value;
+        var text = e.options[e.selectedIndex].text;
+
+        var regExp = /\(([^)]+)\)/;
+        var matches = regExp.exec(text);
+
+        if (matches){
+        return matches[1].split(' ')[0]}
+        else return false
+    }
+            function get_amount() {
+        const e =  document.getElementById('id_amount').value
+
+        if (e){
+        return e}
+        else return false
+    }
+    document.getElementById('id_feeling_id').onchange= change_price
+    document.getElementById('id_taste_id').onchange= change_price
+    document.getElementById('id_amount').onchange= change_price
+
+
+        function change_price () {
+        var feeling_price = get_feeling_price()
+        var  taste_price = get_taste_price()
+        var  amount = get_amount()
+          console.log(amount)
+        let price = 180000
+        if (feeling_price){
+            price+=Number(feeling_price)
+        }
+        if (taste_price){
+            price+=Number(taste_price)
+        }
+        let price_lang = ''
+        if (lang === 'en'){
+            price_lang = `price / each kilo (${price} IR)`
+        }else {
+            price_lang =`قیمت / هر کیلو (${price} تومان)`
+        }
+        document.getElementById('id_price').labels[0].innerText = price_lang
+         if (amount){
+        document.getElementById('id_price').value = Number(amount) * price}
+         else document.getElementById('id_price').value = ''
+    }
+    function add_to_basket() {
+        const form = document.getElementById('cake_design')
+        const payload = new FormData(form)
+        const qty = document.getElementById('id_amount').value
+        const total_price = document.getElementById('id_price').value
+        const description = document.getElementById('id_description').value
+        const feeling = document.getElementById('id_feeling_id')
+        const image = document.getElementById('id_print_img').files[0]
+        const reader = new FileReader();
+        var f_text = feeling.options[feeling.selectedIndex].text;
+        const taste = document.getElementById('id_taste_id')
+        const ready_time = document.getElementById('id_ready_time').value
+        var t_text = taste.options[taste.selectedIndex].text;
+        const id ='cake-'+Math.floor((Math.random() * 100) + 1)
+        reader.onloadend = () => {
+            console.log();
+            localStorage.setItem(id,reader.result)
+            };
+            reader.readAsDataURL(image);
+        const price = 180000 + Number(get_taste_price()) + Number(get_feeling_price())
+        let cake_info = {
+            'price': price,
+            'feeling': feeling.value,
+            'taste': taste.value,
+            'description': description,
+            'total_price': total_price,
+            'qty': qty,
+            'ready_time': ready_time,
+            'id':id
+        }
+        let card_shop = JSON.parse(sessionStorage.getItem('shop_card'))
+        let ls = {}
+        if (card_shop) {
+            let cake_shop = card_shop['cake_shop']
+            if (cake_shop) {
+                cake_shop.push(cake_info)
+            } else {
+                card_shop['cake_shop'] = [cake_info]
+            }
+            sessionStorage.setItem('shop_card',JSON.stringify(card_shop))
+        } else {
+            ls['cake_shop'] = [cake_info]
+            sessionStorage.setItem('shop_card',JSON.stringify(ls))
+        }
+
+        console.log(JSON.parse(sessionStorage.getItem('shop_card'))['cake_shop'])
+             document.getElementById('shopp_count').innerHTML = Object.keys(JSON.parse(sessionStorage.getItem('shop_card'))).length - 1 + JSON.parse(sessionStorage.getItem('shop_card'))['cake_shop'].length
+
+    }
+    </script>
+{% endblock %}

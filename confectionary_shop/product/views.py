@@ -22,11 +22,16 @@ class Detail_product(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(Detail_product, self).get_context_data(**kwargs)
+
         f = create_comment_form(self.request, self.kwargs['pk'])
         context['form'] = f
+        dis = context['object'].get_discount()
+        if dis:
+            context['after_discount'] = context['object']._after_discount(dis['amount'], dis['percent'])
         context['comments'] = Comment.objects.filter_by_instance(Stock.objects.get(id=self.kwargs['pk']))
         for i in context['comments']:
             i.create_at = convert_to_localtime(i.create_at)
+
         return context
 
 
@@ -51,3 +56,5 @@ class ProductListAPI(generics.ListCreateAPIView):
 
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
+
+

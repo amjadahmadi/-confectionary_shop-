@@ -3,14 +3,16 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.views import View
 from django.views.generic.detail import DetailView
+from rest_framework import generics
+from rest_framework.response import Response
+from .serializers import AddressSerializer
 from .forms import SignUpForm, CodeForm, LoginForm, CommentForm
 from django.contrib import messages
 from core.utils import send_otp, check_otp
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin, UserPassesTestMixin
-from django.views.generic.edit import CreateView
+from django.utils.translation import gettext_lazy as _
 
-# Create your views here.
-from .models import User, Comment
+from .models import User, Addresses
 
 
 class UserCreateView(View):
@@ -91,7 +93,6 @@ class Login(View):
                 return redirect('user:login')
 
         else:
-            del request.session['next']
             return render(request, 'customer/signIn.html', {'form': f})
 
 
@@ -111,7 +112,19 @@ class CreateComment(View):
         c = CommentForm(request.POST)
         if c.is_valid():
             c.save()
-            messages.info(request, 'your comment after approve will be show')
+            messages.info(request, _('your comment after approve will be show'))
         else:
-            messages.error(request, c.errors)
+            messages.error(request, _(c.errors))
         return redirect('product:detail', pk=request.POST['object_id'])
+
+
+class AddressListAPI(generics.ListCreateAPIView):
+    serializer_class = AddressSerializer
+
+    def get_queryset(self):
+        return Addresses.objects.filter(is_deleted=False)
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset().filter(user=kwargs['user_id']))
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
