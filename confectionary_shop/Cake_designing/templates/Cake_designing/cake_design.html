@@ -95,11 +95,18 @@
         const total_price = document.getElementById('id_price').value
         const description = document.getElementById('id_description').value
         const feeling = document.getElementById('id_feeling_id')
+        const image = document.getElementById('id_print_img').files[0]
+        const reader = new FileReader();
         var f_text = feeling.options[feeling.selectedIndex].text;
         const taste = document.getElementById('id_taste_id')
         const ready_time = document.getElementById('id_ready_time').value
         var t_text = taste.options[taste.selectedIndex].text;
-
+        const id ='cake-'+Math.floor((Math.random() * 100) + 1)
+        reader.onloadend = () => {
+            console.log();
+            localStorage.setItem(id,reader.result)
+            };
+            reader.readAsDataURL(image);
         const price = 180000 + Number(get_taste_price()) + Number(get_feeling_price())
         let cake_info = {
             'price': price,
@@ -109,7 +116,7 @@
             'total_price': total_price,
             'qty': qty,
             'ready_time': ready_time,
-            'id':'cake-'+Math.floor((Math.random() * 100) + 1)
+            'id':id
         }
         let card_shop = JSON.parse(sessionStorage.getItem('shop_card'))
         let ls = {}

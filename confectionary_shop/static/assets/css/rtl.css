@@ -13,3 +13,6 @@ flex-direction: row !important;
 #cartModal{
    direction: rtl;
 }
+#products_con{
+    direction: rtl;
+}

@@ -336,6 +336,10 @@ async function send_order(){
     body.append('order',JSON.stringify(order))
     body.append('order_items',JSON.stringify(order_items))
     body.append('cake_design',JSON.stringify(cake))
+    for (const i of Object.keys(localStorage)){
+        console.log(i)
+         body.append(i,dataURLtoFile(localStorage.getItem(i),i+'.jpeg'))
+    }
     const res = await fetch('http://127.0.0.1:8000/en/ordersapi/',{method:'POST',body:body,headers:{'X-CSRFToken': csrftoken}})
 }
 function total_price_items(val){
@@ -380,8 +384,23 @@ function create_design_cake(val){
             'description': val['description'],
             'feeling_id': val['feeling'],
             'taste_id': val['taste'],
+            'id':val['id']
         }
 
 }
+ function dataURLtoFile(dataurl, filename) {
+
+        var arr = dataurl.split(','),
+            mime = arr[0].match(/:(.*?);/)[1],
+            bstr = atob(arr[1]),
+            n = bstr.length,
+            u8arr = new Uint8Array(n);
+
+        while(n--){
+            u8arr[n] = bstr.charCodeAt(n);
+        }
+
+        return new File([u8arr], filename, {type:mime});
+    }
 </script>
 {% endblock %}
