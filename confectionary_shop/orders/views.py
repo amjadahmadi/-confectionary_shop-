@@ -20,7 +20,7 @@ class Orders(View):
 class OrdersAPI(APIView):
     def post(self, request):
         order = json.loads(request.data['order'])
-
+        print(request.data)
         serializer = OrdersSerializer(data=order)
         if serializer.is_valid():
             order = serializer.save()
@@ -29,7 +29,7 @@ class OrdersAPI(APIView):
         order_items = json.loads(request.data['order_items'])
         cake_design = json.loads(request.data['cake_design'])
         list(map(lambda c: c.update({'order_id': order.id}), order_items))
-        list(map(lambda z: z.update({'order_id': order.id}), cake_design))
+        list(map(lambda z: z.update({'order_id': order.id,'print_img':request.data.get(z['id'],None)}), cake_design))
         order_item_serializer = OrderItemSerializer(data=order_items, many=True)
         if order_item_serializer.is_valid():
             order_item_serializer.save()
