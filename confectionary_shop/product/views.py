@@ -1,13 +1,11 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.views import View
 from rest_framework.response import Response
-from rest_framework import generics
-from .models import Category, Stock
 from .serializers import CategorySerializer, StockSerializer
 from customer.models import Comment
-from rest_framework import generics
-from .models import Category, Stock, Products
-from .serializers import CategorySerializer
+from rest_framework import generics, mixins, viewsets
+from .models import Category, Stock, Products, Discount_Code
+from .serializers import CategorySerializer, DiscountCodeSerializer
 from django.views.generic.detail import DetailView
 from core.utils import convert_to_localtime
 from customer.utils import create_comment_form
@@ -58,3 +56,16 @@ class ProductListAPI(generics.ListCreateAPIView):
         return Response(serializer.data)
 
 
+class DiscountCode(viewsets.ModelViewSet):
+    serializer_class = DiscountCodeSerializer
+
+    def get_queryset(self, *args, **kwargs):
+        return Discount_Code.active_manger.get(discount_name=args[0])
+
+    def retrieve(self, request, pk=None):
+        try:
+            item = self.get_queryset(pk)
+            serializer = self.serializer_class(item)
+            return Response(serializer.data)
+        except Discount_Code.DoesNotExist:
+            return Response({'detail': 'not fount'},status=400)
