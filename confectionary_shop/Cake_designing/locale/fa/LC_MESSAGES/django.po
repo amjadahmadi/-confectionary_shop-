@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-24 08:18+0000\n"
+"POT-Creation-Date: 2023-01-01 16:38+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -30,43 +30,43 @@ msgstr ""
 msgid "The amount of weight you want"
 msgstr "مقدار وزن مورد نیاز را وارد کنید"
 
-#: Cake_designing/forms.py:35
+#: Cake_designing/forms.py:36
 msgid "sample image"
 msgstr "عکس نمونه"
 
-#: Cake_designing/forms.py:36
+#: Cake_designing/forms.py:37
 msgid "printing image"
 msgstr "عکس برای چاپ"
 
-#: Cake_designing/forms.py:37
+#: Cake_designing/forms.py:38
 msgid "ready time"
 msgstr "زمان حاظر شدن"
 
-#: Cake_designing/forms.py:38
+#: Cake_designing/forms.py:39
 msgid "description"
 msgstr "توضیحات"
 
-#: Cake_designing/forms.py:39
+#: Cake_designing/forms.py:40
 msgid "payment status"
 msgstr "وضعیت پرداخت"
 
-#: Cake_designing/forms.py:40
+#: Cake_designing/forms.py:41
 msgid "extra payment"
 msgstr "پرداخت اضافی"
 
-#: Cake_designing/forms.py:41
+#: Cake_designing/forms.py:42
 msgid "felling"
 msgstr "محتویات"
 
-#: Cake_designing/forms.py:42
+#: Cake_designing/forms.py:43
 msgid "taste"
 msgstr "طعم"
 
-#: Cake_designing/forms.py:43
+#: Cake_designing/forms.py:44
 msgid "price / each kilo (180000 IR)"
 msgstr "قیمت / هر کیلو (180000 تومان)"
 
-#: Cake_designing/forms.py:44
+#: Cake_designing/forms.py:45
 msgid "amount"
 msgstr "مقدار"
 
