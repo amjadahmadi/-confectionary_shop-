@@ -95,18 +95,25 @@
         const total_price = document.getElementById('id_price').value
         const description = document.getElementById('id_description').value
         const feeling = document.getElementById('id_feeling_id')
-        const image = document.getElementById('id_print_img').files[0]
-        const reader = new FileReader();
-        var f_text = feeling.options[feeling.selectedIndex].text;
+        const print_image = document.getElementById('id_print_img').files[0]
+        const sample_image = document.getElementById('id_sample_img').files[0]
+        const print_reader = new FileReader();
+        const sample_reader = new FileReader();
         const taste = document.getElementById('id_taste_id')
         const ready_time = document.getElementById('id_ready_time').value
-        var t_text = taste.options[taste.selectedIndex].text;
         const id ='cake-'+Math.floor((Math.random() * 100) + 1)
-        reader.onloadend = () => {
-            console.log();
-            localStorage.setItem(id,reader.result)
+
+        if (print_image){
+        print_reader.onloadend = () => {
+            localStorage.setItem('print'+id,print_reader.result)
             };
-            reader.readAsDataURL(image);
+            print_reader.readAsDataURL(print_image);}
+        if (sample_image){
+                   sample_reader.onloadend = () => {
+            localStorage.setItem('sample'+id,sample_reader.result)
+            };
+                   sample_reader.readAsDataURL(sample_image)
+        }
         const price = 180000 + Number(get_taste_price()) + Number(get_feeling_price())
         let cake_info = {
             'price': price,
