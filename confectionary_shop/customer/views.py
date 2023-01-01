@@ -85,7 +85,7 @@ class Login(View):
 
             if user:
                 login(request, user)
-                if next1 != str(None):
+                if next1:
                     return redirect(next1)
                 return redirect('core:home')
             else:
