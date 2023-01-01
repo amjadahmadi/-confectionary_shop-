@@ -4,21 +4,24 @@ from django.core.validators import RegexValidator
 from django.db import models
 from django.http import JsonResponse
 
-from .managers import StockManagers
+from .managers import StockManagers, DiscountCodeManagers
 from Cake_designing.models import Cake_Designing
 from customer.models import User
 from core.models import BaseModel
 from translated_fields import TranslatedField
 
+
 # Create your models here.
 
 
 class Discount_Code(BaseModel):
-    discount_name = models.CharField(max_length=100)
+    discount_name = models.CharField(max_length=100,unique=True)
     start_date = models.DateTimeField()
     end_date = models.DateTimeField()
     amount = models.FloatField()
     percent = models.BooleanField()
+    objects = models.Manager()
+    active_manger = DiscountCodeManagers()
 
 
 class Products(BaseModel):
@@ -51,6 +54,7 @@ class Discount(BaseModel):
 
     # class Meta:
     #     ordering = 'id'
+
 
 class Stock(BaseModel):
     product = models.OneToOneField(Products, on_delete=models.CASCADE)
