@@ -82,10 +82,10 @@ class Login(View):
             user = authenticate(request, phone=f.cleaned_data['phone'], password=f.cleaned_data['password'])
 
             next1 = request.GET['next']
-
+            print(type(next1))
             if user:
                 login(request, user)
-                if next1:
+                if next1 != 'None':
                     return redirect(next1)
                 return redirect('core:home')
             else:
