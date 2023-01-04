@@ -7,8 +7,8 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from .serializers import OrdersSerializer, OrderItemSerializer
 from Cake_designing.serializers import CakeDesignSerializer
-
-
+from customer.models import User
+from .helpers import back_money
 # Create your views here.
 
 
@@ -19,9 +19,8 @@ class Orders(View):
 
 class OrdersAPI(APIView):
     def post(self, request):
-        order = json.loads(request.data['order'])
-        print(request.data)
-        serializer = OrdersSerializer(data=order)
+        orders = json.loads(request.data['order'])
+        serializer = OrdersSerializer(data=orders)
         if serializer.is_valid():
             order = serializer.save()
         else:
@@ -32,8 +31,13 @@ class OrdersAPI(APIView):
         list(map(lambda z: z.update({'order_id': order.id, 'print_img': request.data.get('print' + z['id'], None),
                                      'sample_img': request.data.get('sample' + z['id'], None)}), cake_design))
         order_item_serializer = OrderItemSerializer(data=order_items, many=True)
+        status_code = 200
         if order_item_serializer.is_valid():
-            order_item_serializer.save()
+            x = order_item_serializer.save()
+            money = back_money(x, orders['user_id'])
+            if money:
+                status_code = 203
+
         else:
             return Response(order_item_serializer.errors, status=401)
         if cake_design:
@@ -42,5 +46,4 @@ class OrdersAPI(APIView):
                 cake_design_serializer.save()
             else:
                 return Response(cake_design_serializer.errors, status=401)
-
-        return Response(status=200)
+        return Response(money, status=status_code)
