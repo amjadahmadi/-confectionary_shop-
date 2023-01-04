@@ -12,7 +12,7 @@
 {% block main %}
     {% csrf_token %}
     <div class="container">
-<div class="d-flex flex-row justify-content-center " >
+<div  class="d-flex flex-row justify-content-center " >
       <div class="modal-body" style="width: 700px;{% if LANGUAGE_CODE == 'fa' %} direction: rtl {% endif %}">
         <table class="table table-image">
           <thead>
@@ -47,7 +47,7 @@
       </div>
 </div></div>
  <div class="tab">
-<div class="container" {% if LANGUAGE_CODE == 'fa' %}   style="direction: rtl" {% endif %}>
+<div id="body" class="container" {% if LANGUAGE_CODE == 'fa' %}   style="direction: rtl" {% endif %}>
 
   <ul class="nav nav-tabs"  {% if LANGUAGE_CODE == 'fa' %}   style="direction: rtl" {% endif %}>
     <li class="active"><a data-toggle="tab" href="#home">{% translate 'Send to me' %}</a></li>
@@ -336,13 +336,15 @@ async function send_order(send_type){
          console.log(form)
     }
     let payload = new FormData(form)
+
     payload.append('basket',JSON.stringify(JSON.parse(sessionStorage.getItem('shop_card'))))
+
     const discount_code = document.getElementById('discount_code_status').value
     const order = {
             'user_id': '{{ request.user.id }}',
             'total_price': total_price_items(JSON.parse(payload.get('basket'))),
             'final_price': Number(document.getElementById('order-total').innerText.split(' ')[0]),
-            'payment_status': JSON.parse(payload.get('basket'))['cake_shop'].length > 0 ? 'PR' : 'PY',
+            'payment_status':  (JSON.parse(payload.get('basket'))['cake_shop'] && JSON.parse(payload.get('basket'))['cake_shop'].length > 0) ? 'PR' : 'PY',
 
         }
     if (discount_code !== 'false'){
@@ -360,9 +362,12 @@ async function send_order(send_type){
         order['last_name'] = payload.get('last_name')
         order['phone'] = payload.get('phone')
     }
-    let order_items = Object.keys(JSON.parse(payload.get('basket'))).map(create_order_item)
-    let cake = JSON.parse(payload.get('basket'))['cake_shop'].length > 0 ? JSON.parse(payload.get('basket'))['cake_shop'].map(create_design_cake) : []
-    order_items.pop('undefined')
+    const order_items = create_order_item(Object.keys(JSON.parse(payload.get('basket'))))
+
+    let cake = JSON.parse(payload.get('basket'))['cake_shop']  ? JSON.parse(payload.get('basket'))['cake_shop'].map(create_design_cake) : []
+    {#order_items.pop('undefined')#}
+        for (const i of order_items){
+        console.log(i)}
     const body = new FormData()
     body.append('order',JSON.stringify(order))
     body.append('order_items',JSON.stringify(order_items))
@@ -372,6 +377,32 @@ async function send_order(send_type){
          body.append(i,dataURLtoFile(localStorage.getItem(i),i+'.jpeg'))
     }
     const res = await fetch('http://127.0.0.1:8000/en/ordersapi/',{method:'POST',body:body,headers:{'X-CSRFToken': csrftoken}})
+    let message = ''
+    console.log(res.status)
+    if(res.status ===203){
+        const res_json = await res.json()
+        let names = ''
+
+
+        if(lang ==='en'){
+                 for (const i of res_json){
+              if(i[0]!==0){
+            names += i[1].split('_')[1]+','}
+        }
+         message = `Sorry, the ${names} products are finished, your money has been returned to your account, you can withdraw or use again`
+        }else {
+            for (const i of res_json){
+            names += i[1].split('_')[0]+','
+        }
+            message = `با عرض پوزش محصولات ${names} به اتمام رسیده پول شما به حساب شما برگشت داده شد شما میتوانید برداشت و یا استفاده مجدد کنید`
+        }
+        const alert = `<div class="alert alert-danger" role="alert"
+style="background-color: rgb(217,83,79);color: black">
+  ${message}
+</div`
+        document.getElementById('body').innerHTML += alert
+    }
+
 }
 function total_price_items(val){
     let count = 0
@@ -390,20 +421,27 @@ function total_price_items(val){
     return count
 }
 
-function create_order_item(val){
-    const shop = JSON.parse(sessionStorage.getItem('shop_card'))
+function create_order_item(value){
 
+
+    const shop = JSON.parse(sessionStorage.getItem('shop_card'))
+    let arry = []
+    for (const val of value ){
     if (val !=='cake_shop'){
-        return  {
+        const order =  {
             'stock_id': val,
             'amount': shop[val]['shopping_info']['count'],
-            'kilo': (shop[val]['shopping_info']['type'] === 'number' || shop[val]['shopping_info']['type']=== 'عدد') ? false : true,
+            'kilo': (shop[val]['shopping_info']['type'] === 'Number' || shop[val]['shopping_info']['type']=== 'عدد') ? false : true,
             'price': shop[val]['price'],
             'after_discount':shop[val]['after_discount'],
             'total_price': shop[val]['shopping_info']['total_price'],
             'pre_order': false
         }
+
+        arry.push(order)
     }
+    }
+    return arry
 }
 function create_design_cake(val){
 
