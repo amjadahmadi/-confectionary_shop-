@@ -5,7 +5,7 @@ from django.db import models
 from django.http import JsonResponse
 
 from .managers import StockManagers, DiscountCodeManagers
-from Cake_designing.models import Cake_Designing
+# from Cake_designing.models import Cake_Designing
 from customer.models import User
 from core.models import BaseModel
 from translated_fields import TranslatedField
@@ -45,7 +45,7 @@ class Category(BaseModel):
 class Discount(BaseModel):
     product = models.OneToOneField("Stock", on_delete=models.CASCADE, null=True, blank=True, related_name='dis')
     # category_id = models.OneToOneField(Category, on_delete=models.CASCADE, null=True, blank=True)
-    cake_designing_id = models.OneToOneField(Cake_Designing, on_delete=models.CASCADE, null=True, blank=True)
+    cake_designing_id = models.OneToOneField('Cake_designing.Cake_Designing', on_delete=models.CASCADE, null=True, blank=True)
     amount = models.FloatField()
     percent = models.BooleanField()
     active = models.BooleanField()
