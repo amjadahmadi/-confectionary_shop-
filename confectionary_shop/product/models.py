@@ -65,7 +65,7 @@ class Stock(BaseModel):
     stock_manager = StockManagers()
 
     def __str__(self):
-        return self.product.product_name
+        return self.product.product_name_fa + '_' + self.product.product_name_en
 
     def _after_discount(self, amount, percent):
         if percent:
