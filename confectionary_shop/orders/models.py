@@ -27,6 +27,9 @@ class Orders(BaseModel):
 
 
 class Order_Item(BaseModel):
+    class Order_Status(models.TextChoices):
+        canceled = "CA", "Canceled"
+        submitted = "SU", "Submitted"
     order_id = models.ForeignKey(Orders, on_delete=models.CASCADE)
     stock_id = models.ForeignKey(to='product.Stock', on_delete=models.CASCADE)
     amount = models.FloatField()
@@ -38,3 +41,6 @@ class Order_Item(BaseModel):
     description = models.TextField(null=True, blank=True)
     pre_order = models.BooleanField()
     ready_time = models.DateTimeField(null=True, blank=True)
+    order_status = models.CharField(max_length=2, choices=Order_Status.choices, default=Order_Status.submitted)
+
+
