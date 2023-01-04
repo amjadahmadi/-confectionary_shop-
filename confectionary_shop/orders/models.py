@@ -5,6 +5,7 @@ from django.db import models
 from core.models import BaseModel
 from customer.models import User
 from .validators import test
+from product.models import Discount_Code
 
 
 # Create your models here.
@@ -25,11 +26,20 @@ class Orders(BaseModel):
     phone = models.CharField(max_length=50, validators=[test], null=True, blank=True)
     payment_status = models.CharField(max_length=2, choices=Payment_Status.choices, default=Payment_Status.pre_payment)
 
+    @staticmethod
+    def valid_discount_code(discount_id):
+        try:
+            Discount_Code.active_manger.get(id=discount_id)
+            return True
+        except Discount_Code.DoesNotExist:
+            return False
+
 
 class Order_Item(BaseModel):
     class Order_Status(models.TextChoices):
         canceled = "CA", "Canceled"
         submitted = "SU", "Submitted"
+
     order_id = models.ForeignKey(Orders, on_delete=models.CASCADE)
     stock_id = models.ForeignKey(to='product.Stock', on_delete=models.CASCADE)
     amount = models.FloatField()
@@ -42,5 +52,3 @@ class Order_Item(BaseModel):
     pre_order = models.BooleanField()
     ready_time = models.DateTimeField(null=True, blank=True)
     order_status = models.CharField(max_length=2, choices=Order_Status.choices, default=Order_Status.submitted)
-
-
