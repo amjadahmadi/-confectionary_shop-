@@ -7,8 +7,8 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from .serializers import OrdersSerializer, OrderItemSerializer
 from Cake_designing.serializers import CakeDesignSerializer
-from customer.models import User
 from .helpers import back_money
+from .models import Orders as ord
 # Create your views here.
 
 
@@ -20,6 +20,12 @@ class Orders(View):
 class OrdersAPI(APIView):
     def post(self, request):
         orders = json.loads(request.data['order'])
+        try:
+            if not ord.valid_discount_code(orders['discount_code_id']):
+                return Response(status=407)
+        except KeyError:
+            pass
+
         serializer = OrdersSerializer(data=orders)
         if serializer.is_valid():
             order = serializer.save()
