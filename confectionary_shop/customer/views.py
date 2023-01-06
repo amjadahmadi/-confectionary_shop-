@@ -1,18 +1,21 @@
 from django.contrib.auth import login, logout, authenticate
 from django.http import HttpResponse
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
 from django.views.generic.detail import DetailView
-from rest_framework import generics
-from rest_framework.response import Response
-from .serializers import AddressSerializer
+from rest_framework import generics, status
+from .serializers import *
 from .forms import SignUpForm, CodeForm, LoginForm, CommentForm
 from django.contrib import messages
 from core.utils import send_otp, check_otp
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin, UserPassesTestMixin
 from django.utils.translation import gettext_lazy as _
-
-from .models import User, Addresses
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from .models import User, Addresses, Profile
+from rest_framework import viewsets
+from rest_framework import mixins
 
 
 class UserCreateView(View):
@@ -107,6 +110,14 @@ class Profile(LoginRequiredMixin, UserPassesTestMixin, DetailView):
         return False
 
 
+class HelloView(APIView):
+    permission_classes = (IsAuthenticated,)
+
+    def get(self, request):
+        content = {'message': f'{request.user.phone}'}
+        return Response(content)
+
+
 class CreateComment(View):
     def post(self, request):
         c = CommentForm(request.POST)
@@ -128,3 +139,115 @@ class AddressListAPI(generics.ListCreateAPIView):
         queryset = self.filter_queryset(self.get_queryset().filter(user=kwargs['user_id']))
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
+
+
+class AddressAPI(viewsets.ViewSet):
+    serializer_class = AddressSerializer
+    permission_classes = (IsAuthenticated,)
+
+    def get_queryset(self):
+        return Addresses.objects.filter(is_deleted=False, user=self.request.user)
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.serializer_class(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(status=201)
+
+    def auth(self, pk):
+        instance = Addresses.objects.select_related('user').get(id=pk)
+        if self.request.user.is_superuser or self.request.user.is_staff or self.request.user == instance.user:
+            return instance
+        return False
+
+    def list(self, request):
+        serializer = self.serializer_class(self.get_queryset(), many=True)
+        return Response(serializer.data)
+
+    def partial_update(self, request, pk=None):
+
+        if instance := self.auth(pk):
+            serializer = self.serializer_class(instance, data=request.data, partial=True)
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+            return Response(serializer.data)
+        return Response(status=401)
+
+    def destroy(self, request, pk=None):
+        if instance := self.auth(pk):
+            instance.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        return Response(status=401)
+
+
+class ProfileAPI(viewsets.ViewSet):
+    serializer_class = ProfileSerializer
+    permission_classes = (IsAuthenticated,)
+
+    def get_queryset(self):
+        return Profile.objects.filter(is_deleted=False)
+
+    def create(self, request, *args, **kwargs):
+        return Response(status=404)
+
+    def auth(self, pk):
+        instance = User.objects.select_related('profile').get(id=pk)
+        if self.request.user.is_superuser or self.request.user.is_staff or self.request.user == instance:
+            return instance
+        return False
+
+    def retrieve(self, request, pk=None):
+        if item := self.auth(pk):
+            serializer = self.serializer_class(item.profile)
+            return Response(serializer.data)
+        return Response(status=401)
+
+    def partial_update(self, request, pk=None):
+        if instance := self.auth(pk):
+            serializer = self.serializer_class(instance.profile, data=request.data, partial=True)
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+            return Response(serializer.data)
+        return Response(status=401)
+
+    def destroy(self, request, pk=None):
+        return Response(status=404)
+
+
+class UserCreate(generics.CreateAPIView):
+    serializer_class = UserSerializer
+
+
+class UserUpdate(generics.UpdateAPIView):
+    serializer_class = UserSerializer
+    queryset = User.objects.all()
+    permission_classes = (IsAuthenticated,)
+
+    def update(self, request, *args, **kwargs):
+        if int(request.user.id) == int(kwargs['pk']):
+            return super().update(request, *args, **kwargs)
+        return Response(status=401)
+
+
+class BankAPI(APIView):
+    permission_classes = (IsAuthenticated,)
+
+    def get(self, request):
+        print(request.headers)
+        pk = request.data.get('pk')
+        amount = float(request.data.get('amount'))
+        if int(request.user.id) == int(pk):
+            user = User.objects.select_related('bank_account').get(id=pk)
+            bank_account = user.bank_account
+            bank_account_balance = user.bank_account.balance
+
+            if request.data.get('type') == 'deposit':
+                bank_account.balance += amount
+            else:
+                if bank_account_balance - amount >= 0:
+                    bank_account.balance -= amount
+                else:
+                    return Response(status=400)
+            bank_account.save()
+            return Response(status=200)
+        return Response(status=401)
