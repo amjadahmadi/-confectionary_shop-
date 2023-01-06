@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Addresses, Profile, User
+from .models import Addresses, Profile, User, Bank_Account
 
 
 class AddressSerializer(serializers.ModelSerializer):
@@ -12,6 +12,12 @@ class AddressSerializer(serializers.ModelSerializer):
 class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
+        fields = '__all__'
+
+
+class BankSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Bank_Account
         fields = '__all__'
 
 
