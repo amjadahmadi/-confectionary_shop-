@@ -1,8 +1,12 @@
-from django.urls import path
-from .views import UserCreateView, CodeGenerate, Logout, Login, Profile, CreateComment, AddressListAPI
+from django.urls import path, include
+from .views import *
 from django.conf import settings
 from django.conf.urls.static import static
-import django.utils.translation as e
+from rest_framework.routers import DefaultRouter
+
+router = DefaultRouter()
+router.register(r'addressapi', AddressAPI, basename="addressapi")
+router.register(r'profileapi', ProfileAPI, basename="profileapi")
 
 app_name = 'user'
 urlpatterns = [
@@ -13,5 +17,9 @@ urlpatterns = [
                   path('profile/<pk>', Profile.as_view(), name='profile'),
                   path('comment/', CreateComment.as_view(), name='comment'),
                   path('address/<user_id>', AddressListAPI.as_view(), name='address'),
+                  path('', include(router.urls)),
+                  path('createuser/', UserCreate.as_view(),name='createuser'),
+                  path('updateuser/<pk>', UserUpdate.as_view(),name='updateuser'),
+                  path('bankapi/', BankAPI.as_view(),name='bankapi'),
 
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
