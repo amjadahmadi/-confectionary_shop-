@@ -231,8 +231,25 @@ class UserUpdate(generics.UpdateAPIView):
 
 class BankAPI(APIView):
     permission_classes = (IsAuthenticated,)
+    serializer_class = BankSerializer
 
-    def get(self, request):
+
+    def auth(self, pk):
+        instance = User.objects.select_related('bank_account').get(id=pk)
+        if self.request.user.is_superuser or self.request.user.is_staff or self.request.user == instance:
+            return instance
+        return False
+
+    def get(self,request):
+        pk = request.data.get('pk')
+        if item := self.auth(pk):
+            serializer = self.serializer_class(item.bank_account)
+            return Response(serializer.data)
+        return Response(status=401)
+
+
+
+    def put(self, request):
         print(request.headers)
         pk = request.data.get('pk')
         amount = float(request.data.get('amount'))
