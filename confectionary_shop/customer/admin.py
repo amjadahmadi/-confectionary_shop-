@@ -23,7 +23,7 @@ class UserAdmin(BaseUserAdmin):
             'fields': ('phone', 'password1', 'password2'),
         }),
     )
-    list_display = ['phone', 'first_name', 'last_name', 'is_staff']
+    list_display = ['phone', 'first_name', 'last_name', 'is_staff','id']
     search_fields = ('first_name', 'last_name', 'phone')
     ordering = ('last_name',)
 
