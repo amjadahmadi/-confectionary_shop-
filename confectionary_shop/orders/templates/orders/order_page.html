@@ -31,8 +31,18 @@
 
           </tbody>
         </table>
-        <div class="d-flex justify-content-start">
+        <div class="d-flex">
+            <div class="col">
           <h5><h5> {% translate 'Total:' %} </h5>   <h5  id="order-total" class="price text-success pr-2">0</h5></h5>
+                </div>
+            <div class="col">
+  <div class="form-group">
+    <label for="discount_code">{% translate 'Discount Code' %}</label>
+    <input type="text" required class="form-control"   id="discount_code" placeholder="{% translate 'if you have discount code enter here' %}">
+    <input type="hidden"    id="discount_code_status" value="false">
+           <button type="button" onclick="discount_code()" class="btn btn-primary mt-2">{% translate 'apply' %}</button>
+
+  </div></div>
         </div>
       </div>
 </div></div>
@@ -55,27 +65,27 @@
     </select>
 
   </div>
-  <button type="button"  onclick="send_order()" class="btn btn-primary">{% translate 'pay' %}</button>
+  <button type="button"  onclick="send_order('me')" class="btn btn-primary">{% translate 'pay' %}</button>
 </form>    </div>
     <div id="menu1" class="tab-pane fade">
-    <form >
+    <form id="other-form">
   <div class="form-group">
     <label for="first_name">{% translate 'First name' %}</label>
-    <input type="text" required class="form-control" id="first_name" placeholder="{% translate 'Enter the recipients name' %}">
+    <input type="text" required class="form-control"  name="first_name" id="first_name" placeholder="{% translate 'Enter the recipients name' %}">
   </div>
   <div class="form-group">
     <label for="last_name">{% translate 'Last name' %}</label>
-    <input type="text" class="form-control" id="last_name" placeholder="{% translate 'Enter the recipients last name' %}">
+    <input type="text" class="form-control" required name="last_name"  id="last_name" placeholder="{% translate 'Enter the recipients last name' %}">
   </div>
   <div class="form-group">
     <label for='phone'>{% translate 'phone' %}</label>
-    <input type="text" class="form-control" id="last_name" placeholder="{% translate 'Enter the recipients phone' %}">
+    <input type="text" class="form-control" required name="phone"  id="phone" placeholder="{% translate 'Enter the recipients phone' %}">
   </div>
   <div class="form-group">
     <label for="recipients_address">{% translate 'recipients address' %}</label>
-    <textarea class="form-control" id="recipients_address" rows="3"></textarea>
+    <textarea class="form-control" name="recipients_address"  id="recipients_address" rows="3"></textarea>
   </div>
-          <button type="submit" class="btn btn-primary">{% translate 'pay' %}</button>
+          <button type="button" onclick="send_order('other')" class="btn btn-primary">{% translate 'pay' %}</button>
 </form>
     </div>
   </div>
@@ -209,7 +219,7 @@ get_address()
          async function cake_shop_order(item) {
              if(items[item]){
              for (const i of items[item]) {
-                 console.log(item)
+
                  const response = await fetch(`http://127.0.0.1:8000/en/get_feeling_taste/${i.feeling}/${i.taste}`)
                  const res_json = await response.json()
 
@@ -258,7 +268,7 @@ get_address()
 function delete_item_order(id) {
 
     let shop_card = JSON.parse(sessionStorage.getItem('shop_card'));
-        console.log(id.search('cake-') !== -1)
+
         if(id.search('cake-') !== -1)     {
         for(let i of shop_card['cake_shop']){
             if(i.id === id){
@@ -280,7 +290,7 @@ function delete_item_order(id) {
           money = 'تومان'
 
       }
-      console.log(document.getElementById('shopp_count'))
+
     document.getElementById('shopp_count').innerText = Number( document.getElementById('shopp_count').innerText)-1
      document.getElementById('order-total').innerText = Number(document.getElementById('order-total').innerText.split(' ')[0]) - total_item + ' ' + money
      document.getElementById(id).value = ''
@@ -315,20 +325,41 @@ async function get_address(){
 
 }
 
-async function send_order(){
-     const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+async function send_order(send_type){
+    const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+    let form = null
+    if(send_type ==='me'){
+     form = document.getElementById('me-form')}
+    else {
 
-    const form = document.getElementById('me-form')
+        form = document.getElementById('other-form')
+         console.log(form)
+    }
     let payload = new FormData(form)
     payload.append('basket',JSON.stringify(JSON.parse(sessionStorage.getItem('shop_card'))))
-        console.log(JSON.parse(payload.get('basket'))['cake_shop'])
+    const discount_code = document.getElementById('discount_code_status').value
     const order = {
             'user_id': '{{ request.user.id }}',
             'total_price': total_price_items(JSON.parse(payload.get('basket'))),
-            'final_price': total_price_items(JSON.parse(payload.get('basket'))),
-            'address': payload.get('address'),
-            'payment_status': JSON.parse(payload.get('basket'))['cake_shop'].length > 0 ? 'PR' : 'PY'
+            'final_price': Number(document.getElementById('order-total').innerText.split(' ')[0]),
+            'payment_status': JSON.parse(payload.get('basket'))['cake_shop'].length > 0 ? 'PR' : 'PY',
+
         }
+    if (discount_code !== 'false'){
+        order['discount_code_id'] = discount_code
+    }
+    if (send_type === 'me'){
+        order['address'] = payload.get('address')
+        order['first_name'] = '{{ request.user.first_name }}'
+        order['last_name'] = '{{ request.user.last_name }}'
+        order['phone'] = '{{ request.user.phone }}'
+    }  else {
+        console.log(payload.get('f'))
+        order['address'] = payload.get('recipients_address')
+        order['first_name'] = payload.get('first_name')
+        order['last_name'] = payload.get('last_name')
+        order['phone'] = payload.get('phone')
+    }
     let order_items = Object.keys(JSON.parse(payload.get('basket'))).map(create_order_item)
     let cake = JSON.parse(payload.get('basket'))['cake_shop'].length > 0 ? JSON.parse(payload.get('basket'))['cake_shop'].map(create_design_cake) : []
     order_items.pop('undefined')
@@ -337,7 +368,7 @@ async function send_order(){
     body.append('order_items',JSON.stringify(order_items))
     body.append('cake_design',JSON.stringify(cake))
     for (const i of Object.keys(localStorage)){
-        console.log(i)
+
          body.append(i,dataURLtoFile(localStorage.getItem(i),i+'.jpeg'))
     }
     const res = await fetch('http://127.0.0.1:8000/en/ordersapi/',{method:'POST',body:body,headers:{'X-CSRFToken': csrftoken}})
@@ -361,7 +392,7 @@ function total_price_items(val){
 
 function create_order_item(val){
     const shop = JSON.parse(sessionStorage.getItem('shop_card'))
-    console.log(val)
+
     if (val !=='cake_shop'){
         return  {
             'stock_id': val,
@@ -402,5 +433,24 @@ function create_design_cake(val){
 
         return new File([u8arr], filename, {type:mime});
     }
+  async function discount_code(){
+    const name = document.getElementById('discount_code').value
+    const status = document.getElementById('discount_code_status').value
+     console.log(status)
+    if (name && status == 'false'){
+    const res = await fetch('http://127.0.0.1:8000/en/product/discount_code/'+name)
+    if (res.status === 200){
+    const json_res = await res.json()
+    const total = document.getElementById('order-total').innerText.split(' ')
+    if (json_res['percent']){
+        const new_total = Number(total[0]) * (1-(json_res['amount']/100))
+        document.getElementById('order-total').innerText = `${new_total} ${total[1]}`
+        document.getElementById('discount_code_status').value = json_res['id']
+    }
+     console.log(json_res)
+
+    }
+    }
+  }
 </script>
 {% endblock %}

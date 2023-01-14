@@ -1,4 +1,4 @@
-from .models import Category, Stock, Discount, Products
+from .models import Category, Stock, Discount, Products, Discount_Code
 from rest_framework import serializers
 
 
@@ -47,6 +47,12 @@ class StockSerializer(serializers.ModelSerializer):
 class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Products
+        fields = '__all__'
+
+
+class DiscountCodeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Discount_Code
         fields = '__all__'
 
 

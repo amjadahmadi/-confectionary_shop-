@@ -29,7 +29,8 @@ class OrdersAPI(APIView):
         order_items = json.loads(request.data['order_items'])
         cake_design = json.loads(request.data['cake_design'])
         list(map(lambda c: c.update({'order_id': order.id}), order_items))
-        list(map(lambda z: z.update({'order_id': order.id,'print_img':request.data.get(z['id'],None)}), cake_design))
+        list(map(lambda z: z.update({'order_id': order.id, 'print_img': request.data.get('print' + z['id'], None),
+                                     'sample_img': request.data.get('sample' + z['id'], None)}), cake_design))
         order_item_serializer = OrderItemSerializer(data=order_items, many=True)
         if order_item_serializer.is_valid():
             order_item_serializer.save()

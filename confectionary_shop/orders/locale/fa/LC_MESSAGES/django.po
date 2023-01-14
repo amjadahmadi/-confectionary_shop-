@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-25 15:45+0000\n"
+"POT-Creation-Date: 2023-01-01 16:38+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,70 +18,83 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: orders/templates/orders/order_page.html:20
+#: orders/templates/orders/order_page.html:21
 msgid "Product"
 msgstr "محصول"
 
-#: orders/templates/orders/order_page.html:21
+#: orders/templates/orders/order_page.html:22
 msgid "Price"
 msgstr "قیمت"
 
-#: orders/templates/orders/order_page.html:22
+#: orders/templates/orders/order_page.html:23
 msgid "Qty"
 msgstr "تعداد"
 
-#: orders/templates/orders/order_page.html:23
+#: orders/templates/orders/order_page.html:24
 msgid "Total"
 msgstr "مجموع"
 
-#: orders/templates/orders/order_page.html:24
+#: orders/templates/orders/order_page.html:25
 msgid "Actions"
 msgstr "عملیات"
 
-#: orders/templates/orders/order_page.html:34
+#: orders/templates/orders/order_page.html:36
 msgid "Total:"
 msgstr "قیمت کل:"
 
+#: orders/templates/orders/order_page.html:40
+msgid "Discount Code"
+msgstr "کد تخفیف"
+
+#: orders/templates/orders/order_page.html:41
+msgid "if you have discount code enter here"
+msgstr "اگر کد تخفیفی دارید اینجا وارد کنید"
+
 #: orders/templates/orders/order_page.html:42
+msgid "apply"
+msgstr "اعمال"
+
+#: orders/templates/orders/order_page.html:52
 msgid "Send to me"
 msgstr "ارسال به من"
 
-#: orders/templates/orders/order_page.html:43
+#: orders/templates/orders/order_page.html:53
 msgid "Send to someone else"
 msgstr "ارسال به فرد دیگر"
 
-#: orders/templates/orders/order_page.html:51
+#: orders/templates/orders/order_page.html:61
 msgid "Address"
 msgstr "آدرس"
 
-#: orders/templates/orders/order_page.html:62
+#: orders/templates/orders/order_page.html:67
+#: orders/templates/orders/order_page.html:87
+msgid "pay"
+msgstr "پرداخت"
+
+#: orders/templates/orders/order_page.html:72
 msgid "First name"
 msgstr "نام"
 
-#: orders/templates/orders/order_page.html:63
+#: orders/templates/orders/order_page.html:73
 msgid "Enter the recipients name"
 msgstr "نام فرد گیرنده را وارد کنید"
 
-#: orders/templates/orders/order_page.html:66
+#: orders/templates/orders/order_page.html:76
 msgid "Last name"
 msgstr "نام خانوادگی"
 
-#: orders/templates/orders/order_page.html:67
+#: orders/templates/orders/order_page.html:77
 msgid "Enter the recipients last name"
 msgstr "نام خانوادگی گیرنده را وارد کنید"
 
-#: orders/templates/orders/order_page.html:70
+#: orders/templates/orders/order_page.html:80
 msgid "phone"
 msgstr "تلفن"
 
-#: orders/templates/orders/order_page.html:71
+#: orders/templates/orders/order_page.html:81
 msgid "Enter the recipients phone"
 msgstr "تلفن گیرنده را وارد کنید"
 
-#: orders/templates/orders/order_page.html:74
+#: orders/templates/orders/order_page.html:84
 msgid "recipients address"
 msgstr "آدرس گیرنده را وارد کنید"
-
-#: orders/templates/orders/order_page.html:81
-msgid "pay"
-msgstr "پرداخت"
