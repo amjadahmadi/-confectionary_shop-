@@ -1,1 +1,7 @@
 
+Django
+djangorestframework
+redis
+jdatetime
+django-crispy-forms
+kavenegar
