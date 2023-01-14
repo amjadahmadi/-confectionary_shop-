@@ -1,10 +1,158 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-{{ object.first_name }}
-</body>
-</html>
+{% extends 'core/base.html' %}
+{% load static %}
+{% load i18n %}
+{% block navbar %}
+    {% include 'core/navbar.html' %}
+
+{% endblock %}
+    {% get_current_language as LANGUAGE_CODE %}
+{% block style %}
+{% endblock %}
+{% load crispy_forms_tags %}
+{% block main %}
+    <div class="col" id="profile" >
+    <div class="row">
+    <div class="col-1 mt-3" style="margin-left: 5px" ><b>{% translate 'bank account info' %}</b></div>
+    <div class="col-10 " style="border: 1px solid;height: 1px;margin-top: 20px"></div>
+
+</div>
+    <form style="margin-top: 20px">
+  <h4><b id="balance-b"> your balance : 100000000</b></h4>
+  <div class="form-group">
+      <label for="balance"> {% translate 'increase Balance' %}</label>
+    <input type="number" min="0" class="form-control" id="balance" placeholder="{% translate 'Enter the desired amount' %}" style="width: 300px">
+
+  </div>
+     <div class="form-group">
+      <label for="balance"> {% translate 'Card Number' %}</label>
+    <input type="text" id="card"  class="form-control"   style="width: 300px">
+
+  </div>
+  <button type="button" class="btn btn-primary">{% translate 'pay' %}</button>
+  <button type="button" class="btn btn-primary" style="margin-left: 10px">{% translate 'withdraw' %}</button>
+  <button type="button" class="btn btn-primary" style="margin-left: 10px">{% translate 'edit card number' %}</button>
+</form>
+ <div class="row">
+    <div class="col-1 mt-3" style="margin-left: 5px" ><b>{% translate 'profile' %}</b></div>
+    <div class="col-10 " style="border: 1px solid;height: 1px;margin-top: 20px"></div>
+
+</div>
+        <form style="margin-top: 20px">
+  <div class="form-group">
+         <label for="gender">{% translate 'Gender' %}</label>
+    <select class="form-control" id="gender" style="width: 300px">
+      <option>{% translate 'Male' %}</option>
+      <option>{% translate 'Female' %}</option>
+    </select>
+
+  </div>
+     <div class="form-group">
+  <label for="birthday">{% translate 'Birthday:' %} </label>
+  <input type="date" class="form-control" placeholder="yyyy-mm-dd"  id="birthday" name="birthday"  style="width: 300px">
+     </div>
+  <div class="form-group">
+  <label for="email">{% translate 'email:' %}</label>
+  <input type="email" class="form-control" id="email" name="email"  style="width: 300px">
+     </div>
+  <button type="button" class="btn btn-primary">{% translate 'edit' %}</button>
+
+</form>
+  <div class="row">
+    <div class="col-1 mt-3" style="margin-left: 5px" ><b>{% translate 'personal info' %}</b></div>
+    <div class="col-10 " style="border: 1px solid;height: 1px;margin-top: 20px"></div>
+
+</div>
+        <form style="margin-top: 20px">
+     <div class="form-group">
+  <label for="first_name">{% translate 'first name:' %} </label>
+  <input type="text" class="form-control" id="first_name" name="first_name"  style="width: 300px">
+     </div>
+  <div class="form-group">
+  <label for="last_name">{% translate 'last name:' %}</label>
+  <input type="text" class="form-control" id="last_name" name="last_name"  style="width: 300px">
+     </div>
+    <div class="form-group">
+  <label for="phone">{% translate 'phone:' %}</label>
+  <input type="text" class="form-control" id="phone" name="phone"  style="width: 300px">
+     </div>
+  <button type="button" class="btn btn-primary">{% translate 'edit' %}</button>
+
+</form>
+  <div class="row">
+    <div class="col-1 mt-3" style="margin-left: 5px" ><b>{% translate 'Address' %}</b></div>
+    <div class="col-10 " style="border: 1px solid;height: 1px;margin-top: 20px"></div>
+
+    </div>
+
+ <form style="margin-top: 20px">
+
+    <div class="form-group">
+        <label for="addresses">{% translate 'select one for delete or edit :' %}</label>
+       <select class="form-control" onchange="address()" id="addresses" style="width: 300px">
+           <option value="0">-----</option>
+    </select>
+  <label for="new_address">{% translate 'add new address or edit:' %}</label>
+ <textarea class="form-control" id="new_address" style="width: 500px"></textarea>
+     </div>
+  <button type="button" class="btn btn-primary">{% translate 'add address' %}</button>
+  <button type="button" class="btn btn-primary">{% translate 'edit address' %}</button>
+  <button type="button" class="btn btn-danger">{% translate 'delete address' %}</button>
+
+</form>
+
+</div>
+
+
+{% endblock %}
+{% block footer %}
+{% include 'core/footer.html' %}
+{% endblock %}
+{% block script %}
+
+    <script>
+    const lang = '{{ LANGUAGE_CODE }}'
+    async function info(){
+    const res = await fetch('http://127.0.0.1:8000/en/user/userapi/'+'{{ request.user.id }}/',{headers:{ 'Content-Type': 'application/json',
+        'Authorization':'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjczMTg2OTcyLCJpYXQiOjE2NzMxNzAwNTUsImp0aSI6ImMxNGU1YTBmMjdjYzRkYmQ4MDBjMzAzN2NiMTNjZTRiIiwidXNlcl9pZCI6Mn0.Hgqt1scdXdJqeUcSaYJWIvUy7Gj8j6ziGRaJweJz4NI'}})
+    const json_res = await res.json()
+     let unit = ''
+        let balance = ''
+     if (lang === 'en'){
+         unit = 'IR'
+         balance = 'your balance :'
+            document.getElementById('gender').value = json_res['profile']['gender']==='MA' ? 'Male' :'Female'
+     }else {
+         unit = "تومان"
+         balance = 'موجودی شما:'
+            document.getElementById('gender').value = json_res['profile']['gender']==='MA' ? 'مرد' :'زن'
+     }
+     console.log(json_res)
+     console.log(document.getElementById('gender').value)
+        const date = new Date(json_res['profile']['birth_day'])
+        const mon = (date.getMonth() + 1) > 9 ? `${ (date.getMonth() + 1)}` : `0${ (date.getMonth() + 1)}`
+        let formatted_date = date.getFullYear() + "-" +  mon + "-" + date.getDate()
+        console.log(formatted_date)
+
+        document.getElementById('birthday').value =formatted_date
+        document.getElementById('balance-b').innerText = `${balance} ${json_res['bank_account']['balance']} ${unit}`
+        document.getElementById('email').value = json_res['profile']['email']
+        document.getElementById('first_name').value = json_res['first_name']
+        document.getElementById('last_name').value = json_res['last_name']
+        document.getElementById('phone').value = json_res['phone']
+        document.getElementById('card').value = json_res['bank_account']['card_bank']
+        for (const i of json_res['addresses']){
+            const b = `<option value="${i['id']}" id="address-${i['id']}">${i['full_address']}</option>`
+            document.getElementById('addresses').innerHTML += b
+        }
+    }
+    info();
+    function address(){
+        const e = document.getElementById('addresses')
+        if(e.value!=="0"){
+       document.getElementById('new_address').value = e.options[e.selectedIndex].text
+    }else{
+        document.getElementById('new_address').value = ''
+    }}
+    </script>
+
+{% endblock %}

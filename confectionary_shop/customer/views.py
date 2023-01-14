@@ -82,6 +82,7 @@ class Login(View):
         f = LoginForm(request.POST or None)
 
         if f.is_valid():
+
             user = authenticate(request, phone=f.cleaned_data['phone'], password=f.cleaned_data['password'])
 
             next1 = request.GET['next']
@@ -218,14 +219,32 @@ class UserCreate(generics.CreateAPIView):
     serializer_class = UserSerializer
 
 
-class UserUpdate(generics.UpdateAPIView):
+class UserAPI(viewsets.ViewSet):
     serializer_class = UserSerializer
-    queryset = User.objects.all()
     permission_classes = (IsAuthenticated,)
 
-    def update(self, request, *args, **kwargs):
-        if int(request.user.id) == int(kwargs['pk']):
-            return super().update(request, *args, **kwargs)
+    def get_queryset(self):
+        return User.objects.all()
+
+    def auth(self, pk):
+        instance = User.objects.get(id=pk)
+        if self.request.user.is_superuser or self.request.user.is_staff or self.request.user == instance:
+            return instance
+        return False
+
+    def retrieve(self, request, pk=None):
+        if item := self.auth(pk):
+            # item = get_object_or_404(self.get_queryset(), pk=pk)
+            serializer = self.serializer_class(item)
+            return Response(serializer.data)
+        return Response(status=401)
+
+    def partial_update(self, request, pk=None):
+        if instance := self.auth(pk):
+            serializer = self.serializer_class(instance, data=request.data, partial=True)
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+            return Response(serializer.data)
         return Response(status=401)
 
 
@@ -233,24 +252,20 @@ class BankAPI(APIView):
     permission_classes = (IsAuthenticated,)
     serializer_class = BankSerializer
 
-
     def auth(self, pk):
         instance = User.objects.select_related('bank_account').get(id=pk)
         if self.request.user.is_superuser or self.request.user.is_staff or self.request.user == instance:
             return instance
         return False
 
-    def get(self,request):
+    def get(self, request):
         pk = request.data.get('pk')
         if item := self.auth(pk):
             serializer = self.serializer_class(item.bank_account)
             return Response(serializer.data)
         return Response(status=401)
 
-
-
     def put(self, request):
-        print(request.headers)
         pk = request.data.get('pk')
         amount = float(request.data.get('amount'))
         if int(request.user.id) == int(pk):
@@ -268,3 +283,13 @@ class BankAPI(APIView):
             bank_account.save()
             return Response(status=200)
         return Response(status=401)
+
+    def patch(self, request):
+        print(request.data.get('pk'))
+        if item := self.auth(request.data.get('pk')):
+            bank_account = item.bank_account
+            bank_account.card_bank = request.data.get('card_bank')
+            bank_account.save()
+            return Response(status=200)
+        return Response(status=401)
+

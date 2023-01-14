@@ -2,11 +2,11 @@
 
     direction: rtl;
 }
-#products{
+/*#products{*/
 
-    display: flex;
-flex-direction: row !important;
-}
+/*    display: flex;*/
+/*flex-direction: row !important;*/
+/*}*/
 #comment_form{
     direction: rtl !important;
 }
@@ -14,5 +14,9 @@ flex-direction: row !important;
    direction: rtl;
 }
 #products_con{
+    direction: rtl;
+}
+
+#profile{
     direction: rtl;
 }

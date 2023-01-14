@@ -1,5 +1,6 @@
 import json
 
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.shortcuts import render
 from django.views import View
 from rest_framework import status
@@ -12,7 +13,9 @@ from .models import Orders as ord
 # Create your views here.
 
 
-class Orders(View):
+class Orders(LoginRequiredMixin, View):
+    login_url = '/login/'
+
     def get(self, request):
         return render(request, 'orders/order_page.html')
 

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-01 16:38+0000\n"
+"POT-Creation-Date: 2023-01-08 13:51+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -50,51 +50,51 @@ msgstr "کد تخفیف"
 msgid "if you have discount code enter here"
 msgstr "اگر کد تخفیفی دارید اینجا وارد کنید"
 
-#: orders/templates/orders/order_page.html:42
+#: orders/templates/orders/order_page.html:43
 msgid "apply"
 msgstr "اعمال"
 
-#: orders/templates/orders/order_page.html:52
+#: orders/templates/orders/order_page.html:53
 msgid "Send to me"
 msgstr "ارسال به من"
 
-#: orders/templates/orders/order_page.html:53
+#: orders/templates/orders/order_page.html:54
 msgid "Send to someone else"
 msgstr "ارسال به فرد دیگر"
 
-#: orders/templates/orders/order_page.html:61
+#: orders/templates/orders/order_page.html:62
 msgid "Address"
 msgstr "آدرس"
 
-#: orders/templates/orders/order_page.html:67
-#: orders/templates/orders/order_page.html:87
+#: orders/templates/orders/order_page.html:68
+#: orders/templates/orders/order_page.html:88
 msgid "pay"
 msgstr "پرداخت"
 
-#: orders/templates/orders/order_page.html:72
+#: orders/templates/orders/order_page.html:73
 msgid "First name"
 msgstr "نام"
 
-#: orders/templates/orders/order_page.html:73
+#: orders/templates/orders/order_page.html:74
 msgid "Enter the recipients name"
 msgstr "نام فرد گیرنده را وارد کنید"
 
-#: orders/templates/orders/order_page.html:76
+#: orders/templates/orders/order_page.html:77
 msgid "Last name"
 msgstr "نام خانوادگی"
 
-#: orders/templates/orders/order_page.html:77
+#: orders/templates/orders/order_page.html:78
 msgid "Enter the recipients last name"
 msgstr "نام خانوادگی گیرنده را وارد کنید"
 
-#: orders/templates/orders/order_page.html:80
+#: orders/templates/orders/order_page.html:81
 msgid "phone"
 msgstr "تلفن"
 
-#: orders/templates/orders/order_page.html:81
+#: orders/templates/orders/order_page.html:82
 msgid "Enter the recipients phone"
 msgstr "تلفن گیرنده را وارد کنید"
 
-#: orders/templates/orders/order_page.html:84
+#: orders/templates/orders/order_page.html:85
 msgid "recipients address"
 msgstr "آدرس گیرنده را وارد کنید"

@@ -57,6 +57,9 @@ class User(AbstractUser, PermissionsMixin):
     REQUIRED_FIELDS = []
     objects = CustomManager()
 
+    def user_address(self):
+        return Addresses.objects.filter(user=self)
+
     def __str__(self):
         return self.phone
 
@@ -64,6 +67,7 @@ class User(AbstractUser, PermissionsMixin):
 class Addresses(BaseModel):
     full_address = models.TextField(null=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+
 
 
 class Comment(BaseModel):

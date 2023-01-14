@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-25 15:42+0000\n"
+"POT-Creation-Date: 2023-01-08 14:00+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -87,12 +87,10 @@ msgid "enter your password."
 msgstr "رمز خود را وارد کنید"
 
 #: customer/forms.py:86
-#, fuzzy
 msgid "first name"
 msgstr "نام خود را وارد کنید"
 
 #: customer/forms.py:87
-#, fuzzy
 msgid "last name"
 msgstr "نام خانوادگی خود را وارد کنید"
 
@@ -108,37 +106,136 @@ msgstr "ایمیل"
 msgid "Rate"
 msgstr "امتیاز"
 
-#: customer/models.py:74
+#: customer/models.py:78
 msgid "Very bad"
 msgstr "خیلی بد"
 
-#: customer/models.py:75
+#: customer/models.py:79
 msgid "Bad"
 msgstr "بد"
 
-#: customer/models.py:76
+#: customer/models.py:80
 msgid "Good"
 msgstr "خوب"
 
-#: customer/models.py:77
+#: customer/models.py:81
 msgid "Very good"
 msgstr "خیلی خوب"
 
-#: customer/models.py:78
+#: customer/models.py:82
 msgid "Excellent"
 msgstr "عالی"
 
-#: customer/models.py:84
+#: customer/models.py:88
 msgid "Pending"
 msgstr "انتظار"
 
-#: customer/models.py:85
+#: customer/models.py:89
 msgid "Approved"
 msgstr "تایید شده"
 
-#: customer/models.py:86
+#: customer/models.py:90
 msgid "Rejected"
 msgstr "رد شده"
+
+#: customer/templates/customer/profile.html:15
+msgid "bank account info"
+msgstr "اطلاعات بانکی"
+
+#: customer/templates/customer/profile.html:22
+msgid "increase Balance"
+msgstr "افزایش موجودی"
+
+#: customer/templates/customer/profile.html:23
+msgid "Enter the desired amount"
+msgstr "مبلغ مورد نظر را وارد کنید"
+
+#: customer/templates/customer/profile.html:27
+msgid "Card Number"
+msgstr "شماره کارت"
+
+#: customer/templates/customer/profile.html:31
+msgid "pay"
+msgstr "پرداخت"
+
+#: customer/templates/customer/profile.html:32
+msgid "withdraw"
+msgstr "برداشت موجودی"
+
+#: customer/templates/customer/profile.html:33
+msgid "edit card number"
+msgstr "ویرایش شماره کارت"
+
+#: customer/templates/customer/profile.html:36
+msgid "profile"
+msgstr "پروفایل"
+
+#: customer/templates/customer/profile.html:42
+msgid "Gender"
+msgstr "جنسیت"
+
+#: customer/templates/customer/profile.html:44
+msgid "Male"
+msgstr "مرد"
+
+#: customer/templates/customer/profile.html:45
+msgid "Female"
+msgstr "زن"
+
+#: customer/templates/customer/profile.html:50
+msgid "Birthday:"
+msgstr "تولد"
+
+#: customer/templates/customer/profile.html:54
+#, fuzzy
+#| msgid "email"
+msgid "email:"
+msgstr "ایمیل"
+
+#: customer/templates/customer/profile.html:57
+#: customer/templates/customer/profile.html:78
+msgid "edit"
+msgstr "ویرایش"
+
+#: customer/templates/customer/profile.html:61
+msgid "personal info"
+msgstr "اطلاعات شخصی"
+
+#: customer/templates/customer/profile.html:67
+msgid "first name:"
+msgstr "نام"
+
+#: customer/templates/customer/profile.html:71
+msgid "last name:"
+msgstr "نام خانوادگی"
+
+#: customer/templates/customer/profile.html:75
+msgid "phone:"
+msgstr "تلفن همراه"
+
+#: customer/templates/customer/profile.html:82
+msgid "Address"
+msgstr "ادرس"
+
+#: customer/templates/customer/profile.html:90
+msgid "select one for delete or edit :"
+msgstr "برای حذف یا ویرایش یکی را انتخاب کنید"
+
+#: customer/templates/customer/profile.html:94
+msgid "add new address or edit:"
+msgstr "اضافه کردن یا ویرایش ادرس"
+
+#: customer/templates/customer/profile.html:97
+msgid "add address"
+msgstr " افزودن ادرس"
+
+#: customer/templates/customer/profile.html:98
+msgid "edit address"
+msgstr "ویرایش ادرس"
+
+#: customer/templates/customer/profile.html:99
+msgid "delete address"
+msgstr "حذف ادرس"
 
 #: customer/templates/customer/register.html:15
 msgid "Sign up"
@@ -169,6 +266,9 @@ msgstr "اکانت ندارید؟"
 msgid "SignUp"
 msgstr "ثبت نام کنید"
 
-#: customer/views.py:115
+#: customer/views.py:127
 msgid "your comment after approve will be show"
 msgstr "نظر شما پس از تایید نمایش داده خواهد شد"
+
+#~ msgid "add"
+#~ msgstr "افزودن"
