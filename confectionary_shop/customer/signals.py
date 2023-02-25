@@ -6,7 +6,6 @@ from .models import User, Profile, Bank_Account
 @receiver(post_save, sender=User)
 def create_profile(sender, instance: User, created, **kwargs):
     if created:
-
         user_profile = Profile.objects.create()
         instance.profile = user_profile
         instance.save()

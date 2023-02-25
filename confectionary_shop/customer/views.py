@@ -111,14 +111,6 @@ class Profile(LoginRequiredMixin, UserPassesTestMixin, DetailView):
         return False
 
 
-class HelloView(APIView):
-    permission_classes = (IsAuthenticated,)
-
-    def get(self, request):
-        content = {'message': f'{request.user.phone}'}
-        return Response(content)
-
-
 class CreateComment(View):
     def post(self, request):
         c = CommentForm(request.POST)
@@ -277,7 +269,7 @@ class BankAPI(APIView):
                 bank_account.balance += amount
             else:
                 if bank_account_balance - amount >= 0:
-                    bank_account.balance -= amount
+                    bank_account.balance = bank_account_balance - amount
                 else:
                     return Response(status=400)
             bank_account.save()
@@ -292,4 +284,3 @@ class BankAPI(APIView):
             bank_account.save()
             return Response(status=200)
         return Response(status=401)
-

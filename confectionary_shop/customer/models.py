@@ -69,7 +69,6 @@ class Addresses(BaseModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
 
-
 class Comment(BaseModel):
     class RATE(models.IntegerChoices):
         """
@@ -88,6 +87,7 @@ class Comment(BaseModel):
         PENDING = 1, _('Pending')
         APPROVED = 2, _('Approved')
         REJECTED = 3, _('Rejected')
+
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     first_name = models.CharField(max_length=30, null=True, blank=True)
     last_name = models.CharField(max_length=30, null=True, blank=True)
